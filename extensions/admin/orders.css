@@ -89,7 +89,6 @@ order detail
 .orderStuffItemRow td	{padding:0 12px 12px 0;}
 
 .orderDetailButtonBar	{margin-bottom:12px;}
-.orderDetailButtonBar button	{padding:2px 6px;}
 
 .orderDetails fieldset	{border:0; margin:0;padding:0;}
 
@@ -119,3 +118,11 @@ order detail
 
 /* cart edit */
 .orderItemAddBasic label span	{text-align: right;}
+
+
+
+
+/* quickview styles */
+.orderQuickviewMenu h3	{padding:3px; margin:0;}
+.orderQuickviewMenu li	{border-top:1px solid #E4E4E4; padding: 3px;}
+.orderQuickviewContent .orderContentsTable, .orderQuickviewContent .gridTable	{width:100%;}

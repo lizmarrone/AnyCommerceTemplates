@@ -20,7 +20,7 @@ var _gaq = _gaq || {'push':function(){}} //here for testing. REPLACE BEFORE DEPL
 var myCreole;
 
 var app = {vars:{
-	"release":"20121217131600",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
+	"release":"20130107124100",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
 	"_clientid":"zmvc",
 	"baseURL":"",
 	"httpsURL":"https://ssl.zoovy.com/s=www.sporks.zoovy.com/",
@@ -151,14 +151,16 @@ COMMONLY EDITED TEMPLATES
 the homepageTemplate template is loaded into mainContentArea by default when the application loads
 -->
 <div id='homepageTemplate' class='homeTemplate'>
-
-	<!--<h5 data-bind='var: nothing(); defaultValue: blue; elasticAttr: pid; format:searchLink; extension:myRIA;'></h5>
-	-->
+<ul id="wideSlideshow" class="pics slideshow">
+		<img src='images/blank.gif' width='712' height='400' data-bind="var: category(%page.banner_slideshow1); format: banner; extension:myRIA; editor:banner; wrap:<li>;" />
+	</ul>
+	
 	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>
 
 	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; hide_summary:1; before:<h2>Featured Items</h2>; withReviews:1;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
 	<p data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>
 
+<!-- a sample of how to format an elastic native search in a data-bind -->
 	<ul id='homeProdSearchBestSellers' data-bind='var: elastic-native({"size":"4","mode":"elastic-native","filter":{"term":{"tags":"IS_BESTSELLER"}}}); format: productSearch; extension: myRIA; loadsTemplate: productListTemplateResults; before:<h2>Best Sellers</h2>;' class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
 
 <!-- a sample of how to get a 'list' src onto the page. -->
@@ -337,12 +339,12 @@ remember to NOT put the button inside the 'onclick' container or two events will
 <li id='productListTemplateResults' class='loadingBG  ' >
 	<div onClick="showContent('product',{'pid':$(this).attr('data-pid')})" data-bind='var:product(pid);format:assignAttribute; attribute:data-pid;' class='pointer'>
 		<div class='prodThumbContainer'>
-		<img src='blank.gif' class='prodThumb' data-bind='var: product(images); format:elasticImage1URL;bgcolor:ffffff;' width='120' height='120' />
+		<img src='blank.gif' class='prodThumb' data-bind='var: product(images); format:imageURL;isElastic:1;bgcolor:ffffff;' width='120' height='120' />
 		</div>
 
 		<h5 data-bind='var: product(prod_name); format:text;'></h5>
 
-		<h6 data-bind='var: product(base_price); format:elasticMoney; currencySign: $;  hideZero:true; className:price; pretext: Our Price: ;'></h6>
+		<h6 data-bind='var: product(base_price); format:money; isElastic:1; currencySign: $;  hideZero:true; className:price; pretext: Our Price: ;'></h6>
 	</div>
 </li>
 </ul>
@@ -383,7 +385,7 @@ this will likely become more flexible in the future. ###
 <table class='prodViewerContainer'>
 <tr>
 	<td class='imageContainer'>
-<!--	<img src='%PROJECT_URL%/blank.gif' id='bobWasHere' class='prodBigImage' data-bind='var: product(zoovy:prod_image1); format: magicZoomPlus; extension: magicToolBox;' width='340' height='340' /> -->
+<!--	<img src='blank.gif' id='bobWasHere' class='prodBigImage' data-bind='var: product(zoovy:prod_image1); format: magicZoomPlus; extension: magicToolBox_mzp;' width='340' height='340' /> -->
 
 <div onClick='app.ext.store_product.u.showPicsInModal({"pid":$(this).attr("data-pid")});' class='pointer clearfix'  data-bind='var:product(pid);format:assignAttribute; attribute:data-pid;'>
 
@@ -449,7 +451,7 @@ this will likely become more flexible in the future. ###
 
 	<a href='#' onClick='app.ext.store_crm.u.showReviewFrmInModal({"pid":$(this).parent().attr("data-pid"),"templateID":"reviewFrmTemplate"}); return false;'>Write Review</a>	|
 
-	<a href='#' onClick="app.ext.myRIA.a.add2BuyerList({pid:$(this).parent().attr('data-pid'),'listid':'wishlist'}); return false;">Add to Wishlist</a>
+	<a href='#' onClick="app.ext.myRIA.a.add2BuyerList({sku:$(this).parent().attr('data-pid'),'listid':'wishlist'}); return false;">Add to Wishlist</a>
 
 	</menu>
 
@@ -995,7 +997,7 @@ So the cart template should contain these two elements and the extension should 
 
 	<div class='cartZipCodeContainer'>
 	<label for='data-ship_zip'>Zip/Postal Code:</label>
-	<input type='text' size='6'  name='ship/postal' id='data-ship_zip' value='' data-bind='var: cart(%ship/postal); format:popVal;' maxlength='10' onChange="app.calls.cartSet.init({'ship/postal':this.value, 'ship/region':''});
+	<input type='text' size='6'  name='ship/postal' id='data-ship_zip' value='' data-bind='var: cart(ship/postal); format:popVal;' maxlength='10' onChange="app.calls.cartSet.init({'ship/postal':this.value, 'ship/region':''});
 	app.ext.store_cart.u.updateCartSummary();
 	app.ext.store_cart.calls.cartShippingMethodsWithUpdate.init();
 	app.model.dispatchThis('immutable');"  />
@@ -1270,9 +1272,9 @@ The 'data-action' attribute is used to assign an onclick.
 		<div data-bind="var: address(bill_address2);format:text;" class='editable' title='address 2'></div>
 
 		<span data-bind="var: address(bill_city);format:text;" class='editable' title='city'></span>,
-		<span data-bind="var: address(bill_state);format:text;" class='editable' title='state'></span>.
-		<span data-bind="var: address(bill_zip);format:text;" class='editable' title='zip'></span>
-		<div data-bind="var: address(bill_country);format:text;" title='country'></div>
+		<span data-bind="var: address(bill_region);format:text;" class='editable' title='state'></span>.
+		<span data-bind="var: address(bill_postal);format:text;" class='editable' title='zip'></span>
+		<div data-bind="var: address(bill_countrycode);format:text;" title='country'></div>
 
 	</div>
 
@@ -1297,9 +1299,9 @@ The 'data-action' attribute is used to assign an onclick.
 		<div data-bind="var: address(ship_address2);format:text;" class='editable' title='address 2'></div>
 
 		<span data-bind="var: address(ship_city);format:text;" class='editable' title='city'></span>,
-		<span data-bind="var: address(ship_state);format:text;" class='editable' title='state'></span>.
-		<span data-bind="var: address(ship_zip);format:text;" class='editable' title='zip'></span>
-		<div data-bind="var: address(ship_country);format:text;" title='country'></div>
+		<span data-bind="var: address(ship_region);format:text;" class='editable' title='state'></span>.
+		<span data-bind="var: address(ship_postal);format:text;" class='editable' title='zip'></span>
+		<div data-bind="var: address(ship_countrycode);format:text;" title='country'></div>
 
 	</div>
 </address>
@@ -1409,6 +1411,7 @@ The 'data-action' attribute is used to assign an onclick.
 	<button  onClick="localStorage.clear(); return false;">Clear Local Storage</button>
 	<button  onClick="app.u.dump(app); return false;">Control to Console</button>
 	<button  onClick="app.u.loadCSSFile('examples/red.css','bg');">load red css</button>
+	<button  onClick="document.write('stuff');">document.write</button>
 	<button  onClick="alert(app.ext.store_checkout.u.thisSessionIsPayPal());">Alert isPaypal</button>
 	<button  onClick="alert(app.ext.store_checkout.u.aValidPaypalTenderIsPresent());">Alert aValidPaypalTenderIsPresent</button>
 

@@ -20,6 +20,7 @@ class can also be applied to a 1 item per row list.
 .alignCenter	{text-align:center;}
 
 
+.valignTop	{vertical-align:top;}
 .valignMiddle	{vertical-align:middle;}
 
 /* hideForApp or Vstore gets toggle on based on account/domain setting. toggle on instead of off to avoid popping. */
@@ -32,7 +33,7 @@ class can also be applied to a 1 item per row list.
 
 
 /* for small buttons */
-.smallButton .ui-button-text	{padding:2px 4px !important; line-height:normal !important; font-size:.85em;}
+.smallButton .ui-button-text	{line-height:normal !important; font-size:.85em;} /* don't mess with padding. will effect icon buttons */
 
 .ui-selectee	{cursor:pointer;}
 
@@ -71,7 +72,7 @@ Generic text styles
 .blue	{color:#000066;}
 .green	{color:#006600;}
 
-
+.smallTxt	{font-size:.75em;}
 
 /*
 some global padding and margins.
@@ -130,6 +131,10 @@ Use this in a table where you want clear separation between rows and cells. This
 .gridTable td, .gridTable th, .gridTable tf	{padding:2px 10px 2px 2px; vertical-align:top;}
 .gridTable tr:nth-child(odd)	{background:#ffffff;}
 .gridTable tr:nth-child(even)	{background:#f0f0f0;}
+
+.gridTable tr.ui-state-highlight	{background: inherit !important;}
+.gridTable tr.ui-state-highlight	{background: inherit !important;}
+
 .gridTable th, .gridTable .tf	{background:#cccccc;}
 
 
@@ -138,7 +143,8 @@ Use this in a table where you want clear separation between rows and cells. This
 /* a global 'handle' class for now. for consistency. 
 later if more variety is needed, we can either create exceptions or more rules to handle all cases.
 */
-.handle { background: #f8f8f8; position: absolute; right: 0; top: 0; bottom: 0; padding:14px 6px 0 6px; cursor:pointer; }
+.finderProdlistContainer .handle	{position: absolute; right: 0; top: 0; bottom: 0;background: #f8f8f8; padding:14px 6px 0 6px;}
+.handle { padding:6px; cursor:pointer; }
 
 .simpleListItem .removeProd, .simpleListItem .handle	{padding-top:3px;} /* less padding on top because lineitem is shorter (no image) */
 
@@ -166,8 +172,9 @@ li.loadingBG, tr.loadingBG	{background:url(images/wait.gif) no-repeat center cen
 .finderProdlistContainer .mpControls	{border:0; border-bottom-width:1px; line-height:24px;}
 
 
-
-
+/* use this in combo with ui-widget, ui-corner-all and ui-widget-content to create a horizontal bar of buttons with a container around them. */
+.ui-widget-buttonbar	{padding:3px 1px;} /* only 1 px on sides because button margin will add 2px */
+.ui-widget-buttonbar button	{margin:0 2px;}
 
 .ui-widget fieldset	{margin:0; padding:0; border:0;}
 .ui-widget h1  {font-size:1.6em; color:#000000; font-weight:bold; 	margin: 0; padding: 0;} /* Used for the page title element */
@@ -509,9 +516,28 @@ see shipping panel in product editor for example
 .alignedLabels label span	{width:30%;}
 .alignedInputs textarea,
 .alignedInputs input[type=email],
+.alignedInputs input[type=password],
 .alignedInputs input[type=text]	{width:65%;}
 
 .alignedInputs input[type=number], 
 .alignedInputs select	{max-width:65%;} /* shrink to fit widest option, but stay under threshold */
 
 
+/* landing page (aka recent news) */
+
+/* .pageLanding .ui-widget-content	{max-height:400px; overflow:auto; min-height:75px;} /* if/when browsers support it, check out  overflow-style */
+
+.pageLanding h2 .ui-button	{display:none;} /* temporarily disabled buttons till state is supported */
+
+/* three column panel layout (homepage) */
+#landingPageColumn1	{width:65%; float:left;}
+#landingPageColumn2	{width:33%; float:right;}
+
+#landingPageColumn2 .varImage	{max-width:300px; width:100%;}
+
+
+
+
+
+/* ebay reports page */
+.ebayListingsReportPage fieldset.oneThird	{width:30%}

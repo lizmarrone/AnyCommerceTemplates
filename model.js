@@ -81,7 +81,7 @@ app.globalAjax.lastDispatch - keeps track of when the last dispatch occurs. Not 
 function zoovyModel() {
 	var r = {
 	
-		version : "201252",
+		version : "201301",
 	// --------------------------- GENERAL USE FUNCTIONS --------------------------- \\
 	
 	//pass in a json object and the last item id is returned.
@@ -776,11 +776,15 @@ so to ensure saving to appPageGet|.safe doesn't save over previously requested d
 
 		handleResponse_authAdminLogin: function(responseData)	{
 			app.u.dump("BEGIN model.handleResponse_authAdminLogin"); //app.u.dump(responseData);
-			app.vars.deviceid = responseData.deviceid;
-			app.vars.authtoken = responseData.authtoken;
-			app.vars.userid = responseData.userid.toLowerCase();
-			app.vars.username = responseData.username.toLowerCase();
-			app.vars.thisSessionIsAdmin = true;
+			if(app.model.responseHasErrors(responseData))	{} // do nothing. error handling handled in _default.
+//executing this code block if an error is present will cause a JS error.
+			else	{
+				app.vars.deviceid = responseData.deviceid;
+				app.vars.authtoken = responseData.authtoken;
+				app.vars.userid = responseData.userid.toLowerCase();
+				app.vars.username = responseData.username.toLowerCase();
+				app.vars.thisSessionIsAdmin = true;
+				}
 			app.model.handleResponse_defaultAction(responseData); //datapointer ommited because data already saved.
 			},
 
@@ -1056,7 +1060,7 @@ will return false if datapointer isn't in app.data or local (or if it's too old)
 //			app.u.dump(" -> datapointer = "+datapointer);
 			var local;
 			var r = false;
-			var expires = datapointer == 'authAdminLogin' ? (60*60*24*7) : (60*60*24); //how old the data can be before we fetch new.
+			var expires = datapointer == 'authAdminLogin' ? (60*60*24*2) : (60*60*24); //how old the data can be before we fetch new.
 	//checks to see if the request is already in 'this'.
 			if(app.data && !$.isEmptyObject(app.data[datapointer]))	{
 //				app.u.dump(' -> control already has data');
@@ -1173,6 +1177,7 @@ will return false if datapointer isn't in app.data or local (or if it's too old)
 			var r = true; //what is returned. if a template is created, true is returned.
 			if(templateID && typeof $templateSpec == 'object')	{
 				app.templates[templateID] = $templateSpec.attr('data-templateid',templateID).clone();
+				app.templates[templateID].removeAttr('id'); //get rid of the ID to reduce likelyhood of duplicate ID's on the DOM.
 				$('#'+templateID).empty().remove(); //here for templates created from existing DOM elements. They're removed to ensure no duplicate ID's exist.
 				}
 			else	{
@@ -1500,7 +1505,7 @@ ADMIN/USER INTERFACE
 			var pathParts = path.split('?'); //pathParts[0] = /biz/setup and pathParts[1] = key=value&anotherkey=anothervalue (uri params);
 //make sure to pass data2pass last so that the contents of it get preference (duplicate vars will be overwritten by whats in data)
 //this is important because data is typically a form input and may have a verb or action set that is different than what's in the pathParts URI params
-			var data = $.extend(app.u.getParametersAsObject("?"+pathParts[1]),data2Pass); //getParamsfunction wants ? in string.
+			var data = $.extend(app.u.kvp2Array(pathParts[1]),data2Pass); //getParamsfunction wants ? in string.
 			
 			var URL = 'https://www.zoovy.com'+pathParts[0]; //once live, won't need the full path, but necessary for testing purposes.
 			
