@@ -119,4 +119,21 @@ float:left;
 		
 }
 
+#featureImg{
+	float:right;
+	padding-right:850px;
+	padding-top:700px;
+}
+
+#featureImg img{
+	height:380px;
+	width:700px;
+}
+
+#nav a { border: 1px solid #ccc; background:gray; text-decoration: none; margin: 0 5px; padding: 3px 5px; float:right;}
+#nav a.activeSlide { background: #b9b9b8;}
+
+#mainContentArea{width:75%;
+float:right;}
+
 

@@ -50,6 +50,7 @@ css files should be included before any .js file to ensure they are downloaded i
 <script src="customTabs.js"></script>
 <script type="text/javascript" src="loadscript.js"></script>
 <script type="text/javascript" src="_project1_JS.js"></script>
+<script type="text/javascript" src="_jquery.cycle.all.js"></script>
 
 
 
@@ -101,11 +102,11 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 	<div id="headerBar">
 	<p><span id="boldHeader">&nbsp &nbsp &nbsp &nbsp Welcome, Guest!</span> (not you? 
 	<a href="#" onclick="">Login</a> or <a href="#" onclick="">Sign-up</a>)
-	<span id="headerRight"><span class="cartItemCount"></span><span id="boldHeader">&nbsp Items</span> stashed &nbsp|&nbsp <a href="#" onclick="return showContent('cart',{});">VIEW THE STASH</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+	<span id="headerRight"><span class="cartItemCount"></span><span id="boldHeader">&nbsp Items</span> stashed &nbsp|&nbsp <a 													href="#" onclick="return showContent('cart',{});">VIEW THE STASH</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 	 <a href="#" onclick="" style="text-decoration:none">HELP&nbsp&nbsp </a></span>
 	</p>
 	</div>
-	
+    
 	<div id="sidebar">
 		<img src="link_logo.png/" class="pointer" height="100" onClick="return showContent('category', {'navcat' : '.'})">
 		<div id="searchBar">
@@ -114,6 +115,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 			<button type="button" id="searchButton">SEARCH</button>
 			</form>
 		</div>
+           
 		<div class="sideNav">
         
         	<div class="navLink" id="browse" class="pointer">BROWSE ALL GAMES
@@ -144,6 +146,9 @@ app.u.loadScript(app.vars.baseURL+"init.js");
             <img src="link_hot.png/" class="hot">
             <img src="link_new.png/" class="new">
             <img src="link_act.png/" class="act">-->
+            
+            
+            
 		</div>
         <div id="altSideNav">
         	<div>
@@ -165,7 +170,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
                 <a id="altLinkSignout" href="#" onclick=""> &nbsp &#187 &nbsp Sign Out</a><br />
             </div>
         </div>
-        <img src="bottomLogo.gif">
+        <img src="bottomLogo.gif" class="pointer" onClick="">
 	</div>
 </div> 
 	
@@ -177,6 +182,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 	** REMINDER : DO NOT PUT ANY GRAPHICS/CONTENT THAT SHOULD NOT APPEAR ON EVERY PAGE IN THE VIEW (HERE)
 	**				  INSTEAD PUT THEM INTO <div id="homepageTemplate"></div>
 	-->
+
 <div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
 <div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
 
@@ -226,18 +232,34 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 -->
 <div id='homepageTemplate' class='homeTemplate'>
 
-	<!--<h5 data-bind='var: nothing(); defaultValue: blue; elasticAttr: pid; format:searchLink; extension:myRIA;'></h5>
-	-->
+<div id="featureImg">
+    	<img src="main_Pic1.gif" class="pointer" onClick="">
+        <img src="main_Pic2.gif" class="pointer" onClick="">
+</div>
+    <script type="text/javascript">
+		$('#featureImg') 
+	.after('<div id="nav">') 
+	.cycle({ 
+    fx:     'fade',  
+    timeout: 5000, 
+    pager:  '#nav' 
+	});
+	</script>
+    <!--testing
+	<<h5 data-bind='var: nothing(); defaultValue: blue; elasticAttr: pid; format:searchLink; extension:myRIA;'></h5>
+	
+    -->
 	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>
-
+<!--
 	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; hide_summary:1; before:<h2>Featured Items</h2>; withReviews:1;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
 	<p data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>
 
 	<ul id='homeProdSearchBestSellers' data-bind='var: elastic-native({"size":"4","mode":"elastic-native","filter":{"term":{"tags":"IS_BESTSELLER"}}}); format: productSearch; extension: myRIA; loadsTemplate: productListTemplateResults; before:<h2>Best Sellers</h2>;' class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
-
+testing-->
 <!-- a sample of how to get a 'list' src onto the page. -->
+<!--
 	<ul data-bind="var: list($models.@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; withReviews:1; items_per_page: 25;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
-
+-->
 
 </div>
 
