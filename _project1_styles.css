@@ -1,0 +1,122 @@
+#headerBar{
+	width: 100%;
+	height: 30px;
+	background: black;
+}
+
+#header p{
+	color: white;
+}
+
+#header a{
+	font-weight: bold;
+	color: white;
+}
+
+#boldHeader{
+	font-weight: bold;
+}
+
+a {
+	font-weight: bold;
+	color: white;
+}
+
+#headerRight{
+	float: right;
+}
+
+#searchBar{
+	height: 20px;
+	background: black;
+	text-align: center;
+	padding: 15px;
+	float: left;
+	width: 230px;
+}
+
+#sidebar{
+	width: 270px;
+	float: left;
+}
+
+#searchButton{
+	background:#ca0000;
+	color: white;
+	
+}
+
+#searchfunc{
+float:left;
+}
+
+.sideNav{
+	background: #333333;
+	height:390px;
+	width:260px;
+	float:left;
+}
+
+.navLink{
+	text-align: center;
+	padding-top:15px;
+	padding-bottom:15px;
+	padding-right:20px;
+	color: #ffffff;
+}
+
+#browse:hover{
+	background:url(link_sidebar_mouseover.gif) no-repeat;
+	
+}
+
+#hot:hover{
+	background:url(link_sidebar_mouseover.gif) no-repeat;
+}
+
+#new:hover{
+	background:url(link_sidebar_mouseover.gif) no-repeat;
+}
+
+#act:hover{
+	background:url(link_sidebar_mouseover.gif) no-repeat;
+}
+
+#fps:hover{
+	background:url(link_sidebar_mouseover.gif) no-repeat;
+}
+
+#mmoRpg:hover{
+	background:url(link_sidebar_mouseover.gif) no-repeat;
+}
+
+#board:hover{
+	background:url(link_sidebar_mouseover.gif) no-repeat;
+}
+
+#card:hover{
+	background:url(link_sidebar_mouseover.gif) no-repeat;
+}
+
+#altSideNav{
+	height:350px;
+	width:260px;
+	float:left;
+	background:#111111;
+}
+
+.altLink{
+	text-align:center;
+	display:table;
+}
+
+.altLink a{
+	padding:10px;
+	text-decoration:none;
+}
+
+#altLinkAbout{
+		
+}
+
+
