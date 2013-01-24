@@ -63,6 +63,7 @@ float:left;
 	padding-bottom:15px;
 	padding-right:20px;
 	color: #ffffff;
+	cursor:pointer;
 }
 
 #browse:hover{
@@ -98,7 +99,7 @@ float:left;
 	background:url(link_sidebar_mouseover.gif) no-repeat;
 }
 
-#altSideNav{
+.altSideNav{
 	height:350px;
 	width:260px;
 	float:left;
@@ -133,7 +134,14 @@ float:left;
 #nav a { border: 1px solid #ccc; background:gray; text-decoration: none; margin: 0 5px; padding: 3px 5px; float:right;}
 #nav a.activeSlide { background: #b9b9b8;}
 
-#mainContentArea{width:75%;
+#mainContentArea{
+width:900px;
 float:right;}
+
+#appView{
+	min-width:1200px;
+}
+
+
 
 

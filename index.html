@@ -20,7 +20,7 @@ var _gaq = _gaq || {'push':function(){}} //here for testing. REPLACE BEFORE DEPL
 var myCreole;
 
 var app = {vars:{
-	"release":"20121217131600",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
+	"release":"20130123160000",  //increment this with each change. should solve caching issues. format: YYYYMMDDHHMMSS
 	"_clientid":"zmvc",
 	"baseURL":"",
 	"httpsURL":"https://ssl.zoovy.com/s=www.sporks.zoovy.com/",
@@ -101,7 +101,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 <div id="header">
 	<div id="headerBar">
 	<p><span id="boldHeader">&nbsp &nbsp &nbsp &nbsp Welcome, Guest!</span> (not you? 
-	<a href="#" onclick="">Login</a> or <a href="#" onclick="">Sign-up</a>)
+	<a href="#" onclick="return showContent('customer',{'show':'myaccount'});">Login</a> or <a href="#" onclick="return showContent('customer',{'show':'myaccount'});">Sign-up</a>)
 	<span id="headerRight"><span class="cartItemCount"></span><span id="boldHeader">&nbsp Items</span> stashed &nbsp|&nbsp <a 													href="#" onclick="return showContent('cart',{});">VIEW THE STASH</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 	 <a href="#" onclick="" style="text-decoration:none">HELP&nbsp&nbsp </a></span>
 	</p>
@@ -118,8 +118,8 @@ app.u.loadScript(app.vars.baseURL+"init.js");
            
 		<div class="sideNav">
         
-        	<div class="navLink" id="browse" class="pointer">BROWSE ALL GAMES
-           		<img src="link_arrow.gif" class="pointer" id="browseArrow" onClick="" style="float:right">
+        	<div class="navLink" id="browse" class="pointer" onClick="return showContent('product',{'pid':'[pid]'});">BROWSE ALL GAMES
+           		<img src="link_arrow.gif" class="pointer" id="browseArrow" style="float:right">
             </div>
             <div class="navLink" id="hot" class="pointer">WHAT'S HOT
             	<img src="link_arrow.gif" class="pointer" id="hotArrow" onClick="" style="float:right">
@@ -150,27 +150,25 @@ app.u.loadScript(app.vars.baseURL+"init.js");
             
             
 		</div>
-        <div id="altSideNav">
-        	<div>
-            	<img src="altLinkDrop.gif" class="pointer" id="altDropdown" style="float:left">
-            </div>
+        <img src="altLinkDrop.gif" class="pointer" id="altDropdown" style="float:left">
+        <div class="altSideNav">
             <div class="altLink">
             	<img src="altLogo.gif" style="float:left">
-                <a id="altLinkAbout" href="#" onclick=""> &nbsp &#187 &nbsp About Us</a><br />
-                <a id="altLinkFaq" href="#" onclick=""> &nbsp &#187 &nbsp FAQs</a><br />
-                <a id="altLinkContact" href="#" onclick=""> &nbsp &#187 &nbsp Contact Us</a><br />
-                <a id="altLinkShip" href="#" onclick=""> &nbsp &#187 &nbsp Shipping Policy</a><br />
-                <a id="altLinkExc" href="#" onclick=""> &nbsp &#187 &nbsp Exchange and Return Policy</a><br />
-                <a id="altLinkTC" href="#" onclick=""> &nbsp &#187 &nbsp Terms and Conditions</a><br />
+                <a id="altLinkAbout" href="#" onclick="return showContent('company',{'show':'about'});"> &nbsp &#187 &nbsp About Us</a><br />
+                <a id="altLinkFaq" href="#" onclick="return showContent('company',{'show':'faq'});"> &nbsp &#187 &nbsp FAQs</a><br />
+                <a id="altLinkContact" href="#" onclick="return showContent('company',{'show':'contact'});"> &nbsp &#187 &nbsp Contact Us</a><br />
+                <a id="altLinkShip" href="#" onclick="return showContent('company',{'show':'shipping'});"> &nbsp &#187 &nbsp Shipping Policy</a><br />
+                <a id="altLinkExc" href="#" onclick="return showContent('company',{'show':'return'});"> &nbsp &#187 &nbsp Exchange and Return Policy</a><br />
+                <a id="altLinkTC" href="#" onclick="return showContent('company',{'show':'privacy'});"> &nbsp &#187 &nbsp Terms and Conditions</a><br />
                 <img src="altLinkAccServ.gif" style="float:left">
-                <a id="altLinkAcc" href="#" onclick=""> &nbsp &#187 &nbsp My Account</a><br />
-                <a id="altLinkOrder" href="#" onclick=""> &nbsp &#187 &nbsp Order Tracking</a><br />
+                <a id="altLinkAcc" href="#" onclick="return showContent('customer',{'show':'myaccount'});"> &nbsp &#187 &nbsp My Account</a><br />
+                <a id="altLinkOrder" href="#" onclick="return showContent('customer',{'show':'orders'});"> &nbsp &#187 &nbsp Order Tracking</a><br />
                 <a id="altLinkViewed" href="#" onclick=""> &nbsp &#187 &nbsp Previously Viewed Items</a><br />
                 <a id="altLinkWish" href="#" onclick=""> &nbsp &#187 &nbsp Wishlist Items</a><br />
                 <a id="altLinkSignout" href="#" onclick=""> &nbsp &#187 &nbsp Sign Out</a><br />
             </div>
         </div>
-        <img src="bottomLogo.gif" class="pointer" onClick="">
+        <img src="bottomLogo.gif" class="pointer" onClick="return showContent('category', {'navcat' : '.'})">
 	</div>
 </div> 
 	
@@ -182,10 +180,10 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 	** REMINDER : DO NOT PUT ANY GRAPHICS/CONTENT THAT SHOULD NOT APPEAR ON EVERY PAGE IN THE VIEW (HERE)
 	**				  INSTEAD PUT THEM INTO <div id="homepageTemplate"></div>
 	-->
-
+<div id="mainContentAdjust">
 <div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
 <div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
-
+</div>
 
 <!-- ... your html ends -->
 <!-- /VIEW CONTENT -->
@@ -236,15 +234,7 @@ the homepageTemplate template is loaded into mainContentArea by default when the
     	<img src="main_Pic1.gif" class="pointer" onClick="">
         <img src="main_Pic2.gif" class="pointer" onClick="">
 </div>
-    <script type="text/javascript">
-		$('#featureImg') 
-	.after('<div id="nav">') 
-	.cycle({ 
-    fx:     'fade',  
-    timeout: 5000, 
-    pager:  '#nav' 
-	});
-	</script>
+    
     <!--testing
 	<<h5 data-bind='var: nothing(); defaultValue: blue; elasticAttr: pid; format:searchLink; extension:myRIA;'></h5>
 	

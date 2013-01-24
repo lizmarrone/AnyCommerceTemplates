@@ -61,16 +61,18 @@ $(document).ready(function(){
   $("#altDropdown").click(function(){
 	  if(altDDUpDown == true)
 	  {
-      	$(".altLink").hide();
-		$("#altSideNav").css("background-color", "white");
+      	$(".altSideNav").hide();
+		//$("#altSideNav").css("background-color", "white");
 		altDDUpDown = false;
 	  }
 	  else if(altDDUpDown == false)
 	  {
-		  $(".altLink").show();
-		  $("#altSideNav").css("background-color", "#111111");
+		  $(".altSideNav").show();
+		  //$("#altSideNav").css("background-color", "#111111");
 		  altDDUpDown = true;
-	  }
-		
+	  }	
   });
+  
+
+		
 });
