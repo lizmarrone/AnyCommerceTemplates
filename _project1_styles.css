@@ -1,7 +1,9 @@
 #headerBar{
 	width: 100%;
 	height: 30px;
-	background: black;
+	background: #333333;
+	word-spacing:2px;
+	padding-top:6px;
 }
 
 #header p{
@@ -42,9 +44,9 @@ a {
 }
 
 #searchButton{
-	background:#ca0000;
+	background:#c50000;
 	color: white;
-	
+	border-color:#980000;
 }
 
 #searchfunc{
@@ -65,39 +67,49 @@ float:left;
 	padding-right:20px;
 	color: #ffffff;
 	cursor:pointer;
+	text-align:right;
+	width:110%;
 }
 
 #browse:hover{
 	background:url(link_sidebar_mouseover.gif) no-repeat;
+	text-align:center;	
 	
 }
 
 #hot:hover{
 	background:url(link_sidebar_mouseover.gif) no-repeat;
+	text-align:center;
 }
 
 #new:hover{
 	background:url(link_sidebar_mouseover.gif) no-repeat;
+	text-align:center;
 }
 
 #act:hover{
 	background:url(link_sidebar_mouseover.gif) no-repeat;
+	text-align:center;
 }
 
 #fps:hover{
 	background:url(link_sidebar_mouseover.gif) no-repeat;
+	text-align:center;
 }
 
 #mmoRpg:hover{
 	background:url(link_sidebar_mouseover.gif) no-repeat;
+	text-align:center;
 }
 
 #board:hover{
 	background:url(link_sidebar_mouseover.gif) no-repeat;
+	text-align:center;
 }
 
 #card:hover{
 	background:url(link_sidebar_mouseover.gif) no-repeat;
+	text-align:center;
 }
 
 .altSideNav{
@@ -122,14 +134,16 @@ float:left;
 }
 
 #featureImg{
-	float:right;
+	float:left;
 	padding-right:850px;
-	padding-top:700px;
+	padding-top:540px;
 }
 
 #featureImg img{
-	height:380px;
-	width:700px;
+	height:400px;
+	width:850px;
+	padding-top:40px;
+	float:left;
 }
 
 #nav a { border: 1px solid #ccc; background:gray; text-decoration: none; margin: 0 5px; padding: 3px 5px; float:right;}
@@ -141,6 +155,18 @@ float:right;}
 
 #appView{
 	min-width:1200px;
+}
+
+.overflow{
+	overflow:visible;
+}
+
+.linkPad{
+	padding-right:40px;
+}
+
+.altLinkAlign{
+	text-align:left;
 }
 
 

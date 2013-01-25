@@ -59,14 +59,14 @@ app.rq.push(['script',0,app.vars.baseURL+'_project1_JS.js']);
 app.rq.push(['templateFunction','homepageTemplate','onDeparts',function(P) {app.u.dump("just left the homepage")}]);
 
 //Homepage Slideshow image code. 
-app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) {
-	$("#nav").html("");
+app.rq.push(['templateFunction','homepageTemplate','onCompletes',function(P) { //uncomment lines to add pager tabs
+	//$("#nav").html("");
 	$('#featureImg') 
-	.after('<div id="nav">') 
+	//.after('<div id="nav">') 
 	.cycle({ 
     fx:     'fade',  
     timeout: 5000, 
-    pager:  '#nav' 
+    //pager:  '#nav' 
 	});}]);
 
 //	Use the below function to execute javascript from the homepage.	Modify as needed to perform at different stages/template pages.

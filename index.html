@@ -100,50 +100,47 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 
 <div id="header">
 	<div id="headerBar">
-	<p><span id="boldHeader">&nbsp &nbsp &nbsp &nbsp Welcome, Guest!</span> (not you? 
+	<p><span id="boldHeader">&nbsp &nbsp &nbsp &nbsp Welcome, Guest!</span> (Not you? 
 	<a href="#" onclick="return showContent('customer',{'show':'myaccount'});">Login</a> or <a href="#" onclick="return showContent('customer',{'show':'myaccount'});">Sign-up</a>)
-	<span id="headerRight"><span class="cartItemCount"></span><span id="boldHeader">&nbsp Items</span> stashed &nbsp|&nbsp <a 													href="#" onclick="return showContent('cart',{});">VIEW THE STASH</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+	<span id="headerRight"><span class="cartItemCount"></span><span id="boldHeader">&nbsp Items</span> stashed &nbsp|&nbsp <a href="#" onclick="return showContent('cart',{});">VIEW THE STASH</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 	 <a href="#" onclick="" style="text-decoration:none">HELP&nbsp&nbsp </a></span>
 	</p>
 	</div>
     
 	<div id="sidebar">
-		<img src="link_logo.png/" class="pointer" height="100" onClick="return showContent('category', {'navcat' : '.'})">
+		<img src="link_logo.png/" class="pointer" height="100" onClick="return showContent('homepage', {})">
 		<div id="searchBar">
 			<form name='headerSearchFrm' action='#' class='productSearchForm' method="get" id="searchFunc">
-				<fieldset>
-				<legend>Search</legend>
 				<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="find it here..." />
-				</fieldset>
 				<input class="search" type="submit" value="Search" id="searchButton" />
    		    </form>
 		</div>
            
 		<div class="sideNav">
        
-        	<div class="navLink" id="browse" class="pointer" onClick="return showContent('product',{'pid':'[pid]'});">BROWSE ALL GAMES
-           		<img src="link_arrow.gif" class="pointer" id="browseArrow" style="float:right">
+        	<div class="navLink" id="browse" class="pointer overflow">BROWSE ALL GAMES
+           		<img src="link_arrow.gif" class="pointer linkPad" id="browseArrow" style="float:right">
             </div>
-            <div class="navLink" id="hot" class="pointer">WHAT'S HOT
-            	<img src="link_arrow.gif" class="pointer" id="hotArrow" onClick="" style="float:right">
+            <div class="navLink" id="hot" class="pointer overflow">WHAT'S HOT
+            	<img src="link_arrow.gif" class="pointer linkPad" id="hotArrow" onClick="" style="float:right">
             </div>
-            <div class="navLink" id="new" class="pointer">NEW ARRIVALS
-            	<img src="link_arrow.gif" class="pointer" id="newArrow" onClick="" style="float:right">
+            <div class="navLink" id="new" class="pointer overflow">NEW ARRIVALS
+            	<img src="link_arrow.gif" class="pointer linkPad" id="newArrow" onClick="" style="float:right">
             </div>
-            <div class="navLink" id="act" class="pointer">ACTION ADVENTURE
-            	<img src="link_arrow.gif" class="pointer" id="actArrow" onClick="" style="float:right">
+            <div class="navLink" id="act" class="pointer overflow">ACTION ADVENTURE
+            	<img src="link_arrow.gif" class="pointer linkPad" id="actArrow" onClick="" style="float:right">
             </div>
-            <div class="navLink" id="fps" class="pointer">FPS
-            	<img src="link_arrow.gif" class="pointer" id="fpsArrow" onClick="" style="float:right">
+            <div class="navLink" id="fps" class="pointer overflow">FPS
+            	<img src="link_arrow.gif" class="pointer linkPad" id="fpsArrow" onClick="" style="float:right">
             </div>
-            <div class="navLink" id="mmoRpg" class="pointer">MMO/RPGs
-            	<img src="link_arrow.gif" class="pointer" id="mmoArrow" onClick="" style="float:right">
+            <div class="navLink" id="mmoRpg" class="pointer overflow">MMO/RPGs
+            	<img src="link_arrow.gif" class="pointer linkPad" id="mmoArrow" onClick="" style="float:right">
             </div>
-            <div class="navLink" id="board" class="pointer">BOARD GAMES
-            	<img src="link_arrow.gif" class="pointer" id="boardArrow" onClick="" style="float:right">
+            <div class="navLink" id="board" class="pointer overflow">BOARD GAMES
+            	<img src="link_arrow.gif" class="pointer linkPad" id="boardArrow" onClick="" style="float:right">
             </div>
-            <div class="navLink" id="card" class="pointer">CARD GAMES
-            	<img src="link_arrow.gif" class="pointer" id="cardArrow" onClick="" style="float:right">
+            <div class="navLink" id="card" class="pointer overflow">CARD GAMES
+            	<img src="link_arrow.gif" class="pointer linkPad" id="cardArrow" onClick="" style="float:right">
             </div>
 			<!--<img src="link_browseGames.png/" class="browseGames">
             <img src="link_hot.png/" class="hot">
@@ -155,23 +152,23 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 		</div>
         <img src="altLinkDrop.gif" class="pointer" id="altDropdown" style="float:left">
         <div class="altSideNav">
-            <div class="altLink">
+            <div class="altLink altLinkAlign">
             	<img src="altLogo.gif" style="float:left">
-                <a id="altLinkAbout" href="#" onclick="return showContent('company',{'show':'about'});"> &nbsp &#187 &nbsp About Us</a><br />
-                <a id="altLinkFaq" href="#" onclick="return showContent('company',{'show':'faq'});"> &nbsp &#187 &nbsp FAQs</a><br />
-                <a id="altLinkContact" href="#" onclick="return showContent('company',{'show':'contact'});"> &nbsp &#187 &nbsp Contact Us</a><br />
-                <a id="altLinkShip" href="#" onclick="return showContent('company',{'show':'shipping'});"> &nbsp &#187 &nbsp Shipping Policy</a><br />
-                <a id="altLinkExc" href="#" onclick="return showContent('company',{'show':'return'});"> &nbsp &#187 &nbsp Exchange and Return Policy</a><br />
-                <a id="altLinkTC" href="#" onclick="return showContent('company',{'show':'privacy'});"> &nbsp &#187 &nbsp Terms and Conditions</a><br />
+                <a id="altLinkAbout" href="#" class="altLinkAlign" onclick="return showContent('company',{'show':'about'});"> &nbsp &#187 &nbsp About Us</a><br />
+                <a id="altLinkFaq" href="#" class="altLinkAlign" onclick="return showContent('company',{'show':'faq'});"> &nbsp &#187 &nbsp FAQs</a><br />
+                <a id="altLinkContact" href="#" class="altLinkAlign" onclick="return showContent('company',{'show':'contact'});"> &nbsp &#187 &nbsp Contact Us</a><br />
+                <a id="altLinkShip" href="#" class="altLinkAlign" onclick="return showContent('company',{'show':'shipping'});"> &nbsp &#187 &nbsp Shipping Policy</a><br />
+                <a id="altLinkExc" href="#" class="altLinkAlign" onclick="return showContent('company',{'show':'return'});"> &nbsp &#187 &nbsp Exchange and Return Policy</a><br />
+                <a id="altLinkTC" href="#" class="altLinkAlign" onclick="return showContent('company',{'show':'privacy'});"> &nbsp &#187 &nbsp Terms and Conditions</a><br />
                 <img src="altLinkAccServ.gif" style="float:left">
-                <a id="altLinkAcc" href="#" onclick="return showContent('customer',{'show':'myaccount'});"> &nbsp &#187 &nbsp My Account</a><br />
-                <a id="altLinkOrder" href="#" onclick="return showContent('customer',{'show':'orders'});"> &nbsp &#187 &nbsp Order Tracking</a><br />
-                <a id="altLinkViewed" href="#" onclick=""> &nbsp &#187 &nbsp Previously Viewed Items</a><br />
-                <a id="altLinkWish" href="#" onclick=""> &nbsp &#187 &nbsp Wishlist Items</a><br />
-                <a id="altLinkSignout" href="#" onclick=""> &nbsp &#187 &nbsp Sign Out</a><br />
+                <a id="altLinkAcc" href="#" class="altLinkAlign" onclick="return showContent('customer',{'show':'myaccount'});"> &nbsp &#187 &nbsp My Account</a><br />
+                <a id="altLinkOrder" href="#" class="altLinkAlign" onclick="return showContent('customer',{'show':'orders'});"> &nbsp &#187 &nbsp Order Tracking</a><br />
+                <a id="altLinkViewed" href="#" class="altLinkAlign" onclick=""> &nbsp &#187 &nbsp Previously Viewed Items</a><br />
+                <a id="altLinkWish" href="#" class="altLinkAlign" onclick=""> &nbsp &#187 &nbsp Wishlist Items</a><br />
+                <a id="altLinkSignout" href="#" class="altLinkAlign" onclick=""> &nbsp &#187 &nbsp Sign Out</a><br />
             </div>
         </div>
-        <img src="bottomLogo.gif" class="pointer" onClick="return showContent('category', {'navcat' : '.'})">
+        <img src="bottomLogo.gif" class="pointer" onClick="return showContent('homepage', {})">
 	</div>
 </div> 
 	
