@@ -141,7 +141,7 @@ float:left;
 
 #featureImg img{
 	height:400px;
-	width:850px;
+	width:950px;
 	padding-top:40px;
 	float:left;
 }
@@ -167,6 +167,39 @@ float:right;}
 
 .altLinkAlign{
 	text-align:left;
+}
+
+.productListItem{
+	padding:5px;
+}
+
+#productListItemDetButton{
+	width:40%;
+	height:90%;
+	float:left;
+	padding-top:8px;
+}
+
+#productListItemPrice{
+	float:right;
+	color:#333333;
+	padding-top:8px;
+	padding-right:15px;
+}
+
+#productListItemName{
+	padding-top:8px;
+	text-align:center;
+	color:red;
+}
+
+#productListItemImg{
+	padding-left:60px;
+}
+
+#mainContentAdjust{
+	float:left;
+	padding-left:25px;
 }
 
 
