@@ -72,44 +72,46 @@ float:left;
 }
 
 #browse:hover{
-	background:url(link_sidebar_mouseover.gif) no-repeat;
-	text-align:center;	
-	
+	background:url(link_sidebar_mouseover.gif) no-repeat left center;
+	text-align:center;
 }
 
 #hot:hover{
-	background:url(link_sidebar_mouseover.gif) no-repeat;
+	background:url(link_sidebar_mouseover.gif) no-repeat left center;
 	text-align:center;
 }
 
 #new:hover{
-	background:url(link_sidebar_mouseover.gif) no-repeat;
+	background:url(link_sidebar_mouseover.gif) no-repeat left center;
 	text-align:center;
 }
 
 #act:hover{
-	background:url(link_sidebar_mouseover.gif) no-repeat;
+	background:url(link_sidebar_mouseover.gif) no-repeat left center;
 	text-align:center;
 }
 
 #fps:hover{
-	background:url(link_sidebar_mouseover.gif) no-repeat;
+	background:url(link_sidebar_mouseover.gif) no-repeat left center;
 	text-align:center;
 }
 
 #mmoRpg:hover{
-	background:url(link_sidebar_mouseover.gif) no-repeat;
+	background:url(link_sidebar_mouseover.gif) no-repeat left center;
 	text-align:center;
 }
 
 #board:hover{
-	background:url(link_sidebar_mouseover.gif) no-repeat;
+	background:url(link_sidebar_mouseover.gif) no-repeat left center;
 	text-align:center;
 }
 
 #card:hover{
-	background:url(link_sidebar_mouseover.gif) no-repeat;
+	background:url(link_sidebar_mouseover.gif) no-repeat left center;
 	text-align:center;
+}
+
+.sidebarLineAdjust{
 }
 
 .altSideNav{
@@ -136,7 +138,7 @@ float:left;
 #featureImg{
 	float:left;
 	padding-right:850px;
-	padding-top:540px;
+	height:485px;
 }
 
 #featureImg img{
@@ -163,6 +165,7 @@ float:right;}
 
 .linkPad{
 	padding-right:40px;
+	float:right;
 }
 
 .altLinkAlign{
