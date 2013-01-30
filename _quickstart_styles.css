@@ -1,5 +1,22 @@
 @charset "utf-8";
 /* CSS Document */
+body {font-family:"myriad Pro", arial, verdana; color:#be0000; font-size:12px; margin:0; padding:0;}
+a{color:#be0000; text-decoration:none;}
+a:hover{color:#000000; text-decoration:none;}
 
-#loader{background:#09F; width:500px; border:1px solid #333333; height:200px;}
-#header{height:120px; border:1px solid black;}
+#loader{background:#3b3b3b; width:500px; border:1px solid #000000; height:150px; color:#FFFFFF; padding:20px; text-align:center;}
+#loader h3{margin:15px 0;}
+#appPreViewProgressText{margin-bottom:15px;}
+.wrapper{width:1020px; margin:0 auto;}
+#header{height:30px; background:#333333; margin-bottom:40px;}
+.border-gray{border:1px solid #3b3b3b; padding:15px;}
+.welcome{color:#FFFFFF; font-size:12px; line-height:30px;}
+.welcome a{color:#FFFFFF; font-weight:bold;}
+
+.wl-midlink{margin-left:285px; color:#FFFFFF; font-weight:bold; font-size:12px; line-height:30px;}
+.wl-midlink a{color:#FFFFFF;}
+.wl-midlink span{font-weight:normal;}
+.wl-lastlink a{color:#FFFFFF; font-weight:bold; margin-left:125px; font-size:12px; line-height:30px;}
+
+#homepageTemplate{width:700px; margin:0 40px 0 0;}
+.catName{font-size:12px; font-weight:bold;}

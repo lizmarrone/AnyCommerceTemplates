@@ -62,12 +62,14 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 <body>
 <!-- what is displayed onLoad until the view is loaded -->
 <div id='appPreView'>
-<table>
+<table cellpadding="0" cellspacing="0">
 <tr>
-	<td><!-- put logo here --></td>
+	<td><div class="border-gray"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Name"></div></td></tr>
+<tr>
+	
 	<td>
 
-	<div id="loader">
+	<div id="loader">    	
 		<h3>One moment please.</h3>
 
 		<div class='alignCenter'>
@@ -87,7 +89,15 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 
 
 <div id='appView' class='displayNone'>
-	<div id="header">fff</div>
+	<div id="header">
+    	<div class="wrapper clearfix">
+        	<div class="floatLeft welcome"><strong>Welcome, Guest!</strong> (Not you? <a href="#">Login</a> or <a href="#">Sign-up</a>)</div>
+            <div class="floatLeft wl-midlink"><a href="#">755 Items</a> <span>Stashed  |</span>    <a href="#">VIEW THE STASH</a></div>
+            <div class="floatLeft wl-lastlink"><a href="#">HELP</a></div>
+            
+		</div>
+    </div>
+	
 
 <div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
 <div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
@@ -136,8 +146,10 @@ COMMONLY EDITED TEMPLATES
 <!--
 the homepageTemplate template is loaded into mainContentArea by default when the application loads
 -->
-<div id='homepageTemplate' class='homeTemplate'>
 
+<div id='homepageTemplate' class='homeTemplate floatRight'>
+<div class="wrapper">
+	<div><a href="#"><img src="images/z-h-banner-700x300.jpg" width="700" height="300" alt="Banner"></a></div>
 	<!--<h5 data-bind='var: nothing(); defaultValue: blue; elasticAttr: pid; format:searchLink; extension:myRIA;'></h5>
 	-->
 	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>
@@ -152,7 +164,7 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 
 
 </div>
-
+</div>
 
 
 
