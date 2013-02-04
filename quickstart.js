@@ -134,7 +134,10 @@ else	{
 	}
 
 
-
+document.write = function(v){
+	if(console && console.warn){console.warn("document.write was executed. That's bad mojo. Rewritten to $('body').append();")}
+	$("body").append(v);
+	}
 
 
 //The request for appCategoryList is needed early for both the homepage list of cats and tier1.
@@ -301,7 +304,7 @@ else	{
 //				app.u.dump("BEGIN myRIA.callbacks.showAddresses.onSuccess");
 //clean the workspace.
 				var authState = app.u.determineAuthentication();
-				$('#buyerAddresses .shipAddresses, #buyerAddresses .billAddresses, ').empty(); //empty no matter what, so if user was logged in and isn't, addresses go away.
+				$('#buyerAddresses .shipAddresses, #buyerAddresses .billAddresses ').empty(); //empty no matter what, so if user was logged in and isn't, addresses go away.
 				var $buyerAddresses; //recycled. use as target for bill and ship addresses. the target of this changes in the loop below
 //only show addresses if user is logged in.
 				if(authState == 'authenticated')	{
@@ -447,6 +450,10 @@ else	{
 			onSuccess : function(tagObj)	{
 //				app.u.dump('BEGIN app.ext.myRIA.showList.onSuccess ');
 var $parent = $('#'+tagObj.parentID).removeClass('loadingBG');
+//if the page gets reloaded, de-tab so that running tabs() later re-inits properly.
+if($parent.hasClass("ui-tabs"))	{
+	$parent.tabs('destroy').empty();
+	}
 if(app.data[tagObj.datapointer]['@lists'].length > 0)	{
 	var $ul = app.ext.store_crm.u.getBuyerListsAsUL(tagObj.datapointer);
 	var numRequests = 0;
@@ -481,7 +488,7 @@ else	{
 					}
 				else	{
 //					app.u.dump(prods);
-					app.ext.store_prodlist.u.buildProductList({"templateID":"productListTemplateBuyerList","withInventory":1,"withVariations":1,"parentID":tagObj.parentID,"csv":prods,withInventory:1,withReviews:1,withVariations:1})
+					app.ext.store_prodlist.u.buildProductList({"loadsTemplate":"productListTemplateBuyerList","withInventory":1,"withVariations":1,"parentID":tagObj.parentID,"csv":prods,"hideSummary":1,"hidePagination":1},$(app.u.jqSelector('#',tagObj.parentID)));
 					app.model.dispatchThis();
 					}
 				}
@@ -659,9 +666,9 @@ need to be customized on a per-ria basis.
 // this function gets executed after the request has been made, in the showPageContent response. for this reason it should NOT BE MOVED to store_search
 // ## this needs to be upgraded to use app.ext.store_search.u.getElasticResultsAsJQObject
 			productSearch : function($tag,data)	{
-				app.u.dump("BEGIN myRIA.renderFormats.productSearch");
+//				app.u.dump("BEGIN myRIA.renderFormats.productSearch");
 				data.bindData = app.renderFunctions.parseDataBind($tag.attr('data-bind'));
-				app.u.dump(data);
+//				app.u.dump(data);
 				if(data.value)	{
 					var parentID = $tag.attr('id');
 					var L = data.value.hits.hits.length;
@@ -690,7 +697,7 @@ fallback is to just output the value.
 
 			banner : function($tag, data)	{
 //				app.u.dump("begin myRIA.renderFormats.banner");
-				var obj = app.u.getParametersAsObject(decodeURI(data.value)); //returns an object LINK, ALT and IMG
+				var obj = app.u.kvp2Array(data.value); //returns an object LINK, ALT and IMG
 				var hash; //used to store the href value in hash syntax. ex: #company?show=return
 				var pageInfo = {};
 				
@@ -880,7 +887,7 @@ for legacy browsers. That means old browsers will use the anchor to retain 'back
 							var SSLlocation = app.vars.secureURL+"?sessionId="+app.sessionId;
 							SSLlocation += "#customer?show="+infoObj.show
 							_gaq.push(['_link', SSLlocation]); //for cross domain tracking.
-							document.location = SSLlocation;
+							document.location = SSLlocation; //redir to secure url
 							}
 						infoObj.parentID = 'mainContentArea_customer';
 						break;
@@ -1108,7 +1115,7 @@ P.listID (buyer list id)
 				app.u.dump("BEGIN myria.a.add2BuyerList");
 				var authState = app.u.determineAuthentication();
 				app.u.dump("authState: "+authState);
-				if(typeof P != 'object' || !P.pid || !P.listid)	{
+				if(typeof P != 'object' || !P.sku || !P.listid)	{
 					app.u.throwMessage("Uh Oh! Something went wrong. Please try that again or contact the site administrator if error persists. err: required param for add2buyerList was missing. see console for details.");
 					app.u.dump("ERROR! params missing for add2BuyerList. listid and pid required. params: "); app.u.dump(P);
 					}
@@ -1129,12 +1136,12 @@ P.listID (buyer list id)
 						$parent.dialog({'autoOpen':false});
 						}
 					$parent.dialog('open');
-					var msg = app.u.statusMsgObject('adding item '+P.pid+' to list: '+P.listid);
+					var msg = app.u.statusMsgObject('adding item '+P.sku+' to list: '+P.listid);
 					msg.parentID = parentID;
 					app.u.throwMessage(msg);
-					app.ext.store_crm.calls.buyerProductListAppendTo.init(P,{'parentID':parentID,'callback':'showMessaging','message':'Item '+P.pid+' successfully added to list: '+P.listid},'immutable');
+					app.ext.store_crm.calls.buyerProductListAppendTo.init(P,{'parentID':parentID,'callback':'showMessaging','message':'Item '+P.sku+' successfully added to list: '+P.listid},'immutable');
 					app.model.dispatchThis('immutable');
-					_gaq.push(['_trackEvent','Manage buyer list','User Event','item added',P.pid]);
+					_gaq.push(['_trackEvent','Manage buyer list','User Event','item added',P.sku]);
 					}
 				},
 
@@ -1195,7 +1202,17 @@ P.listID (buyer list id)
 				infoObj = this.detectRelevantInfoToPage(window.location.href); 
 				infoObj.back = 0; //skip adding a pushState on initial page load.
 //getParams wants string to start w/ ? but doesn't need/want all the domain url crap.
-				infoObj.uriParams = app.u.getParametersAsObject('?'+window.location.href.split('?')[1]);
+infoObj.uriParams = {};
+var ps = window.location.href; //param string. find a regex for this to clean it up.
+if(ps.indexOf('?') >= 1)	{
+	ps = ps.split('?')[1]; //ignore everything before the first questionmark.
+	if(ps.indexOf('#') >= 1)	{ps = ps.split('#')[0]} //uri params should be before the #
+//	app.u.dump(ps);
+	infoObj.uriParams = app.u.kvp2Array(ps);
+//	app.u.dump(uriParams);
+	}
+
+//				app.u.dump(" -> infoObj.uriParams:"); app.u.dump(infoObj.uriParams);
 				if(infoObj.uriParams.meta)	{
 					app.calls.cartSet.init({'cart/refer':infoObj.uriParams.meta},{},'passive');
 					}
@@ -1227,12 +1244,12 @@ P.listID (buyer list id)
 //search, customer and company contain 'articles' (pages within pages) so when moving from one company to another company, skip the transition
 // or the content is likely to be hidden. execute scroll to top unless transition implicitly turned off (will happen with modals).
 				if(infoObj.pageType == 'cart'){r = false; app.u.dump('fail 0');}
-				else if(infoObj.pageType == 'category' && $old.data('templateid') == 'categoryTemplate' && $old.data('catsafeid') == infoObj.navcat){r = false; app.u.dump("fail 1");}
-				else if(infoObj.pageType == 'category' && $old.data('templateid') == 'homepageTemplate' && $old.data('catsafeid') == infoObj.navcat){r = false; app.u.dump("fail 2");}
-				else if(infoObj.pageType == 'product' && $old.data('templateid') == 'productTemplate' && $old.data('pid') == infoObj.pid){r = false; app.u.dump("fail 3");}
-				else if($old.data('templateid') == 'companyTemplate' && infoObj.pageType == 'company')	{r = false; app.u.dump("fail 4");}
-				else if($old.data('templateid') == 'customerTemplate' && infoObj.pageType == 'customer')	{r = false; app.u.dump("fail 5");}
-				else if($old.data('templateid') == 'searchTemplate' && infoObj.pageType == 'search')	{r = false; app.u.dump("fail 6");}
+				else if(infoObj.pageType == 'category' && $old.data('templateid') == 'categoryTemplate' && $old.data('catsafeid') == infoObj.navcat){r = false; app.u.dump("transition fail 1");}
+				else if(infoObj.pageType == 'category' && $old.data('templateid') == 'homepageTemplate' && $old.data('catsafeid') == infoObj.navcat){r = false; app.u.dump("transition fail 2");}
+				else if(infoObj.pageType == 'product' && $old.data('templateid') == 'productTemplate' && $old.data('pid') == infoObj.pid){r = false; app.u.dump("transition fail 3");}
+				else if($old.data('templateid') == 'companyTemplate' && infoObj.pageType == 'company')	{r = false; app.u.dump("transition fail 4");}
+				else if($old.data('templateid') == 'customerTemplate' && infoObj.pageType == 'customer')	{r = false; app.u.dump("transition fail 5");}
+				else if($old.data('templateid') == 'searchTemplate' && infoObj.pageType == 'search')	{r = false; app.u.dump("transition fail 6");}
 				else if(!app.u.determineAuthentication() && this.thisArticleRequiresLogin(infoObj))	{
 					r = false; //if the login modal is displayed, don't animate or it may show up off screen.
 					}
@@ -1445,12 +1462,17 @@ P.listID (buyer list id)
 
 
 			getPageInfoFromHash : function(HASH)	{
+//				app.u.dump(" -> hash: "+HASH);
 				var myHash = HASH;
 //make sure first character isn't a #. location.hash is used a lot and ie8 (maybe more) include # in value.
 				if(myHash.indexOf('#') == 0)	{myHash = myHash.substring(1);}
 				var infoObj = {}; //what is returned. infoObj.pageType and based on value of page type, infoObj.show or infoObj.pid or infoObj.navcat, etc
+				
 				var splits = myHash.split('?'); //array where 0 = 'company' or 'search' and 1 = show=returns or keywords=red
-				infoObj = app.u.getParametersAsObject(splits[1]); //will set infoObj.show=something or infoObj.pid=PID
+//				app.u.dump(" -> splits: "); app.u.dump(splits);
+				
+				infoObj = app.u.kvp2Array(splits[1]); //will set infoObj.show=something or infoObj.pid=PID
+//				app.u.dump(" -> infoObj: "); app.u.dump(infoObj);
 				infoObj.pageType = splits[0];
 				if(!infoObj.pageType || !this.thisPageInfoIsValid(infoObj))	{
 					infoObj = false;
@@ -1746,6 +1768,7 @@ return r;
 						app.model.dispatchThis();
 						}
 					else	{
+						infoObj.datapointer = 'appProductGet|'+infoObj.pid; //here so datapoitner is available in renderFunctions.
 //typically, the onCompletes get handled as part of the request callback, but the template has already been rendered so the callback won't get executed.
 						infoObj.state = 'onCompletes'; //needed for handleTemplateFunctions.
 						app.ext.myRIA.u.handleTemplateFunctions(infoObj);
@@ -1860,7 +1883,7 @@ return r;
 					//infoObj.show is already set.
 					}
 				else	{
-					infoObj.show = 'newsletter'
+					infoObj.show = 'newsletter';
 					}
 //				$('#mainContentArea').empty();
 //				app.u.dump(" -> infoObj follows:"); app.u.dump(infoObj);
@@ -1874,7 +1897,7 @@ return r;
 				
 				$('#mainContentArea .textContentArea').hide(); //hide all the articles by default and we'll show the one in focus later.
 				var authState = app.u.determineAuthentication();
-//				app.u.dump(" -> authState:"+authState);
+				app.u.dump(" -> authState:"+authState);
 				
 				infoObj.templateID = 'customerTemplate';
 				infoObj.state = 'onInits';
@@ -1882,7 +1905,7 @@ return r;
 
 				
 				
-				if(authState != 'authenticated' && this.thisArticleRequiresLogin(infoObj))	{
+				if((authState != 'authenticated' && authState != 'admin') && this.thisArticleRequiresLogin(infoObj))	{
 					r = false; // don't scroll.
 					app.ext.myRIA.u.showLoginModal();
 					$('#loginSuccessContainer').empty(); //empty any existing login messaging (errors/warnings/etc)
@@ -1919,6 +1942,7 @@ return r;
 							app.ext.store_crm.calls.buyerPurchaseHistory.init({'parentID':'orderHistoryContainer','templateID':'orderLineItemTemplate','callback':'showOrderHistory','extension':'store_crm'});
 							break;
 						case 'lists':
+
 							app.ext.store_crm.calls.buyerProductLists.init({'parentID':'listsContainer','callback':'showBuyerLists','extension':'myRIA'});
 							break;
 						case 'myaccount':
@@ -2380,7 +2404,7 @@ if($form && $form.length)	{
 	var sfo = $form.serializeJSON(); //Serialized Form Object.
 	var pid = sfo.product_id;  //shortcut
 	$('.atcButton',$form).addClass('disabled ui-disabled').attr('disabled','disabled');
-	if(app.ext.store_product.validate.addToCart(pid))	{
+	if(app.ext.store_product.validate.addToCart(pid,$form))	{
 //this product call displays the messaging regardless, but the modal opens over it, so that's fine.
 		app.ext.store_product.calls.cartItemsAdd.init(sfo,{'callback':'itemAddedToCart','extension':'myRIA'});
 		if(obj.action && obj.action == 'modal')	{

@@ -73,6 +73,18 @@ a callback was also added which just executes this call, so that checkout COULD 
 				r = app.ext.convertSessionToOrder.calls.showCheckoutForm.init();
 				app.model.dispatchThis("immutable");
 
+/*
+CC and other payment details are saved in memory so that when payment panel is reloaded (due to a change in the shipping panel, for instance) the payment info
+doesn't have to be reloaded. The following code nukes all that so that from one client to the next, the payment panel is emptied.
+*/
+var obj = app.ext.convertSessionToOrder.vars; //shortcut
+
+for(index in obj)	{
+	if(index.substring(0,8) == 'payment/')	{
+		delete obj[index];
+		}
+	}
+
 				return r; 
 				}			
 			},
@@ -173,13 +185,8 @@ a callback was also added which just executes this call, so that checkout COULD 
 //formerly createOrder
 		adminOrderCreate : {
 			init : function(callback)	{
-//serializes just the payment panel, which is required for payment processing to occur (CC numbers can't be store anywhere, even in the session)
-//seems safari doesn't like serializing a fieldset. capture individually.
-//				var payObj = $('#chkoutPayOptionsFieldset').serializeJSON();
-				
 				this.dispatch(callback);
 				return 1;
-
 				},
 			dispatch : function(callback)	{
 				var payObj = {};
@@ -311,7 +318,7 @@ if server validation passes, the callback handles what to do next (callback is m
 				if(app.data[tagObj.datapointer] && app.data[tagObj.datapointer].CID)	{
 					//Match FOund.
 					app.calls.cartSet.init({"customer/cid":app.data[tagObj.datapointer].CID});
-					app.ext.admin.calls.customer.adminCustomerGet.init(app.data[tagObj.datapointer].CID,{'callback':'startCheckout','extension':'convertSessionToOrder'},'immutable');
+					app.ext.admin.calls.adminCustomerGet.init(app.data[tagObj.datapointer].CID,{'callback':'startCheckout','extension':'convertSessionToOrder'},'immutable');
 					app.model.dispatchThis('immutable');
 					}
 				else	{
@@ -724,6 +731,7 @@ note - the click prevent default is because the renderFormat adds an onclick tha
 				}, //validate.chkoutShipMethodsFieldset
 
 //in addition to selecting a pay option, certain extra fields may be present and must be checked for.
+//in addition to selecting a pay option, certain extra fields may be present and must be checked for.
 			chkoutPayOptionsFieldset : function()	{
 				var valid = 1;
 //				app.u.dump('BEGIN app.ext.convertSessionToOrder.validate.chkoutPayOptionsFieldset');
@@ -733,21 +741,34 @@ note - the click prevent default is because the renderFormat adds an onclick tha
 				var safeid,$holder;
 				if($payMethod.val())	{
 					switch($payMethod.val())	{
-
+//for payment supplemental, can't use required='required' because they're not removed from the DOM if the user switches from echeck to cc (and at that point, they're no longer required
 						case 'CREDIT':
-							var $paymentCC = $("[name='CC']").removeClass('mandatory');
-							var $paymentMM = $("[name='MM']").removeClass('mandatory');
-							var $paymentYY = $("[name='YY']").removeClass('mandatory');
-							var $paymentCV = $("[name='CV']").removeClass('mandatory');
+							var $paymentCC = $('#payment-cc').removeClass('mandatory');
+							var $paymentMM = $('#payment-mm').removeClass('mandatory');
+							var $paymentYY = $('#payment-yy').removeClass('mandatory');
+							var $paymentCV = $('#payment-cv').removeClass('mandatory');
 							if(!app.u.isValidCC($paymentCC.val())){$paymentCC.parent().addClass('mandatory'); valid = 0; errMsg += '<li>please enter a valid credit card #<\/li>'}
 							if(!app.u.isValidMonth($paymentMM.val())){$paymentMM.parent().addClass('mandatory'); valid = 0; errMsg += '<li>please select an exipration month<\/li>'}
 							if(!app.u.isValidCCYear($paymentYY.val())){$paymentYY.parent().addClass('mandatory'); valid = 0; errMsg += '<li>please select an expiration year<\/li>'}
 							if($paymentCV.val().length < 3){$paymentCV.parent().addClass('mandatory'); valid = 0; errMsg += '<li>please enter a cvv/cid #<\/li>'}
 							break;
+						
+						case 'ECHECK':
+							$('#paymentea').parent().removeClass('mandatory');
+							$('#paymenter').parent().removeClass('mandatory');
+							$('#paymenten').parent().removeClass('mandatory');
+							$('#paymenteb').parent().removeClass('mandatory');
+							$('#paymentes').parent().removeClass('mandatory');
+							$('#paymentei').parent().removeClass('mandatory');
+							if(!$('#paymentEA').val())	{valid = 0; errMsg += '<li>please enter account #<\/li>'; $('#paymentEA').parent().addClass('mandatory')}
+							if(!$('#paymentER').val())	{valid = 0; errMsg += '<li>please enter routing #<\/li>'; $('#paymentER').parent().addClass('mandatory')}
+							if(!$('#paymentEN').val())	{valid = 0; errMsg += '<li>please enter account name<\/li>'; $('#paymentEN').parent().addClass('mandatory')}
+							if(!$('#paymentEB').val())	{valid = 0; errMsg += '<li>please enter bank name<\/li>'; $('#paymentEB').parent().addClass('mandatory')}
+							if(!$('#paymentES').val())	{valid = 0; errMsg += '<li>please enter bank state<\/li>'; $('#paymentES').parent().addClass('mandatory')}
+							if(!$('#paymentEI').val())	{valid = 0; errMsg += '<li>please enter check #<\/li>'; $('#paymentEI').parent().addClass('mandatory')}
+							break;
 
-//eCheck has required=required on it, so the browser will validate. if this causes no issues, we'll start moving all forms over to this instead of 
-//js validation. browser based validation is new at this point. (2012-06-22)
-
+						
 						case 'PO':
 							var $paymentPO = $('#payment-po').removeClass('mandatory');
 							if(!app.u.isSet($paymentPO.val())){$paymentPO.parent().addClass('mandatory'); valid = 0; errMsg += '<li>please enter a PO #<\/li>'}
@@ -1191,7 +1212,7 @@ after using it, too frequently the dispatch would get cancelled/dominated by ano
 				$buttonBar.append($("<button \/>").text("Find Customer").button().click(function(){
 					$buttonBar.hide();
 					$target.showLoading();
-					app.ext.admin.calls.customer.adminCustomerLookup.init($('#customerLookupByEmail').val(),{'callback':'useLookupForCustomerGet','extension':'convertSessionToOrder'});
+					app.ext.admin.calls.adminCustomerLookup.init($('#customerLookupByEmail').val(),{'callback':'useLookupForCustomerGet','extension':'convertSessionToOrder'});
 					app.model.dispatchThis();
 					}));
 				$buttonBar.appendTo($target);
@@ -1202,9 +1223,26 @@ after using it, too frequently the dispatch would get cancelled/dominated by ano
 //				app.u.dump(" -> P: "); app.u.dump(P);
 				$('#printContainer').empty();
 				$('body').showLoading(); //indicate to client that button was pressed.
-				app.calls.appProfileInfo.init({'profile':P.data.profile},{},'immutable');				
-				app.ext.convertSessionToOrder.calls.adminOrderDetail.init(orderID,{'callback':'printById','merge':'appProfileInfo|'+P.data.profile,'extension':'convertSessionToOrder','templateID':P.data.type.toLowerCase()+'Template'});
-				app.model.dispatchThis('immutable');
+				var profileDatapointer = undefined;
+				if(P.data.profile)	{
+					app.calls.appProfileInfo.init({'profile':P.data.profile},{},'immutable');
+					profileDatapointer = 'appProfileInfo|'+P.data.profile;
+					}
+				else if(P.data.domain)	{
+					app.calls.appProfileInfo.init({'domain':P.data.domain},{},'immutable');
+					profileDatapointer = 'appProfileInfo|'+P.data.domain;
+					}
+				else	{
+					//error handling for this is below.
+					}
+				
+				if(profileDatapointer)	{
+					app.ext.convertSessionToOrder.calls.adminOrderDetail.init(orderID,{'callback':'printById','merge':profileDatapointer,'extension':'convertSessionToOrder','templateID':P.data.type.toLowerCase()+'Template'});
+					app.model.dispatchThis('immutable');
+					}
+				else	{
+					app.u.throwGMessage("In order_create.a.printOrder, either profile ["+P.data.profile+"] or domain ["+P.data.domain+"] is required.");
+					}
 				},
 			
 			addToCart : function(formObj){
@@ -1550,7 +1588,9 @@ don't toggle the panel till after preflight has occured. preflight is done once 
 
 				var o = '';
 				$('.ui-state-active',$container).removeClass('ui-state-active ui-corner-top ui-corner-all ui-corner-bottom');
-				$('.paybySupplemental', $container).hide(); //hide all other payment messages/fields.
+ //in Admin, some of the supplemental inputs are shared between payment types (flag as paid)
+//so to ensure the checkbox isn't on by accident, remove all supplemental material when switching between.
+				$('.paybySupplemental', $container).empty().remove();
 				var $radio = $("[name='want/payby']:checked",$container);
 				
 				
@@ -1559,7 +1599,7 @@ don't toggle the panel till after preflight has occured. preflight is done once 
 //only add the 'subcontents' once. if it has already been added, just display it (otherwise, toggling between payments will duplicate all the contents)
 				if($supplementalContainer.length == 0)	{
 					app.u.dump(" -> supplemental is empty. add if needed.");
-					var supplementalOutput = app.u.getSupplementalPaymentInputs2(paymentID,app.ext.convertSessionToOrder.vars); //this will either return false if no supplemental fields are required, or a jquery UL of the fields.
+					var supplementalOutput = app.u.getSupplementalPaymentInputs(paymentID,app.ext.convertSessionToOrder.vars,true); //this will either return false if no supplemental fields are required, or a jquery UL of the fields.
 //					app.u.dump("typeof supplementalOutput: "+typeof supplementalOutput);
 					if(typeof supplementalOutput == 'object')	{
 						$radio.parent().addClass('ui-state-active ui-corner-top'); //supplemental content will have bottom corners
@@ -1881,13 +1921,49 @@ the refreshCart call can come second because none of the following calls are upd
 			}, //renderFomrats
 
 		e : {
-			
-			"cartItemAdd" : function($btn)	{
+			"cartItemAddFromForm" : function($btn)	{
 				$btn.button();
-				$btn.off('click.cartItemAdd').on('click.cartItemAdd',function(){
-					var $button = $("<button>").text("Add to Order").button().on('click',function(){
-						$form = $('form','#chooserResultContainer');
+				$btn.off('click.cartItemAdd').on('click.cartItemAdd',function(event){
+					event.preventDefault();
+					app.ext.convertSessionToOrder.a.addToCart($(this).closest('form').serializeJSON())
+					});
+				}, //cartItemAddFromForm
+
+			"cartItemAddWithChooser" : function($btn)	{
+				$btn.button();
+				$btn.off('click.cartItemAdd').on('click.cartItemAdd',function(event){
+					event.preventDefault();
+
+//$button is passed into the showFinder function. This is the button that appears IN the chooser/finder for adding to the cart/order.					
+					var $button = $("<button>").text("Add to Order").button().on('click',function(event){
+						event.preventDefault();
+$(this).button('disable'); //prevent doubleclick.
+$form = $('form','#chooserResultContainer');
+if($form && $form.length)	{
+	var sfo = $form.serializeJSON(); //Serialized Form Object.
+	var pid = sfo.sku;  //shortcut
+	sfo.product_id = pid; //
+	if(app.ext.store_product.validate.addToCart(pid,$form))	{
+		app.calls.ping.init({
+			'callback':function(){
+				$('#prodFinder').dialog('close');
+				}
+			},'immutable');
+		app.ext.convertSessionToOrder.a.addToCart(sfo);
+		}
+	else	{
+		$(this).button('enable'); //prevent doubleclick.
+		}
+	}
+else	{
+	app.u.throwGMessage("WARNING! add to cart $form has no length. can not add to cart.");
+	$(this).button('enable');
+
+	}
+
+
 						});
+
 					app.ext.admin.a.showFinderInModal('CHOOSER','','',{'$buttons' : $button})
 					});
 				}

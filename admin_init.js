@@ -18,7 +18,9 @@ app.rq.push(['extension',1,'store_product','extensions/store_product.js']);
 
 app.rq.push(['extension',1,'admin_support','extensions/admin/support.js']);
 app.rq.push(['extension',1,'admin_task','extensions/admin/task.js']);
+app.rq.push(['extension',1,'admin_reports','extensions/admin/reports.js']);
 app.rq.push(['extension',1,'admin_batchJob','extensions/admin/batchjob.js']);
+app.rq.push(['extension',0,'admin_user','extensions/admin/user.js']); //is zero at init for testing.
 app.rq.push(['extension',1,'convertSessionToOrder','extensions/admin/order_create.js']); 
 app.rq.push(['extension',1,'admin_medialib','extensions/admin/medialib.js']); //do NOT set to zero. causes a script issue.
 
@@ -29,14 +31,18 @@ app.rq.push(['script',0,app.vars.baseURL+'includes.js']); //','validator':functi
 app.rq.push(['script',0,app.vars.baseURL+'controller.js']);
 
 
+
+
 app.rq.push(['script',1,app.vars.baseURL+'jeditable.js']); //used for making text editable (customer address). non-essential. loaded late. used in orders.
-app.rq.push(['script',1,app.vars.baseURL+'extensions/admin/resources/highcharts-v2.1.9.js']); //used for KPI
+app.rq.push(['script',1,app.vars.baseURL+'extensions/admin/resources/highcharts-v2.3.5.js']); //used for KPI
 
 app.rq.push(['script',1,'https://crypto-js.googlecode.com/files/2.5.3-crypto-md5.js']); //used for authentication.
 
 //have showLoading as early as possible. pretty handy feature. used everywhere.
-app.rq.push(['css',0,app.vars.baseURL+'extensions/admin/resources/showloading.css']);
-app.rq.push(['script',0,app.vars.baseURL+'extensions/admin/resources/jquery.showloading-v1.0.js']);
+
+app.rq.push(['script',0,app.vars.baseURL+'extensions/admin/resources/jquery.showloading-v1.0.jt.js']);
+
+app.rq.push(['script',0,app.vars.baseURL+'extensions/admin/resources/anyplugins.js']);
 
 
 // jQuery-contextMenu - http://medialize.github.com/jQuery-contextMenu/  used in orders.
@@ -45,9 +51,6 @@ app.rq.push(['script',0,app.vars.baseURL+'extensions/admin/resources/jquery.cont
 app.rq.push(['script',1,app.vars.baseURL+'extensions/admin/resources/jquery.ui.position.js']);
 
 
-
-//group any third party files together (regardless of pass) to make troubleshooting easier.
-app.rq.push(['script',0,(document.location.protocol == 'https:' ? 'https:' : 'http:')+'//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.js']);
 
 
 
@@ -100,10 +103,10 @@ app.u.initMVC = function(attempts){
 		myCreole = new Parse.Simple.Creole();
 		
 		}
-	else if(attempts > 50)	{
+	else if(attempts > 100)	{
 		app.u.dump("WARNING! something went wrong in init.js");
 		//this is 10 seconds of trying. something isn't going well.
-		$('.appMessaging').empty().append("<h2>Uh Oh. Something seems to have gone wrong. </h2><p>Several attempts were made to load the store but some necessary files were not found or could not load. We apologize for the inconvenience. Please try 'refresh' and see if that helps.<br><b>If the error persists, please contact the site administrator</b><br> - dev: see console.</p>");
+		$('.appMessaging').empty().append("<h2>Not all resources were able to be loaded.</h2><p>Several attempts were made to load the store but some necessary files were not found or could not load. We apologize for the inconvenience. This is <b>most likely due to a slow computer and/or slow internet connection<\/b>. Please try 'refresh' and see if that helps.<br><b>If the error persists, please contact the site administrator</b><br> - dev: see console.</p>");
 		app.u.howManyPassZeroResourcesAreLoaded(true);
 		}
 	else	{

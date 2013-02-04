@@ -5,7 +5,8 @@ app.rq = app.rq || []; //ensure array is defined. rq = resource queue.
 
 
 //app.rq.push(['extension',0,'convertSessionToOrder','extensions/checkout_passive/extension.js']);
-app.rq.push(['extension',0,'convertSessionToOrder','extensions/checkout_nice/extension.js']);
+app.rq.push(['extension',0,'convertSessionToOrder','extensions/checkout_active/extension.js']);
+//app.rq.push(['extension',0,'convertSessionToOrder','extensions/checkout_required/extension.js']);
 app.rq.push(['extension',0,'store_checkout','extensions/store_checkout.js']);
 app.rq.push(['extension',0,'store_prodlist','extensions/store_prodlist.js']);
 app.rq.push(['extension',0,'store_navcats','extensions/store_navcats.js']);
@@ -15,29 +16,23 @@ app.rq.push(['extension',0,'store_cart','extensions/store_cart.js']);
 app.rq.push(['extension',0,'store_crm','extensions/store_crm.js']);
 app.rq.push(['extension',0,'myRIA','quickstart.js','startMyProgram']);
 
-app.rq.push(['extension',1,'analytics_google','extensions/analytics_google.js','startExtension']);
-//app.rq.push(['extension',1,'bonding_buysafe','extensions/bonding_buysafe.js','startExtension']);
-//app.rq.push(['extension',1,'powerReviews','extensions/reviews_powerreviews.js','startExtension']);
-//app.rq.push(['extension',0,'magicToolBox','extensions/imaging_magictoolbox.js','startExtension']); // (not working yet - ticket in to MTB)
+app.rq.push(['extension',1,'google_analytics','extensions/partner_google_analytics.js','startExtension']);
+//app.rq.push(['extension',1,'resellerratings_survey','extensions/partner_buysafe_guarantee.js','startExtension']); /// !!! needs testing.
+//app.rq.push(['extension',1,'buysafe_guarantee','extensions/partner_buysafe_guarantee.js','startExtension']);
+//app.rq.push(['extension',1,'powerReviews_reviews','extensions/partner_powerreviews_reviews.js','startExtension']);
+//app.rq.push(['extension',0,'magicToolBox_mzp','extensions/partner_magictoolbox_mzp.js','startExtension']); // (not working yet - ticket in to MTB)
 
 
 //spec_LLTRSHIRT017_0
 //add tabs to product data.
 //tabs are handled this way because jquery UI tabs REALLY wants an id and this ensures unique id's between product
 app.rq.push(['templateFunction','productTemplate','onCompletes',function(P) {
-	var safePID = app.u.makeSafeHTMLId(P.pid); //can't use jqSelector because productTEmplate_pid still used makesafe. planned Q1-2012 update ###
+	var safePID = app.u.makeSafeHTMLId(P.pid); //can't use jqSelector because productTEmplate_pid still used makesafe. planned Q1-2013 update ###
 	var $tabContainer = $( ".tabbedProductContent",$('#productTemplate_'+safePID));
 		if($tabContainer.length)	{
-			if($tabContainer.data("tabs")){} //tabs have already been instantiated. no need to be redundant.
+			if($tabContainer.data("widget") == 'anytabs'){} //tabs have already been instantiated. no need to be redundant.
 			else	{
-				$("div.tabContent",$tabContainer).each(function (index) {
-					$(this).attr("id", "spec_"+safePID+"_" + index.toString());
-					})
-				$(".tabs li a",$tabContainer).each(function (index) {
-					$(this).attr('id','href_'+safePID+"_" + index.toString());
-					$(this).attr("href", "app://#spec_"+safePID+"_" + index.toString());
-					});
-				$tabContainer.localtabs();
+				$tabContainer.anytabs();
 				}
 			}
 		else	{} //couldn't find the tab to tabificate.
@@ -48,6 +43,8 @@ app.rq.push(['script',0,app.vars.baseURL+'model.js']); //'validator':function(){
 app.rq.push(['script',0,app.vars.baseURL+'includes.js']); //','validator':function(){return (typeof handlePogs == 'function') ? true : false;}})
 app.rq.push(['script',1,app.vars.baseURL+'jeditable.js']); //used for making text editable (customer address). non-essential. loaded late.
 app.rq.push(['script',0,app.vars.baseURL+'controller.js']);
+
+app.rq.push(['script',1,app.vars.baseURL+'anytabs.js']);
 
 //sample of an onDeparts. executed any time a user leaves this page/template type.
 app.rq.push(['templateFunction','homepageTemplate','onDeparts',function(P) {app.u.dump("just left the homepage")}]);
@@ -84,7 +81,7 @@ app.u.howManyPassZeroResourcesAreLoaded = function(debug)	{
 //the 'attempts' var is incremented each time the function is executed.
 
 app.u.initMVC = function(attempts){
-//	app.u.dump("app.u.initMVC activated ["+attempts+"]");
+	app.u.dump("app.u.initMVC activated ["+attempts+"]");
 	var includesAreDone = true;
 
 //what percentage of completion a single include represents (if 10 includes, each is 10%).

@@ -55,13 +55,12 @@ jQuery.extend(zController.prototype, {
 		app.vars.protocol = document.location.protocol == 'https:' ? 'https:' : 'http:';
 
 //used in conjunction with support/admin login. nukes entire local cache.
-		if(app.u.getParameterByName('flush'))	{
-			app.u.dump("uri param flush is true. CLEAR LOCAL STORAGE");
+		if(app.u.getParameterByName('flush') == 1)	{
+			app.u.dump("URI param flush is true. CLEAR LOCAL STORAGE");
 			localStorage.clear();
 			}
 		
-
-		
+		app.vars.debug = app.u.getParameterByName('debug'); //set a var for this so the URI doesn't have to be checked each time.
 //in some cases, such as the zoovy UI, zglobals may not be defined. If that's the case, certain vars, such as jqurl, must be passed in via P in initialize:
 		if(typeof zGlobals == 'object')	{
 			app.vars.profile = zGlobals.appSettings.profile.toUpperCase();
@@ -143,12 +142,6 @@ copying the template into memory was done for two reasons:
 		setVars('username');
 
 		app.vars.username = app.vars.username.toLowerCase();
-//		app.u.dump(" -> app.vars: "); app.u.dump(app.vars);
-		
-//		if(!app.vars.username && app.vars.userid && app.vars.userid.indexOf('@') > 0)	{
-//			app.u.dump("REMINDER!!! this is a temporary solution till username is returned in authAdminLogin");
-//			app.vars.username = app.vars.userid.split('@')[1].toLowerCase();
-//			}
 		
 		},
 
@@ -163,29 +156,35 @@ Exception - the controller is used for admin sessions too. if an admin session i
 A session ID could be passed in through vars, but app.sessionId isn't set until the session id has been verified OR the app is explicitly told to not validate the session.
 */
 		if(app.vars.thisSessionIsAdmin && app.vars.sessionId)	{
+			app.u.dump(" -> admin session and session id set.");
 //you'd get here in the UI.
 			app.sessionId = app.vars.sessionId
 			app.model.addExtensions(app.vars.extensions);
 			}
 		else if(app.vars.thisSessionIsAdmin)	{
+			app.u.dump(" -> admin session. no session id.");
 			//for now, do nothing.  this may change later.
 			app.model.addExtensions(app.vars.extensions);
 			}
 		else if(app.vars.sessionId)	{
+			app.u.dump(" -> session id set.");
 			app.calls.appCartExists.init(app.vars.sessionId,{'callback':'handleTrySession','datapointer':'appCartExists'});
 			app.model.dispatchThis('immutable');
 			}
 //if sessionId is set on URI, there's a good chance a redir just occured from non secure to secure.
 		else if(app.u.isSet(app.u.getParameterByName('sessionId')))	{
+			app.u.dump(" -> session id from URI used.");
 			app.calls.appCartExists.init(app.u.getParameterByName('sessionId'),{'callback':'handleTrySession','datapointer':'appCartExists'});
 			app.model.dispatchThis('immutable');
 			}
 //check localStorage
 		else if(app.model.fetchSessionId())	{
+			app.u.dump(" -> session retrieved from localstorage..");
 			app.calls.appCartExists.init(app.model.fetchSessionId(),{'callback':'handleTrySession','datapointer':'appCartExists'});
 			app.model.dispatchThis('immutable');
 			}
 		else	{
+			app.u.dump(" -> go get a new session id.");
 			app.calls.getValidSessionID.init('handleNewSession');
 			app.model.dispatchThis('immutable');
 			}
@@ -377,6 +376,11 @@ _gaq.push(['_trackEvent','Authentication','User Event','Logged in through Facebo
 						r = 1;
 						this.dispatch(obj,_tag,Q);
 						}
+//if the product record is in memory BUT the inventory is zero, go get updated record in case it's back in stock.
+					else if(app.ext.store_product && (app.ext.store_product.u.getProductInventory(obj.pid) === 0))	{
+						r = 1;
+						this.dispatch(obj,_tag,Q);
+						}
 					else 	{
 						app.u.handleCallback(_tag);
 						}
@@ -479,28 +483,27 @@ _gaq.push(['_trackEvent','Authentication','User Event','Logged in through Facebo
 		appProfileInfo : {
 			init : function(obj,_tag,Q)	{
 				var r = 0; //will return 1 if a request is needed. if zero is returned, all data needed was in local.
-				if(typeof obj == 'object' && (obj.profile || obj.sdomain))	{
+				if(typeof obj == 'object' && (obj.profile || obj.domain))	{
 					_tag = _tag || {};
-					_tag.datapointer = 'appProfileInfo|'+(obj.profile || obj.sdomain);
-
+					_tag.datapointer = 'appProfileInfo|'+(obj.profile || obj.domain);
 					if(app.model.fetchData(_tag.datapointer) == false)	{
 						r = 1;
 						this.dispatch(obj,_tag,Q);
 						}
 					else 	{
-						app.u.handleCallback(_tag)
+						app.u.handleCallback(_tag);
 						}
 					}
 				else	{
-					app.u.throwGMessage("In calls.appProfileGet, obj either missing or missing profile or sdomain var.");
+					app.u.throwGMessage("In calls.appProfileGet, obj either missing or missing profile ["+obj.profile+"] or domain ["+obj.domain+"] var.");
 					app.u.dump(obj);
 					}
 
 				return r;
 				}, // init
 			dispatch : function(obj,_tag,Q)	{
-				obj['_cmd'] = "appProfileInfo";
-				obj['_tag'] = _tag;
+				obj._cmd = "appProfileInfo";
+				obj._tag = _tag;
 				app.model.addDispatchToQ(obj,Q);
 				} // dispatch
 			}, //appProfileInfo
@@ -593,6 +596,14 @@ app.u.throwMessage(responseData); is the default error handler.
 				}
 			},
 	
+		transmogrify : 	{
+			onSuccess : function(tagObj)	{
+				var $parent = $(app.u.jqSelector('#',tagObj.parentID));
+				if(typeof jQuery().hideLoading == 'function'){$parent.hideLoading();}
+				$parent.append(app.renderFunctions.transmogrify({'id':tagObj.parentID+"_"+tagObj.datapointer},tagObj.templateID,app.data[tagObj.datapointer]));
+				}
+			}, //translateTemplate
+
 		
 //pass the following on _tag:
 // parentID is the container id that the template instance is already in (should be created before call)
@@ -602,7 +613,7 @@ app.u.throwMessage(responseData); is the default error handler.
 			onSuccess : function(tagObj)	{
 //				app.u.dump("BEGIN callbacks.translateTemplate"); app.u.dump(tagObj);
 //				app.u.dump("typeof jQuery.hideLoading: "+typeof jQuery().hideLoading);
-				if(typeof jQuery().hideLoading == 'function'){$('#'+tagObj.parentID).hideLoading();}
+				if(typeof jQuery().hideLoading == 'function'){$(app.u.jqSelector('#',tagObj.parentID)).hideLoading();}
 				app.renderFunctions.translateTemplate(app.data[tagObj.datapointer],tagObj.parentID);
 				}
 			}, //translateTemplate
@@ -794,6 +805,11 @@ it'll then set app.rq.push to mirror this function.
 			},
 
 
+		isThisBitOn : function(bit,int)	{
+			var B = Number(int).toString(2); //binary
+			return (B.charAt(bit) == 1) ? true : false; //1
+			},
+
 
 //http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript
 		guidGenerator : function() {
@@ -822,7 +838,7 @@ it'll then set app.rq.push to mirror this function.
 //uses throwMessage, but always adds the same generic message. value of 'err' is output w/ dump.
 //this should only be used for app errors (errors thrown from within the MVC, not as a result of an API call, in which case throwMessage should be used (handles request errors nicely)
 		throwGMessage : function(err,parentID){
-			var msg = this.errMsgObject("Well this is embarrassing. Something bad happened. Please try that again. If this error persists, please contact the site administrator.<br \/>Err: "+err+"<br \/>Dev: console may contain additional details.","#");
+			var msg = this.youErrObject("Something bad just happened. If this error persists, please contact the site administrator with these details:<br \/>Err: "+err+"<br \/>URI: "+document.location+" Dev: console may contain additional details.","#");
 			app.u.dump("FROM throwGMessage: "+err);
 			if(parentID)	{msg.parentID = parentID}
 			this.throwMessage(msg);
@@ -842,13 +858,18 @@ and model that needed to be permanently displayed had to be converted into an ob
 		throwMessage : function(msg,persistant){
 //			app.u.dump("BEGIN app.u.throwMessage");
 //			app.u.dump(" -> msg follows: "); app.u.dump(msg);
-			var $target; //where the app message will be appended.
-			var messageClass = "appMessage_"+this.guidGenerator(); //the class added to the container of the message. message 'may' appear in multiple locations, so a class is used instead of an id.
-			var r = messageClass; //what is returned. set to false if no good error message found. set to htmlID is error found. 
-			var $container = $("<div \/>").addClass('appMessage').addClass(messageClass).append("<button onClick='$(\"."+messageClass+"\").toggle(); return false;' class='ui-state-default ui-corner-all floatRight stdMargin'><span class='ui-button ui-icon-circle-close'>X</span><\/button>");
-//make sure the good-ole fallback destination for errors exists and is a modal.
-			var $globalDefault = $('#globalErrorMessaging')
-			if	($globalDefault.length == 0)	{
+
+			var $target, //where the app message will be appended.
+			messageClass = "appMessage_"+this.guidGenerator(), //the class added to the container of the message. message 'may' appear in multiple locations, so a class is used instead of an id.
+			r = messageClass, //what is returned. set to false if no good error message found. set to htmlID is error found.
+			$container = $("<div \/>").addClass('appMessage clearfix').addClass(messageClass),
+			$closeButton = $("<button \/>").text('close message').addClass('floatRight').button({icons: {primary: "ui-icon-circle-close"},text: false}),
+			$globalDefault = $('#globalErrorMessaging'); //make sure the good-ole fallback destination for errors exists and is a modal.
+			
+			$closeButton.on('click.closeMsg',function(){$(this).closest('.appMessage').empty().remove()});
+			$container.append($closeButton);
+
+			if($globalDefault.length == 0)	{
 				$globalDefault = $("<div \/>").attr({'id':'globalErrorMessaging'}).appendTo('body');
 				$globalDefault.dialog({autoOpen:false,modal:true})
 				}
@@ -867,12 +888,23 @@ and model that needed to be permanently displayed had to be converted into an ob
 				}
 			else if(typeof msg === 'object')	{
 				persistant = persistant || msg.persistant; //global persistence (within this context) gets priority.
+				if(msg.errtype == 'iseerr' || msg.errtype == 'ISE')	{persistant = true} //ise errs throw extra info at the user. make persistent.
 				msg.messageClass = messageClass;
-				if(msg.parentID){$target = $('#'+msg.parentID);}
-				else if(typeof msg['_rtag'] == 'object' && msg['_rtag'].parentID && $('#'+msg['_rtag'].parentID).length)	{$target = $('#'+msg['_rtag'].parentID);}
-				else if(typeof msg['_rtag'] == 'object' && msg['_rtag'].targetID && $('#'+msg['_rtag'].targetID).length)	{$target = $('#'+msg['_rtag'].targetID)}
-				else if($('.appMessaging:visible').length > 0)	{$target = $('.appMessaging');}
+				var selector = undefined; //used if parentID isn't passed in to attempt to find a location for the message
+				if(msg._rtag && (msg._rtag.parentID || msg._rtag.targetID || msg._rtag.selector))	{
+					app.u.dump(' -> an id (parent, target or selector) was found.');
+					if(msg._rtag.parentID)	{selector = app.u.jqSelector('#',msg._rtag.parentID)}
+					else if(msg._rtag.targetID)	{selector = app.u.jqSelector('#',msg._rtag.targetID)}
+					else	{
+						selector = app.u.jqSelector(msg['_rtag'].selector.charAt(0),msg['_rtag'].selector);
+						}
+					}
+				
+				if(msg.parentID){$target = $(app.u.jqSelector('#',msg.parentID));}
+				else if(selector && $(selector).length)	{$target = $(selector);}
+				else if($('.appMessaging:visible').length > 0)	{$target = $('.appMessaging'); app.u.dump(" -> using .appMessaging");}
 				else	{
+					app.u.dump(" -> using globalDefault");
 					$target = $globalDefault;
 					$target.dialog('open');
 					}
@@ -892,8 +924,10 @@ and model that needed to be permanently displayed had to be converted into an ob
 				}
 //get rid of all the loading gfx in the target so users know the process has stopped.
 			$target.removeClass('loadingBG');
-			if(typeof $.hideLoading == 'function'){$target.hideLoading()} //used in UI. plan on switching everything applicable to this.
- 
+			app.u.dump(" -> $.hideLoading: "+typeof jQuery().hideLoading);
+			app.u.dump(" -> $target.attr('id'): "+$target.attr('id'));
+			if(typeof jQuery().hideLoading == 'function'){$target.hideLoading()} //used in UI. plan on switching everything applicable to this.
+// 			app.u.dump(" -> $target in error handling: "); app.u.dump($target);
 			return r;
 			},
 
@@ -945,7 +979,19 @@ This function will have both cases.
 						}
 					}
 				else if(d['errid'])	{
-					r += "<div class='"+d.errtype+" appMessageTxt'>"+d.errmsg
+					var msgDetails = "";
+					if(d.errtype == 'iseerr')	{
+						msgDetails += "<ul>";
+						msgDetails += "<li>errtype: iseerr<\/li>";
+						msgDetails += "<li>errid: "+d.errid+"<\/li>";
+						msgDetails += "<li>errmsg: "+d.errmsg+"<\/li>";
+						msgDetails += "<li>uri: "+document.location+"<\/li>";
+						msgDetails += "<li>domain: "+app.vars.domain+"<\/li>";
+						msgDetails += "<li>release: "+app.model.version+"|"+app.vars.release+"<\/li>";
+						msgDetails += "<\/ul>";
+						}
+					
+					r += "<div class='"+d.errtype+" appMessageTxt'>"+d.errmsg+msgDetails;
 					if(d.errid && d.errid != "#") { r += "<br \/>Error ID: "+d.errid}
 					r += "<\/div>";
 //					app.u.dump("WARNGING! error occured. id: "+d.errid+" and type: "+d.errtype+" and msg: "+errmsg);
@@ -1020,36 +1066,43 @@ URI PARAM
 			else
 				return decodeURIComponent(results[1].replace(/\+/g, " "));
 			},
+
+//turn a set of key value pairs (a=b&c=d) into an object. if string is from URI, use getParametersAsObject which handles encoding and executes this after.
+//formerly getParametersAsObject
+		kvp2Array : function(s)	{
+			var r = false;
+			if(s && s.indexOf('=') > -1)	{
+				s = s.replace(/&amp;/g, '&'); //needs to happen before the decodeURIComponent (specifically for how banner elements are encoded )
+				r = JSON.parse(decodeURIComponent('{"' + s.replace(/&/g, "\",\"").replace(/=/g,"\":\"") + '"}'));
+				}
+			else	{}
+			return r;
+			},
+		
 //will create an object of a series of key/value pairs in URI format.
 //if nothing is passed in, will get string directly from URL.
+//commented on 2013-01-15
+/*
 		getParametersAsObject : function(string)	{
-//			app.u.dump("BEGIN control.u.getParametersAsObject");
-//			app.u.dump(" -> string: "+string);
+			app.u.dump("BEGIN control.u.getParametersAsObject");
+			app.u.dump(" -> string: "+string);
 			var tmp = string ? string : location.search;
-//			app.u.dump(" -> tmp: "+tmp);
+			app.u.dump(" -> tmp: "+tmp);
 			var url = tmp.split('#')[0]; //split at hash and only use relevant segment. otherwise last param is key:value#something
 			var params = {};
 //check for ? to avoid js error which results when no uri params are present
 			if(string || url.indexOf('?') > 0)	{
-				url = url.replace('?', '').replace(/&amp;/g, '&'); //uri may be encoded or not. normalize.
+				url = url.replace('?', '').replace(/&amp;/g, '&').replace(/\+/g, " "); //uri may be encoded or not. normalize.
 				url = decodeURIComponent(url);
-//				app.u.dump(" -> URL after tweaking: "+url);
+				app.u.dump(" -> URL after tweaking: "+url);
 				if(app.u.isSet(url))	{
-					var queries = url.split('&');
-					for(var q in queries) {
-						var param = queries[q].split('=');
-						if(param[1])	{
-							params[ param[0] ] = param[1].replace(/\+/g, " "); 
-							}
-						}
+					params = this.kvp2Array(url);
 					}
 				}
 //			app.u.dump(" -> params: "); app.u.dump(params);
 			return params;
 			},
-
-
-
+*/
 
 /*
 
@@ -1264,42 +1317,43 @@ VALIDATION
 			},
 
 		isValidEmail : function(str) {
-			app.u.dump("BEGIN isValidEmail for: "+str);
+//			app.u.dump("BEGIN isValidEmail for: "+str);
 			var r = true; //what is returned.
-			if(!str || str == false)
-				r = false;
-			var at="@"
-			var dot="."
-			var lat=str.indexOf(at)
-			var lstr=str.length
-			var ldot=str.indexOf(dot)
-			if (str.indexOf(at)==-1){
-				app.u.dump(" -> email does not contain an @");
-				r = false
+			if(!str || str == false)	{r = false;}
+			else	{
+				var at="@"
+				var dot="."
+				var lat=str.indexOf(at)
+				var lstr=str.length
+				var ldot=str.indexOf(dot)
+				if (str.indexOf(at)==-1){
+					app.u.dump(" -> email does not contain an @");
+					r = false
+					}
+				if (str.indexOf(at)==-1 || str.indexOf(at)==0 || str.indexOf(at)==lstr){
+					app.u.dump(" -> @ in email is in invalid location (first or last)");
+					r = false
+					}
+				if (str.indexOf(dot)==-1 || str.indexOf(dot)==0 || str.indexOf(dot)==lstr){
+					app.u.dump(" -> email does not have a period or it is in an invalid location (first or last)");
+					r = false
+					}
+				if (str.indexOf(at,(lat+1))!=-1){
+					app.u.dump(" -> email contains two @");
+					r = false
+					}
+				if (str.substring(lat-1,lat)==dot || str.substring(lat+1,lat+2)==dot){
+					app.u.dump(" -> email contains multiple periods");
+					r = false
+					}
+				if (str.indexOf(dot,(lat+2))==-1){
+					r = false
+					}
+				if (str.indexOf(" ")!=-1){
+					r = false
+					}
+//				app.u.dump("u.isValidEmail: "+r);
 				}
-			if (str.indexOf(at)==-1 || str.indexOf(at)==0 || str.indexOf(at)==lstr){
-				app.u.dump(" -> @ in email is in invalid location (first or last)");
-				r = false
-				}
-			if (str.indexOf(dot)==-1 || str.indexOf(dot)==0 || str.indexOf(dot)==lstr){
-				app.u.dump(" -> email does not have a period or it is in an invalid location (first or last)");
-				r = false
-				}
-			if (str.indexOf(at,(lat+1))!=-1){
-				app.u.dump(" -> email contains two @");
-				r = false
-				}
-			if (str.substring(lat-1,lat)==dot || str.substring(lat+1,lat+2)==dot){
-				app.u.dump(" -> email contains multiple periods");
-				r = false
-				}
-			if (str.indexOf(dot,(lat+2))==-1){
-				r = false
-				}
-			if (str.indexOf(" ")!=-1){
-				r = false
-				}
-			app.u.dump("u.isValidEmail: "+r);
 			return r;					
 			}, //isValidEmail
 
@@ -1716,63 +1770,20 @@ later, it will handle other third party plugins as well.
 				return obj;
 				},
 
-
-//Removing all ID's. Using this in UI. will update checkout to use this too once 201248+ released. 201248 is used by 1PC and it's xmas time
-//The names are also updated to use the new two char codes used by the paymentQ.
-			getSupplementalPaymentInputs2 : function(paymentID,data)	{
-//				app.u.dump("BEGIN control.u.getSupplementalPaymentInputs ["+paymentID+"]");
-//				app.u.dump(" -> data:"); app.u.dump(data);
-				var $o = $(); //what is returned. a jquery object (ul) w/ list item for each input of any supplemental data.
-				$o = $("<div />").addClass("paybySupplemental").attr('data-ui-supplemental',paymentID);
-				var safeid = ''; //used in echeck loop. recycled in loop.
-				var tmp = ''; //tmp var used to put together string of html to append to $o
-				switch(paymentID)	{
-	//for credit cards, we can't store the # or cid in local storage. Save it in memory so it is discarded on close, reload, etc
-	//expiration is less of a concern
-					case 'PAYPALEC' :
-					//paypal supplemental is used for some messaging (select another method or change due to error). leave this here.
-						break;
-
-					case 'CREDIT':
-						tmp += "<label>Credit Card # <input type='text' size='20' name='CC' value='"+(data['CC'] || "")+"' onKeyPress='return app.u.numbersOnly(event);' /><\/label>";
-//two selects inside a label behaved badly, so  div is used for the container on this row.
-						tmp += "<div>Expiration <select name='MM'><option><\/option>";
-						tmp += app.u.getCCExpMonths(data['MM']);
-						tmp += "<\/select>";
-						tmp += "<select name='YY'><option value=''><\/option>"+app.u.getCCExpYears(data['YY'])+"<\/select><\/div>";
-						tmp += "<label>CVV/CID <input type='text' size='8' name='CV' onKeyPress='return app.u.numbersOnly(event);' value='" + (data['CV'] || "") + "'  /> <span class='ui-icon ui-icon-help pointer' onClick=\"$('#cvvcidHelp').dialog({'modal':true,height:400,width:550});\"></span><\/label>";
-						break;
-
-					case 'PO':
-						tmp += "<label>PO #<input type='text' size='15' name='PO' class=' purchaseOrder' value='"+ (data['PO'] || "") +"' /><\/label>";
-						break;
-
-					case 'ECHECK':
-						var echeckFields = {"EA" : "Account #","ER" : "Routing #","EN" : "Account Name","EB" : "Bank Name","ES" : "Bank State","EI" : "Check #"}
-						for(var key in echeckFields) {
-							safeid = app.u.makeSafeHTMLId(key);
-							tmp += "<label>"+echeckFields[key]+"<input type='text' size='15' name='"+key+"' value='" + (data[key] || "") + "' /><\/label>";
-							}
-						break;
-					default:
-//if no supplemental material is present, return false. That'll make it easy for any code executing this to know if there is additional inputs or not.
-						$o = false; //return false if there is no supplemental fields
-					}
-				if($o != false)	{$o.append(tmp)} //put the li contents into the ul for return.
-				return $o;
-				},
-
-
 // This function is in the controller so that it can be kept fairly global. It's used in checkout, store_crm (buyer admin) and will likely be used in admin (orders) at some point.
 // ### NOTE! SANITY ! WHATEVER - app.ext.convertSessionToOrder.vars is referenced below. When this is removed, make sure to update checkouts to add an onChange event to update the app.ext.convertSessionToOrder.vars object because otherwise the CC number won't be in memory and possibly won't get sent as part of calls.cartOrderCreate.
 
-			getSupplementalPaymentInputs : function(paymentID,data)	{
+			getSupplementalPaymentInputs : function(paymentID,data,isAdmin)	{
 //				app.u.dump("BEGIN control.u.getSupplementalPaymentInputs ["+paymentID+"]");
 //				app.u.dump(" -> data:"); app.u.dump(data);
 				var $o; //what is returned. a jquery object (ul) w/ list item for each input of any supplemental data.
 				$o = $("<ul />").attr("id","paybySupplemental_"+paymentID).addClass("paybySupplemental");
 				var safeid = ''; //used in echeck loop. recycled in loop.
 				var tmp = ''; //tmp var used to put together string of html to append to $o
+				
+				var payStatusCB = "<li><label><input type='checkbox' name='flagAsPaid'>Flag as paid<\/label><\/li>"
+				
+				
 				switch(paymentID)	{
 	//for credit cards, we can't store the # or cid in local storage. Save it in memory so it is discarded on close, reload, etc
 	//expiration is less of a concern
@@ -1789,16 +1800,38 @@ later, it will handle other third party plugins as well.
 						tmp += "<\/select>";
 						tmp += "<select name='payment/YY' id='payment-yy' class='creditCardYearExp'  required='required'><option value=''><\/option>"+app.u.getCCExpYears(data['payment/YY'])+"<\/select><\/li>";
 						
-						tmp += "<li><label for='payment/CV'>CVV/CID<\/label><input type='text' size='8' name='payment/CV' id='payment-cv' class=' creditCardCVV' onKeyPress='return app.u.numbersOnly(event);' value='";
+						tmp += "<li><label for='payment/CV'>CVV/CID<\/label><input type='text' size='4' name='payment/CV' id='payment-cv' class=' creditCardCVV' onKeyPress='return app.u.numbersOnly(event);' value='";
 						if(data['payment/CV']){tmp += data['payment/CV']}
 						tmp += "'  required='required' /> <span class='ui-icon ui-icon-help' onClick=\"$('#cvvcidHelp').dialog({'modal':true,height:400,width:550});\"></span><\/li>";
+						
+						if(isAdmin === true)	{
+							tmp += "<li><label><input type='radio' name='VERB' value='AUTHORIZE'>Authorize<\/label><\/li>"
+							tmp += "<li><label><input type='radio' name='VERB' value='CHARGE'>Charge<\/label><\/li>"
+							tmp += "<li><label><input type='radio' name='VERB' value='REFUND'>Refund<\/label><\/li>"
+							}
+						
+						
+						break;
+	
+						case 'CASH':
+						case 'MO':
+						case 'CHECK':
+						case 'PICKUP':
+//will output a flag as paid checkbox ONLY in the admin interface.
+//if this param is passed in a store, it will do nothing.
+						if(isAdmin === true)	{
+							tmp += payStatusCB;
+							}
 						break;
 	
 					case 'PO':
-						tmp += "<li><label for='payment-po'>PO #<\/label><input type='text' size='2' name='payment/PO' id='payment-po' class=' purchaseOrder' onChange='app.calls.cartSet.init({\"payment/PO\":this.value});' value='";
+						tmp += "<li><label for='payment-po'>PO #<\/label><input type='text' size='10' name='payment/PO' id='payment-po' class=' purchaseOrder' onChange='app.calls.cartSet.init({\"payment/PO\":this.value});' value='";
 						if(data['payment/PO'])
 								tmp += data['payment/PO'];
 						tmp += "' /><\/li>";
+						if(isAdmin === true)	{
+							tmp += payStatusCB;
+							}
 						break;
 	
 					case 'ECHECK':
@@ -1912,14 +1945,19 @@ if(app.u.isSet(eleAttr) && typeof eleAttr == 'string')	{
 	}
 else if(typeof eleAttr == 'object')	{
 //	app.u.dump(' -> eleAttr is an object.');
+//NOTE - eventually, we want to get rid of this check and just use the .data at the bottom.
 	for(var index in eleAttr)	{
 		if(typeof eleAttr[index] == 'object')	{
 			//can't output an object as a string. later, if/when data() is used, this may be supported.
 			}
-		else	{
+		else if(index.match("^[a-zA-Z0-9_\-]*$"))	{
 			$r.attr('data-'+index,eleAttr[index]) //for now, this is being added via attr data-. later, it may use data( but I want it in the DOM for now.
-			} 
+			}
+		else	{
+			//can't have non-alphanumeric characters in 
+			}
 		}
+	$r.data(eleAttr);
 	if(eleAttr.id)	{$r.attr('id',app.u.makeSafeHTMLId(eleAttr.id))} //override the id with a safe id, if set.
 	}
 //app.u.dump("GOT HERE");
@@ -1995,7 +2033,8 @@ most likely, this will be expanded to support setting other data- attributes. ##
 		handleTranslation : function($r,data)	{
 //app.u.dump("BEGIN app.renderFunctions.handleTranslation");
 //locates all children/grandchildren/etc that have a data-bind attribute within the parent id.
-$r.find('[data-bind]').each(function()	{
+//
+$r.find('[data-bind]').addBack('[data-bind]').each(function()	{
 										   
 	var $focusTag = $(this);
 	var value;
@@ -2003,7 +2042,7 @@ $r.find('[data-bind]').each(function()	{
 //	app.u.dump(' -> data-bind match found: '+$focusTag.data('bind'));
 //proceed if data-bind has a value (not empty).
 	if(app.u.isSet($focusTag.attr('data-bind'))){
-		var bindData = app.renderFunctions.parseDataBind($focusTag.attr('data-bind'))  
+		var bindData = app.renderFunctions.parseDataBind($focusTag.attr('data-bind'));
 //		app.u.dump(" -> bindData.var: "+bindData['var']);
 
 //in some cases, it's necessary to pass the entire data object into the renderFormat. admin_orders paymentActions renderFormat is a good example. Most likely this will be used frequently in admin, in conjunction with processList renderFormat.
@@ -2027,11 +2066,13 @@ $r.find('[data-bind]').each(function()	{
 		
 		}
 	if(bindData.hideZero == 'false') {bindData.hideZero = false} //passed as string. treat as boolean.
+	else	{bindData.hideZero = true}
 // SANITY - value should be set by here. If not, likely this is a null value or isn't properly formatted.
 //	app.u.dump(" -> value: "+value);
 
 	if(Number(value) == 0 && bindData.hideZero)	{
 //do nothing. value is zero and zero should be skipped.
+//		app.u.dump(" -> value is 0 but was skipped: "+bindData['var']);
 		}
 // ### NOTE - at some point, see if this code can be moved inot the render format itself so that no special handler needs to exist.
 //did a quick try on this that failed. Need to revisit this when time permits.
@@ -2050,7 +2091,7 @@ $r.find('[data-bind]').each(function()	{
 			}
 		
 		}
-	else if(value)	{
+	else if(value || (Number(value) == 0 && bindData.hideZero === false))	{
 		if(app.u.isSet(bindData.className)){$focusTag.addClass(bindData.className)} //css class added if the field is populated. If the class should always be there, add it to the template.
 
 		if(app.u.isSet(bindData.format)){
@@ -2085,7 +2126,7 @@ $r.find('[data-bind]').each(function()	{
 		}
 	else	{
 		// attribute has no value.
-//				app.u.dump(' -> data-bind is set, but it has no/invalid value.');
+//		app.u.dump(' -> data-bind is set, but it has no/invalid value: '+bindData['var']+" Number(value): "+Number(value)+" and bindData.hideZero: "+bindData.hideZero);
 		if($focusTag.prop('tagName') == 'IMG'){$focusTag.remove()} //remove empty/blank images from dom. necessary for IE.
 
 		}
@@ -2208,12 +2249,16 @@ return $r;
 	renderFormats : {
 
 		imageURL : function($tag,data){
-//				app.u.dump('got into displayFunctions.image: "'+data.value+'"');
-			data.bindData.bgcolor = data.bindData.bgcolor || 'ffffff'
-//			app.u.dump(" -> width: "+$tag.width());
+//			app.u.dump('got into displayFunctions.image: "'+data.value+'"');
+			data.bindData.b = data.bindData.b || 'ffffff'; //default to white.
+			
+			if(data.bindData.isElastic) {
+				data.bindData.elasticImgIndex = data.bindData.elasticImgIndex || 0; //if a specific image isn't referenced, default to zero.
+				data.value = data.value[data.bindData.elasticImgIndex];
+				};
 			if(data.value)	{
 //set some recommended/required params.
-				data.bindData.name = data.value;
+				data.bindData.name = (data.bindData.valuePretext) ? data.bindData.valuePretext+data.value : data.value;
 				data.bindData.w = $tag.attr('width');
 				data.bindData.h = $tag.attr('height');
 				data.bindData.tag = 0;
@@ -2244,22 +2289,24 @@ return $r;
 			},
 
 
-		elasticImage1URL : function($tag,data)	{
-			var bgcolor = data.bindData.bgcolor ? data.bindData.bgcolor : 'ffffff'
-			if(data.value[0])	{$tag.attr('src',app.u.makeImage({"name":data.value[0],"w":$tag.attr('width'),"h":$tag.attr('height'),"b":bgcolor,"tag":0}))}
-			else	{$tag.style('display','none');}
-			},
-
 //handy for enabling tabs and whatnot based on whether or not a field is populated.
 //doesn't actually do anything with the value.
 		showIfSet : function($tag,data)	{
-//			app.u.dump('BEGIN control.renderFormats.hideorShowTab');
-//			app.u.dump(' -> data.value'+data.value);
 			if(data.value)	{
-//				app.u.dump(' -> setting $tag.show()');
 				$tag.show().css('display','block'); //IE isn't responding to the 'show', so the display:block is added as well.
 				}
 			},
+
+
+
+//handy for enabling tabs and whatnot based on whether or not a field is populated.
+//doesn't actually do anything with the value.
+		hideIfSet : function($tag,data)	{
+			if(data.value)	{
+				$tag.hide(); //IE isn't responding to the 'show', so the display:block is added as well.
+				}
+			},
+
 
 //for embedding. There is an action for showing a youtube video in an iframe in quickstart.
 // hint: set the action as an onclick and set attribute youtube:video id on element and use jquery to pass it in. 
@@ -2395,6 +2442,11 @@ $tmp.empty().remove();
 			$tag.html(o);
 			},
 
+		epoch2pretty : function($tag,data)	{
+			var myDate = new Date( data.value*1000);
+			$tag.append(myDate.getFullYear()+"/"+(myDate.getMonth()+1)+"/"+myDate.getDate()+" "+myDate.getHours()+":"+myDate.getMinutes()+":"+myDate.getSeconds());
+			},
+
 		unix2mdy : function($tag,data)	{
 			$tag.text(app.u.unix2Pretty(data.value,data.bindData.showtime))
 			},
@@ -2440,19 +2492,14 @@ $tmp.empty().remove();
 			}, //text
 
 		loadsTemplate : function($tag,data)	{
-			app.u.dump("BEGIN renderFormats.loadsTemplate");
+//			app.u.dump("BEGIN renderFormats.loadsTemplate");
 			$tag.append(app.renderFunctions.transmogrify({},data.bindData.loadsTemplate,data));
 			},
 
-		elasticMoney :function($tag,data)	{
-			data.value = data.value / 100;
-			app.renderFormats.money($tag,data);
-			}, //money
-		
 		money : function($tag,data)	{
 			
 //			app.u.dump('BEGIN view.formats.money');
-			var amount = data.value;
+			var amount = data.bindData.isElastic ? (data.value / 100) : data.value;
 			if(amount)	{
 				var r;
 				r = app.u.formatMoney(amount,data.bindData.currencySign,'',data.bindData.hideZero);
@@ -2463,35 +2510,25 @@ $tmp.empty().remove();
 				}
 			}, //money
 
-//This should be used for all lists going forward. stuffList and object2Template should be upgraded to use this.
+//This should be used for all lists going forward that don't require special handling (such as stufflist, prodlist, etc).
 //everthing that's in the data lineitem gets passed as first param in transmogrify, which will add each key/value as data-key="value"
 //at this time, prodlist WON'T use this because each pid in the list needs/makes an API call.
 //data-obj_index is set so that a quick lookup is available. ex: in tasks list, there's no detail call, so need to be able to find data quickly in orig object.
 // _index is used instead of -index because of how data works (removes dashes and goes to camel case, which is nice but not consistent and potentially confusing)
-
+//doing a for(i in instead of a +=1 style loop makes it work on both arrays and objects.
 		processList : function($tag,data){
 //			app.u.dump("BEGIN renderFormats.processList");
-			var L = data.value.length;
-			var $o; //recycled. what gets added to $tag for each iteration.
-			for(var i = 0; i < L; i += 1)	{
-//				app.u.dump(i+") reached.");
-				$o = app.renderFunctions.transmogrify(data.value[i],data.bindData.loadsTemplate,data.value[i]);
-//				app.u.dump(" ---> appended");
-				if(data.value[i].id){} //if an id was set, do nothing.
-				else	{$o.removeAttr('id').attr('data-obj_index',i)} //nuke the id. it's the template id and will be duplicated several times. set index for easy lookup later.
-				$tag.append($o);
-				}
-			$tag.removeClass('loadingBG');
-			},
-
-
-		object2Template : function($tag,data)	{
-//			app.u.dump("BEGIN renderFormats.array2Template");
-//			app.u.dump(data.value);
-			var L = data.value.length;
-//			app.u.dump(" -> L: "+L);
-			for(var i = 0; i < L; i += 1)	{
-				$tag.append(app.renderFunctions.transmogrify({'id': $tag.attr('id') ? '02t_'+$tag.attr('id')+'_'+i : '02t_'+i},data.bindData.loadsTemplate,data.value[i])); 
+			var $o, //recycled. what gets added to $tag for each iteration.
+			int = 0;
+			for(i in data.value)	{
+				if(data.bindData.limit && int >= Number(data.bindData.limit)) {break;}
+				else	{
+					$o = app.renderFunctions.transmogrify(data.value[i],data.bindData.loadsTemplate,data.value[i]);
+					if(data.value[i].id){} //if an id was set, do nothing.
+					else	{$o.removeAttr('id').attr('data-obj_index',i)} //nuke the id. it's the template id and will be duplicated several times. set index for easy lookup later.
+					$tag.append($o);
+					}
+				int += 1;				
 				}
 			$tag.removeClass('loadingBG');
 			}

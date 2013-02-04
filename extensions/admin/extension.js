@@ -25,19 +25,19 @@ An extension for working within the Zoovy UI.
 var admin = function() {
 // theseTemplates is it's own var because it's loaded in multiple places.
 // here, only the most commonly used templates should be loaded. These get pre-loaded. Otherwise, load the templates when they're needed or in a separate extension (ex: admin_orders)
-	var theseTemplates = new Array('adminProdStdForList','adminProdSimpleForList','adminElasticResult','adminProductFinder','adminMultiPage','domainPanelTemplate','pageSetupTemplate','pageUtilitiesTemplate','adminChooserElasticResult','productTemplateChooser','pageSyndicationTemplate','pageTemplateSetupAppchooser'); 
+	var theseTemplates = new Array('adminProdStdForList','adminProdSimpleForList','adminElasticResult','adminProductFinder','adminMultiPage','domainPanelTemplate','pageSetupTemplate','pageUtilitiesTemplate','adminChooserElasticResult','productTemplateChooser','pageSyndicationTemplate','pageTemplateSetupAppchooser','dashboardTemplate','recentNewsItemTemplate','quickstatReportTemplate','achievementsListTemplate'); 
 	var r = {
 		
-	vars : {
-		tab : null, //is set when switching between tabs. it outside 'state' because this doesn't get logged into local storage.
-		tabs : ['setup','sites','jt','product','orders','crm','syndication','reports','utilities'],
-		state : {},
-		tab : 'home',
-		templates : theseTemplates,
-		willFetchMyOwnTemplates : true,
-		"tags" : ['IS_FRESH','IS_NEEDREVIEW','IS_HASERRORS','IS_CONFIGABLE','IS_COLORFUL','IS_SIZEABLE','IS_OPENBOX','IS_PREORDER','IS_DISCONTINUED','IS_SPECIALORDER','IS_BESTSELLER','IS_SALE','IS_SHIPFREE','IS_NEWARRIVAL','IS_CLEARANCE','IS_REFURB','IS_USER1','IS_USER2','IS_USER3','IS_USER4','IS_USER5','IS_USER6','IS_USER7','IS_USER8','IS_USER9'],
-		"dependencies" : ['store_prodlist','store_navcats','store_product','store_search'] //a list of other extensions (just the namespace) that are required for this one to load
-		},
+		vars : {
+			tab : null, //is set when switching between tabs. it outside 'state' because this doesn't get logged into local storage.
+			tabs : ['setup','sites','jt','product','orders','crm','syndication','reports','utilities'],
+			state : {},
+			tab : 'home',
+			templates : theseTemplates,
+			willFetchMyOwnTemplates : true,
+			"tags" : ['IS_FRESH','IS_NEEDREVIEW','IS_HASERRORS','IS_CONFIGABLE','IS_COLORFUL','IS_SIZEABLE','IS_OPENBOX','IS_PREORDER','IS_DISCONTINUED','IS_SPECIALORDER','IS_BESTSELLER','IS_SALE','IS_SHIPFREE','IS_NEWARRIVAL','IS_CLEARANCE','IS_REFURB','IS_USER1','IS_USER2','IS_USER3','IS_USER4','IS_USER5','IS_USER6','IS_USER7','IS_USER8','IS_USER9'],
+			"dependencies" : ['store_prodlist','store_navcats','store_product','store_search'] //a list of other extensions (just the namespace) that are required for this one to load
+			},
 
 
 
@@ -49,11 +49,13 @@ if no handler is in place, then the app would use legacy compatibility mode.
 	pages : {
 		
 		"/biz/setup/index.cgi" : {
-			messages : [], //array of strings. TYPE|MESSAGE
+			messages : [], //array of strings. TYPE|MESSAGE -> used in legacy compat.
 			bc : [], //array of objects. link and name in order left to right. zero is leftmost in array.
 			help : "", //webdoc ID.
 			navtabs : {}, //array of objects. link, name and selected (boolean)
 			title : {},
+			allowed : ['ts1','ro1'],
+			tab : '', //string. can be blank. if blank, uses tab in focus. use 'home' for no tab/turn all tabs off.
 			exec : function(){}  //executes the code to render the page.
 			},
 		"/biz/syndication/index.cgi" : {
@@ -156,6 +158,103 @@ if no handler is in place, then the app would use legacy compatibility mode.
 				app.model.addDispatchToQ({"_cmd":"adminBatchJobCleanup","jobid":jobid,"_tag":_tag},Q);	
 				}
 			}, //adminBatchJobStatus
+			
+
+
+
+
+		adminCustomerGet : {
+			init : function(CID,_tag,Q)	{
+				var r = 0;
+				if(CID)	{
+//if datapointer is fixed (set within call) it needs to be added prior to executing handleCallback (which needs datapointer to be set).
+					_tag = _tag || {};
+					_tag.datapointer = "adminCustomerGet|"+CID;
+					if(app.model.fetchData(_tag.datapointer) == false)	{
+						r = 1;
+						this.dispatch(CID,_tag,Q);
+						}
+					else	{
+						app.u.handleCallback(_tag);
+						}
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.adminCustomerGet, no CID specified.");
+					}
+				return r;
+				},
+			dispatch : function(CID,_tag,Q)	{
+//					app.u.dump("CID: "+CID);
+				var obj = {};
+				obj._cmd = "adminCustomerGet";
+				obj.CID = CID;
+				obj._tag = _tag;
+				app.model.addDispatchToQ(obj,Q);
+				}
+			}, //adminCustomerGet
+//no local storage to ensure latest data always present. 
+		adminCustomerLookup : {
+			init : function(email,_tag,Q)	{
+				var r = 0;
+				if(email)	{
+					_tag = _tag || {};
+					_tag.datapointer = "adminCustomerLookup"; //if changed, test order create for existing customer
+					this.dispatch(email,_tag,Q);
+					r = 1;
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.adminCustomerLookup, no email specified.");
+					}
+				return r;
+				},
+			dispatch : function(email,_tag,Q)	{
+				app.model.addDispatchToQ({"_cmd":"adminCustomerLookup","email":email,"_tag" : _tag});	
+				}
+			}, //adminCustomerLookup
+		adminCustomerSet : {
+			init : function(CID,setObj,_tag)	{
+				var r = 0;
+				if(CID && !$.isEmptyObject(setObj))	{
+					this.dispatch(CID,setObj,_tag)
+					r= 1;
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.adminCustomerSet, CID ["+CID+"] not set or setObj was empty");
+					app.u.dump("setObj follows: "); app.u.dump(setObj);
+					}
+				return r;
+				},
+			dispatch : function(CID,setObj,_tag)	{
+				var obj = {};
+				_tag = _tag || {};
+				obj._cmd = "adminCustomerSet";
+				obj.CID = CID;
+				obj['%set'] = setObj;
+				obj._tag = _tag;
+				app.model.addDispatchToQ(obj,'immutable');
+				}
+			}, //adminCustomerSet
+
+
+		adminDataQuery : {
+			init : function(obj,_tag,Q)	{
+				var r = 0;
+				if(obj && obj.query)	{this.dispatch(obj,_tag,Q); r = 1;}
+				else	{
+					app.u.throwGMessage("In admin.calls.adminDataQuery, no object or no object.query object passed.");
+					}
+				return r;
+				},
+			dispatch : function(obj,_tag,Q)	{
+				obj._cmd = 'adminDataQuery';
+				obj._tag = _tag || {};
+				obj._tag.datapointer = 'adminDataQuery';
+				app.model.addDispatchToQ(obj,Q);
+				}
+			}, //adminDataQuery
+			
+//			{'_cmd':'adminDataQuery','query':'listing-active','since_gmt':app.u.unixNow() - (60*60*24*10)}
+			
 		adminDomainList : {
 			init : function(_tag,Q)	{
 				_tag = _tag || {};
@@ -173,8 +272,55 @@ if no handler is in place, then the app would use legacy compatibility mode.
 			dispatch : function(_tag,Q)	{
 				app.model.addDispatchToQ({"_cmd":"adminDomainList","_tag" : _tag},Q);
 				}			
-			},
+			}, //adminDomainList
 
+//PRT and TYPE (ex: ORDER) are required params
+		adminEmailList : {
+			init : function(obj,_tag,Q)	{
+				var r = 0;
+				app.u.dump(" -> obj:"+Number(obj.PRT)); app.u.dump(obj); app.u.dump(_tag);
+				if(obj && (Number(obj.PRT) >= 0) && obj.TYPE)	{
+					_tag = _tag || {};
+					_tag.datapointer = "adminEmailList|"+obj.PRT+"|"+obj.TYPE;
+					
+					if(app.model.fetchData(_tag.datapointer) == false)	{
+						r = 1;
+						this.dispatch(obj,_tag,Q);
+						}
+					else	{
+						app.u.handleCallback(_tag);
+						}
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.adminEmailList, PRT ["+obj.PRT+"] and TYPE ["+obj.TYPE+"] are required and one was not set.");
+					}
+				return r; 
+				},
+			dispatch : function(obj,_tag,Q)	{
+				obj._cmd = "adminEmailList";
+				obj._tag = _tag;
+				app.model.addDispatchToQ(obj,Q || 'mutable');
+				}			
+			}, //adminEmailList
+
+
+
+		adminEmailSave : {
+			init : function(obj,_tag,Q)	{
+				var r = 0;
+				if(obj && Number(obj.PRT) >= 0 && obj.MSGID && obj.TYPE)	{this.dispatch(obj,_tag,Q); r = 1;}
+				else	{
+					app.u.throwGMessage("In admin.calls.adminEmailSave, no object ["+typeof obj+"] or object.PRT ["+obj.PRT+"] or object.MSGID ["+obj.MSGID+"] not passed.");
+					}
+				return r;
+				},
+			dispatch : function(obj,_tag,Q)	{
+				obj._cmd = 'adminEmailSave';
+				obj._tag = _tag || {};
+				obj._tag.datapointer = 'adminEmailSave';
+				app.model.addDispatchToQ(obj,Q || 'immutable');
+				}
+			}, //adminDataQuery
 
 
 		adminPrivateSearch : {
@@ -194,6 +340,8 @@ if no handler is in place, then the app would use legacy compatibility mode.
 				app.model.addDispatchToQ(obj,Q);
 				}
 			}, //adminPrivateSearch
+
+
 
 
 
@@ -223,7 +371,15 @@ if no handler is in place, then the app would use legacy compatibility mode.
 			init : function(orderID,_tag,Q)	{
 				var r = 0;
 				if(orderID)	{
-					this.dispatch(orderID,_tag,Q);
+					_tag = _tag || {};
+					_tag.datapointer = "adminOrderDetail|"+orderID;
+					if(app.model.fetchData(_tag.datapointer) == false)	{
+						r = 1;
+						this.dispatch(orderID,_tag,Q);
+						}
+					else	{
+						app.u.handleCallback(_tag);
+						}
 					r = 1;
 					}
 				else	{
@@ -234,12 +390,29 @@ if no handler is in place, then the app would use legacy compatibility mode.
 			dispatch : function(orderID,_tag,Q)	{
 				var cmdObj = {};
 				cmdObj.orderid = orderID;
-				cmdObj._tag = _tag || {};
-				cmdObj._tag.datapointer = "adminOrderDetail|"+orderID;
+				cmdObj._tag = _tag;
 				cmdObj._cmd = "adminOrderDetail";
 				app.model.addDispatchToQ(cmdObj,Q);
 				}
 			}, //adminOrderDetail
+			
+			
+		adminOrderPaymentMethods	: {
+			
+			init : function(obj,_tag,Q)	{
+				this.dispatch(obj,_tag,Q);
+				return 1;
+				},
+			
+			dispatch : function(obj,_tag,Q){
+				obj._cmd = 'adminOrderPaymentMethods';
+				obj._tag = _tag || {};
+				obj._tag.datapointer = 'adminOrderPaymentMethods';
+				app.model.addDispatchToQ(obj,Q || 'immutable');
+				}
+			
+			},
+			
 //updating an order is a critical function and should ALWAYS be immutable.
 		adminOrderUpdate : {
 			init : function(orderID,updates,_tag)	{
@@ -536,7 +709,6 @@ if no handler is in place, then the app would use legacy compatibility mode.
 				app.model.addDispatchToQ(obj,Q);
 				}
 			}, //appPageGet
-
 		appPageSet : {
 			init : function(obj,_tag,Q)	{
 				var r = 0;
@@ -573,63 +745,27 @@ if no handler is in place, then the app would use legacy compatibility mode.
 
 
 
-	
-		customer : {
-
-			adminCustomerGet : {
-				init : function(CID,tagObj,Q)	{
-//					app.u.dump("CID: "+CID);
-					var r = 0;
-//if datapointer is fixed (set within call) it needs to be added prior to executing handleCallback (which needs datapointer to be set).
-					tagObj = tagObj || tagObj;
-					tagObj.datapointer = "adminCustomerGet|"+CID;
-					if(app.model.fetchData(tagObj.datapointer) == false)	{
-						r = 1;
-						this.dispatch(CID,tagObj,Q);
-						}
-					else	{
-						app.u.handleCallback(tagObj);
-						}
-					return r;
-					},
-				dispatch : function(CID,tagObj,Q)	{
-//					app.u.dump("CID: "+CID);
-					var obj = {};
-					tagObj = tagObj || {};
-					obj["_cmd"] = "adminCustomerGet";
-					obj["CID"] = CID;
-					obj["_tag"] = tagObj;
-					app.model.addDispatchToQ(obj,Q);
+		authNewAccountCreate : {
+			init : function(obj,_tag,Q)	{
+				var r = 0;
+				if(typeof obj == 'object' && obj.email && obj.domain && obj.phone && obj.firstname && obj.lastname && obj.company)	{
+					this.dispatch(obj,_tag,Q);
+					r = 1;
 					}
-				},
-
-//no local storage of this call. only 1 in memory. Will expand when using session storage if deemed necessary.
-			adminCustomerLookup : {
-				init : function(email,tagObj,Q)	{
-					tagObj = tagObj || tagObj;
-					tagObj.datapointer = "adminCustomerLookup";
-					this.dispatch(email,tagObj,Q);
-					},
-				dispatch : function(email,tagObj,Q)	{
-					app.model.addDispatchToQ({"_cmd":"adminCustomerLookup","email":email,"_tag" : tagObj});	
-					}			
-				},
-			adminCustomerSet : {
-				init : function(CID,setObj,tagObj)	{
-					this.dispatch(CID,setObj,tagObj)
-					return 1;
-					},
-				dispatch : function(CID,setObj,tagObj)	{
-					var obj = {};
-					tagObj = tagObj || {};
-					obj["_cmd"] = "adminCustomerSet";
-					obj["CID"] = CID;
-					obj['%set'] = setObj;
-					obj["_tag"] = tagObj;
-					app.model.addDispatchToQ(obj,'immutable');
+				else	{
+					app.u.throwGMessage("In admin.calls.authNewAccountCreate, some required attributes were missing.");
+					app.u.dump(" -> All of the fields in the form must be populated. obj follows: "); app.u.dump(obj);
 					}
+				return r;
+				},
+			dispatch : function(obj,_tag,Q)	{
+				obj._cmd = "authNewAccountCreate";
+				obj._tag = _tag || {};
+				_tag.datapointer = "authNewAccountCreate";
+				app.model.addDispatchToQ(obj,Q);
 				}
 			},
+
 
 		finder : {
 			
@@ -665,12 +801,182 @@ if no handler is in place, then the app would use legacy compatibility mode.
 					}
 				} //adminNavcatProductDelete
 			
-			} //finder
+			}, //finder
 
 
+		bossUserCreate : {
+			init : function(obj,_tag,Q)	{
+				var r = 0;
+				Q = Q || 'immutable';
+				if(!$.isEmptyObject(obj))	{
+					this.dispatch(obj,_tag,Q);
+					r = 1;
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.bossUserCreate, obj is empty.");
+					}
+				return r;
+				},
+			dispatch : function(obj,_tag,Q)	{
+				obj._cmd = 'bossUserCreate';
+				obj._tag = _tag || {};
+				obj._tag.datapointer = 'bossUserCreate';
+				app.model.addDispatchToQ(obj,Q);
+				}
+			},
 
+		bossUserList : {
+			init : function(_tag,Q)	{
+				var r = 0;
+				_tag = _tag || {};
+				_tag.datapointer = 'bossUserList';
+				if(app.model.fetchData(_tag.datapointer) == false)	{
+					this.dispatch(_tag,Q);
+					r = 1;
+					}
+				else	{
+					app.u.handleCallback(_tag);
+					}
+				return r;
+				},
+			dispatch : function(_tag,Q)	{
+				Q = Q || 'immutable';
+				var obj = {_cmd : 'bossUserList'};
+				obj._tag = _tag || {};
+				obj._tag.datapointer = 'bossUserList';
+				app.model.addDispatchToQ(obj,Q);
+				}
+			}, //bossUserList
 
+		bossUserDetail : {
+			init : function(luser,_tag,Q)	{
+				var r = 0;
+				Q = Q || 'immutable';
+				_tag = _tag || {};
+				_tag.datapointer = 'bossUserDetail|'+luser;
+				if(luser)	{
+					if(app.model.fetchData(_tag.datapointer) == false)	{
+						r = 1;
+						this.dispatch(luser,_tag,Q);
+						}
+					else	{
+						app.u.handleCallback(_tag);
+						}
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.bossUserDetail, L user is undefined and required.");
+					}
+				return r;
+				},
+			dispatch : function(luser,_tag,Q)	{
+				app.model.addDispatchToQ({"_cmd":"bossUserDetail","login":luser,"_tag" : _tag},Q);
+				}
+			}, //bossUserDetail
 
+		bossUserDelete : {
+			init : function(luser,_tag,Q)	{
+				var r = 0;
+				Q = Q || 'immutable';
+				if(luser)	{
+					this.dispatch(luser,_tag,Q);
+					r = 1;
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.bossUserDelete, uid is undefined and required.");
+					}
+				return r;
+				},
+			dispatch : function(luser,_tag,Q)	{
+				_tag = _tag || {};
+				_tag.datapointer = 'bossUserDelete|'+luser;
+				app.model.addDispatchToQ({"_cmd":"bossUserDelete","login":luser,"_tag" : _tag},Q);
+				}
+			}, //bossUserDelete
+		bossUserUpdate : {
+			init : function(obj,_tag,Q)	{
+				var r = 0;
+				Q = Q || 'immutable';
+				if(!$.isEmptyObject(obj) && obj.luser)	{
+					this.dispatch(obj,_tag,Q);
+					r = 1;
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.bossUserUpdate, obj is empty or obj.luser is not set.");
+					app.u.dump(obj);
+					}
+				return r;
+				},
+			dispatch : function(obj,_tag,Q)	{
+				obj._cmd = 'bossUserUpdate';
+				obj._tag = _tag || {};
+				obj._tag.datapointer = 'bossUserUpdate|'+obj.luser;
+				app.model.addDispatchToQ(obj,Q);
+				}
+			},
+
+		
+		bossRoleList : {
+			init : function(_tag,Q)	{
+				var r = 0;
+				_tag = _tag || {};
+				_tag.datapointer = 'bossRoleList';
+				if(app.model.fetchData(_tag.datapointer) == false)	{
+					this.dispatch(_tag,Q);
+					r = 1;
+					}
+				else	{
+					app.u.handleCallback(_tag);
+					}
+				return r;
+				},
+			dispatch : function(_tag,Q)	{
+				Q = Q || 'immutable';
+				var obj = {_cmd : 'bossRoleList'};
+				obj._tag = _tag;
+				app.model.addDispatchToQ(obj,Q);
+				}
+			}, //bossRoleList
+		
+		helpSearch : {
+			init : function(keywords,_tag,Q)	{
+				var r = 0;
+				if(keywords)	{
+					r = 1;
+					this.dispatch(keywords,_tag,Q);
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.helpSearch, keywords not specified.");
+					}
+				return 1;
+				},
+			dispatch : function(keywords,_tag,Q)	{
+				app.model.addDispatchToQ({_cmd:'helpSearch','keywords':keywords,_tag:_tag || {}},Q || 'mutable');
+				}
+			}, //helpSearch
+
+		helpDocumentGet : {
+			init : function(docid,_tag,Q)	{
+				if(docid)	{
+					var r = 0;
+					_tag = _tag || {};
+					_tag.datapointer = 'helpDocumentGet|'+docid;
+					if(app.model.fetchData(_tag.datapointer) == false)	{
+						this.dispatch(docid,_tag,Q);
+						r = 1;
+						}
+					else	{
+						app.u.handleCallback(_tag);
+						}
+					}
+				else	{
+					app.u.throwGMessage("In admin.calls.helpDocumentGet, docid not specified.");
+					}
+				return r;
+				},
+			dispatch : function(docid,_tag,Q)	{
+				app.model.addDispatchToQ({_cmd : 'helpDocumentGet','_tag':_tag,'docid':docid},Q || 'immutable');
+				}
+			} //bossRoleList
 		}, //calls
 
 
@@ -690,10 +996,13 @@ if no handler is in place, then the app would use legacy compatibility mode.
 //				app.u.dump('BEGIN app.ext.admin.init.onSuccess ');
 				var r = true; //return false if extension can't load. (no permissions, wrong type of session, etc)
 //app.u.dump("DEBUG - template url is changed for local testing. add: ");
-
+$('title').append(" - release: "+app.vars.release);
 app.model.fetchNLoadTemplates(app.vars.baseURL+'extensions/admin/templates.html',theseTemplates);
 
-//app.rq.push(['css',0,app.vars.baseURL+'extensions/admin/styles.css','admin_styles']);
+
+//SANITY - loading this file async causes a slight pop. but loading it inline caused the text to not show up till the file was done.
+//this is the leser of two weevils.
+app.rq.push(['css',0,'http://fonts.googleapis.com/css?family=PT+Sans:400,700','google_pt_sans']);
 app.rq.push(['script',0,app.vars.baseURL+'extensions/admin/resources/legacy_compat.js']);
 
 
@@ -706,6 +1015,7 @@ app.rq.push(['css',0,app.vars.baseURL+'extensions/admin/resources/jHtmlArea-0.7.
 app.rq.push(['script',0,app.vars.baseURL+'extensions/admin/resources/jHtmlArea-0.7.5.ExamplePlusSource/scripts/jHtmlArea-0.7.5.min.js',function(){app.rq.push(['script',0,app.vars.baseURL+'extensions/admin/resources/jHtmlArea-0.7.5.ExamplePlusSource/scripts/jHtmlArea.ColorPickerMenu-0.7.0.min.js'])}]);
 
 
+app.ext.admin.calls.appResource.init('shipcodes.json',{},'passive'); //get this for orders.
 
 
 				return r;
@@ -733,13 +1043,6 @@ if(app.u.getBrowserInfo().substr(0,4) == 'msie' && parseFloat(navigator.appVersi
 	app.u.throwMessage("<p>In an effort to provide the best user experience for you and to also keep our development team sane, we've opted to optimize our user interface for webkit based browsers. These include; Safari, Chrome and FireFox. Each of these are free and provide a better experience, including more diagnostics for us to maintain our own app framework.<\/p><p><b>Our store apps support IE8+<\/b><\/p>");
 	}
 
-if(app.u.getParameterByName('debug'))	{
-	$('button','#debugPanel').button();
-	$('#debugPanel').show()
-	$('.debugContent','#debugPanel').append("<div class='clearfix'>Model Version: "+app.model.version+" and release: "+app.vars.release+"</div>");
-	$('body').css('padding-bottom',125);
-	$('#jtSectionTab').show();
-	}
 
 //get list of domains and show chooser.
 				var $domainChooser = $("<div \/>").attr({'id':'domainChooserDialog','title':'Choose a domain to work on'}).addClass('displayNone').appendTo('body');
@@ -749,7 +1052,7 @@ if(app.u.getParameterByName('debug'))	{
 					'width': '90%',
 					'height': 500,
 					'closeOnEscape': false,
-					open: function(event, ui) {$(".ui-dialog-titlebar-close", $(this).parent()).hide();} //hide 'close' icon.
+					open: function(event, ui) {$(".ui-dialog-titlebar-close", $(this).parent()).hide();} //hide 'close' icon. will close on domain selection
 					});
 
 
@@ -778,25 +1081,112 @@ if(app.u.getParameterByName('debug'))	{
 				window.linkOffSite = app.ext.admin.u.linkOffSite;
 				window.adminUIDomainPanelExecute = app.ext.admin.u.adminUIDomainPanelExecute;
 				window._ignoreHashChange = false; // see handleHashState to see what this does.
-				
 
-uriParams = app.u.getParametersAsObject('?'+window.location.href.split('?')[1]);
+
+document.write = function(v){
+	if(console && console.warn){
+		console.warn("document.write was executed. That's bad mojo. Rewritten to $('body').append();");
+		console.log("document.write contents: "+v);
+		}
+	$("body").append(v);
+	}
+
+
+var uriParams = {};
+var ps = window.location.href; //param string. find a regex for this to clean it up.
+if(ps.indexOf('?') >= 1)	{
+	ps = ps.split('?')[1]; //ignore everything before the first questionmark.
+	if(ps.indexOf('#') == 0){} //'could' happen if uri is ...admin.html?#doSomething. no params, so do nothing.
+	else	{
+		if(ps.indexOf('#') >= 1)	{ps = ps.split('#')[0]} //uri params should be before the #
+//	app.u.dump(ps);
+		uriParams = app.u.kvp2Array(ps);
+		}
+//	app.u.dump(uriParams);
+	}
+
+// app.u.dump(" -> uriParams"); app.u.dump(uriParams);
 if(uriParams.trigger == 'adminPartnerSet')	{
+	app.u.dump(" -> execute adminPartnerSet call");
 	//Merchant is most likely returning to the app from a partner site for some sort of verification
 	app.ext.admin.calls.adminPartnerSet.init(uriParams,{'callback':'showHeader','extension':'admin'});
 	app.model.dispatchThis('immutable');
 	}
-//if user is logged in already (persistant login), take them directly to the UI. otherwise, have them log in.
-//the code for handling the support login is in the thisisanadminsession function (looking at uri)
-else if(app.u.thisIsAnAdminSession())	{
-	app.ext.admin.u.showHeader();
+
+
+
+if(app.vars.debug)	{
+	$('button','#debugPanel').button();
+	$('#debugPanel').show()
+	$('.debugContent','#debugPanel').append("<div class='clearfix'>Model Version: "+app.model.version+" and release: "+app.vars.release+"</div>");
+	$('body').css('padding-bottom',125);
+	$('#jtSectionTab').show();
+	}
+
+
+app.u.dump("Is anycommerce? document.domain: "+document.domain+" and uriParams.anycommerce: ["+uriParams.anycommerce+"]");
+	
+//the zoovy branding is in place by default. override if on anycommerce.com OR if an anycommerce URI param is present (for debugging)
+if(document.domain && document.domain.toLowerCase().indexOf('anycommerce') > -1)	{
+	app.u.dump(" -> Treat as anycommerce");
+	$('.logo img').attr('src','extensions/admin/images/anycommerce_logo-173x30.png');
+	$('body').addClass('isAnyCommerce');
 	}
 else	{
-	$('#appPreView').hide();
-	$('#appLogin').show();
+	app.u.dump(" -> Treat as zoovy");
+	$('body').addClass('isZoovy'); //displays all the Zoovy only content (will remain hidden for anyCommerce)
+	}
+
+
+//if user is logged in already (persistant login), take them directly to the UI. otherwise, have them log in.
+//the code for handling the support login is in the thisisanadminsession function (looking at uri)
+if(app.u.thisIsAnAdminSession())	{
+	app.ext.admin.u.showHeader();
+	}
+else if(uriParams.show == 'acreate')	{
+	app.ext.admin.u.handleAppEvents($('#createAccountContainer'));
+	$('#appPreView').css('position','relative').animate({right:($('body').width() + $("#appPreView").width() + 100)},'slow','',function(){
+		$("#appPreView").hide();
+		$('#createAccountContainer').css({'left':'1000px','position':'relative'}).removeClass('displayNone').animate({'left':'0'},'slow');
+		});
+	}
+else	{
+	app.ext.admin.u.handleAppEvents($('#appLogin'));
+	$('#appPreView').css('position','relative').animate({right:($('body').width() + $("#appPreView").width() + 100)},'slow','',function(){
+		$("#appPreView").hide();
+		$('#appLogin').css({'left':'1000px','position':'relative'}).removeClass('displayNone').animate({'left':'0'},'slow');
+		});
 	}
 				}
 			}, //initExtension
+
+
+
+
+//very similar to the original translate selector in the control and intented to replace it. 
+//This executes the handleAppEvents in addition to the normal translation.
+//the selector also gets run through jqSelector and hideLoading (if declared) is run.
+		translateSelector : {
+			onSuccess : function(tagObj)	{
+				app.u.dump("BEGIN callbacks.translateSelector");
+//				app.u.dump(" -> tagObj: "); app.u.dump(tagObj);
+				var selector = app.u.jqSelector(tagObj.selector[0],tagObj.selector.substring(1)); //this val is needed in string form for translateSelector.
+//				app.u.dump(" -> selector: "+selector);
+				var $target = $(selector);
+//				app.u.dump(" -> $target.length: "+$target.length);
+				if(typeof jQuery().hideLoading == 'function'){$target.hideLoading();}
+				$target.removeClass('loadingBG'); //try to get rid of anything that uses loadingBG (cept prodlists) in favor of show/hideLoading()
+				var data = app.data[tagObj.datapointer];
+//merge allows for multiple datasets to be merged together prior to translation. use with caution.
+				if(tagObj.merge && app.data[tagObj.merge])	{
+					$.extend(data,app.data[tagObj.merge]);
+					}
+				app.renderFunctions.translateSelector(selector,app.data[tagObj.datapointer]);
+				app.ext.admin.u.handleAppEvents($target);
+				}
+			}, //translateSelector
+
+
 
 		showDataHTML : {
 			onSuccess : function(tagObj)	{
@@ -808,7 +1198,7 @@ else	{
 
 		handleLogout : {
 			onSuccess : function(tagObj)	{
-				document.location = 'logout.html'
+				document.location = '/app/latest/logout.html'
 				}
 			},
 //in cases where the content needs to be reloaded after making an API call, but when a showUI directly won't do (because of sequencing, perhaps)
@@ -865,7 +1255,14 @@ else	{
 			}, //handleElementSave
 
 		showHeader : {
-			onSuccess : function(){
+			onSuccess : function(_rtag){
+//				app.u.dump("BEGIN admin.callbacks.showHeader");
+//				app.u.dump(" -> app.data["+_rtag.datapointer+"]:");	app.u.dump(app.data[_rtag.datapointer]);
+//account was just created, skip domain chooser.
+				if(app.data[_rtag.datapointer] && app.data[_rtag.datapointer].domain)	{
+//					app.u.dump(" -> response contained a domain. use it to set the domain.");
+					app.ext.admin.a.changeDomain(app.data[_rtag.datapointer].domain,0,'#!dashboard');
+					}
 				app.ext.admin.u.showHeader();
 				},
 			onError : function(responseData){
@@ -873,16 +1270,18 @@ else	{
 //				if(responseData.errid == "100")	{
 //					app.u.throwMessage("This is most typically due to your system clock not being set correctly. For security, it must be set to both the correct time and timezone.");
 //					} //this is the clock issue.
-				$('#preloadAndLoginContents').hideLoading();
+				$('body').hideLoading();
 				}
 			}, //showHeader
 
 		handleDomainChooser : {
 			onSuccess : function(tagObj){
-//				app.u.dump("BEGIN admin.callbacks.handleDomainChooser.onSuccess");
+				app.u.dump("BEGIN admin.callbacks.handleDomainChooser.onSuccess");
 				var data = app.data[tagObj.datapointer]['@DOMAINS'];
 				var $target = $(app.u.jqSelector('#',tagObj.targetID));
+				$target.empty().append("<table class='fullWidth'><tr><td class='domainList valignTop'><\/td><td valignTop><iframe src='https://s3-us-west-1.amazonaws.com/admin-ui/ads/ad_300x250.html' class='fullWidth noBorders ad-300x250'><\/iframe><\/td><\/tr><\/table>");
 				var L = data.length;
+				$target.hideLoading();
 				if(L)	{
 					var $ul = $('#domainList'); //ul in modal.
 	//modal has been opened on this visit.  Domain list still reloaded in case they've changed.
@@ -891,14 +1290,14 @@ else	{
 					else	{
 						$ul = $("<ul \/>").attr('id','domainList');
 						}
-					
+
 					for(var i = 0; i < L; i += 1)	{
 						$("<li \/>").data(data[i]).addClass('lookLikeLink').addClass(data[i].id == app.vars.domain ? 'ui-selected' : '').append(data[i].id+" [prt: "+data[i].prt+"]").click(function(){
 							app.ext.admin.a.changeDomain($(this).data('id'),$(this).data('prt'))
 							$target.dialog('close');
 							}).appendTo($ul);
 						}
-					$target.hideLoading().append($ul);
+					$('.domainList',$target).append($ul);
 					}
 				else	{
 //user has no domains on file. What to do?
@@ -1084,40 +1483,41 @@ app.ext.admin.u.changeFinderButtonsState('enable'); //make buttons clickable
 
 		}, //callbacks
 
-	
-		
+
+
 ////////////////////////////////////   RENDERFORMATS    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-		
-		
+
+
 	renderFormats : {
-		
-		elastimage1URL : function($tag,data)	{
-//				app.u.dump(data.value[0]);
-//				var L = data.bindData.numImages ? data.bindData.numImages : 1; //default to only showing 1 image.
-//				for(var i = 0; i < L; i += 1)	{
-//					}
-			$tag.attr('src',app.u.makeImage({"name":data.value[0],"w":50,"h":50,"b":"FFFFFF","tag":0}));
+
+		reportID2Pretty : function($tag,data)	{
+			var lookupTable = {
+				OGMS : 'Total sales',
+				OWEB : 'Web sales',
+				OGRT : 'Return customers',
+				OEXP : 'Expedited',
+				SAMZ : 'Amazon',
+				SGOO : 'Google',
+				SEBA : 'eBay auction',
+				SABF : 'eBay fixed price',
+				SSRS : 'Sears',
+				SBYS : 'Buy.com'
+				}
+
+			$tag.append(lookupTable[data.value] || data.value); //if no translation, display report id.
 			},
-		
-	
+
+//very simple data to list function. no template needed (or allowed. use processList for that).
 		array2ListItems : function($tag,data)	{
 			var L = data.value.length;
-			app.u.dump(data.value);
+
 			var $o = $("<ul />"); //what is appended to tag. 
 			for(var i = 0; i < L; i += 1)	{
 				$o.append("<li>"+data.value[i]+"<\/li>");
 				}
 			$tag.append($o.children());
 			},
-		
-		array2Template : function($tag,data)	{
-//			app.u.dump("BEGIN admin.renderFormats.array2Template");
-//			app.u.dump(data.value);
-			var L = data.value.length;
-			for(var i = 0; i < L; i += 1)	{
-				$tag.append(app.renderFunctions.transmogrify({},data.bindData.loadsTemplate,data.value[i])); 
-				}
-			},
+
 //a value, such as media library folder name, may be a path (my/folder/name) and a specific value from that string may be needed.
 //set bindData.splitter and the value gets split on that character.
 //optionally, set bindData.index to get a specific indices value (0,1, etc). if index is not declared, the last index is returned.
@@ -1152,15 +1552,18 @@ app.ext.admin.u.changeFinderButtonsState('enable'); //make buttons clickable
 //mode is either app or legacy. mode is required and generated based on path.
 					var mode = undefined;
 					if(path.substr(0,5) == "/biz/") {mode = 'legacy'}
-					else if(path.substr(0,2) == "#:")	{mode = 'tabClick'} //path gets changed, so a separate mode is used for tracking when reloadTab is needed.
+					if(path.substr(0,6) == "#/biz/") {mode = 'legacy'}
+					else if(path.substr(0,2) == "#:")	{
+//						app.u.dump(" -> is #:");
+						$('#ordersContent').empty(); //always get new content for orders.
+						mode = 'tabClick';
+						path = "/biz/"+path.substring(2)+"/index.cgi";
+						opts.tab == opts.tab || path.substring(2);
+						} //path gets changed, so a separate mode is used for tracking when reloadTab is needed.
 					else if (path.substr(0,2) == "#!") {mode = 'app'}
 					else	{}
 					
 					if(mode)	{
-
-if(path.substr(0,2) == "#:")	{
-	path = "/biz/"+path.substring(2)+"/index.cgi";
-	}
 
 //app.u.dump(" -> mode: "+mode);
 //app.u.dump(" -> path: "+path);
@@ -1190,7 +1593,7 @@ if(opts.tab)	{app.ext.admin.u.bringTabIntoFocus(opts.tab);} //changes which tab 
 else	{} //do nothing. perfectly normal to not change what tab is in focus.
 
 
-//app.u.dump(" -> tab: "+opts.tab);
+//app.u.dump(" -> passed if/else tab determination code. tab: "+opts.tab);
 
 //set the targetID and $target for the content. 
 // By now, tab will be set IF tab is needed. (dialog and/or app mode support no tab specification)
@@ -1212,6 +1615,8 @@ else	{
 	//not in an app. no tab specified. not in modal. odd. how did we get here? No $target will be set. error handling occurs in if($target) check below.
 	}
 
+
+//app.u.dump(" -> $target determined.");
 
 if($target && $target.length)	{
 	if(opts.dialog)	{
@@ -1248,8 +1653,44 @@ else	{
 				else	{
 					app.u.throwGMessage("Warning! path not set for admin.a.showUI");
 					}
+//app.u.dump(" -> END showUI. ");
 				return false;
 				}, //showUI
+//this is a function that brian has in the UI on some buttons.
+//it's diferent than showUI so we can add extra functionality if needed.
+//the app itself should never use this function.
+			navigateTo : function(path,$t)	{
+				return this.showUI(path,$t ? $t : {});
+				},
+
+/*
+HEADER CODE
+*/
+
+// iconState is optional. if defined, will show or hide icons based on value (show or hide).
+// if iconState is not defined, then the function behaves like a toggle.
+// the value returned is boolen. t for icons are showing and f for icons are hidden.
+			toggleHeaderTabHeight : function(iconState)	{
+				var $target = $('.mhTabsContainer ul','#mastHead'),
+				r;
+				if(iconState == 'show' || $target.hasClass('hideIcons'))	{
+					$('.toggleArrow').html("&#9650;");
+					$target.removeClass('hideIcons').addClass('showIcons');
+					r = true;
+					}
+				else	{
+					$('.toggleArrow').html("&#9660;");
+					$target.removeClass('showIcons').addClass('hideIcons');
+					r = false;
+					}
+			//if the messages pane is open, adjust it's position accordingly.
+				if($('#messagesContent').is(':visible'))	{
+					$('#messagesContent').css('top',$('#messagesContent').parent().height());
+					}
+				return r;
+				},
+
+
 
 /*
 A generic form handler. 
@@ -1264,48 +1705,40 @@ Execute your own dispatch. This allows the function to be more versatile
 set as onSubmit="app.ext.admin.a.processForm($(this)); app.model.dispatchThis('mutable'); return false;"
  -> if data-q is set to passive or immutable, change the value of dispatchThis to match.
 */
-				processForm : function($form,q)	{
-					var obj = $form.serializeJSON() || {};
-					if($form.length && (obj._cmd || obj.call))	{
+			processForm : function($form,q)	{
+				var obj = $form.serializeJSON() || {};
+				if($form.length && (obj._cmd || obj.call))	{
 //						app.u.dump(" -> admin.a.processForm data attributes: "); app.u.dump(data);
-						var _tag = {};
+					var _tag = {};
 //build the _tag obj.
-						for(var key in obj)	{
-							if(key.substring(0,5) == "_tag/")	{
-								_tag[key.substring(5)] = obj[key];//_tag/ must be stripped from key.
-								delete obj[key]; //remove from object so it isn't part of query.
-								}
-							else{}
+					for(var key in obj)	{
+						if(key.substring(0,5) == "_tag/")	{
+							_tag[key.substring(5)] = obj[key];//_tag/ must be stripped from key.
+							delete obj[key]; //remove from object so it isn't part of query.
 							}
-						app.u.dump(" -> _tag in processForm: "); app.u.dump(_tag);
-						if(obj._cmd)	{
-							obj._tag = _tag; //when adding straight to Q, _tag should be a param in the cmd object.
-							app.model.addDispatchToQ(obj,q);
-							}
-						else if(obj.call)	{
-							var call = obj.call; //save to another var. obj.call needs to be deleted so it isn't passed in dispatch.
-							delete obj.call;
-							app.u.dump(" -> call: "+call);
-							app.ext.admin.calls[call.split('/')[1]].init(obj,_tag,q)
-							}
-						else{} //can't get here. either cmd or call are set by now.
-						
+						else{}
 						}
-					else	{
-						app.u.throwGMessage("Warning! $form was empty or _cmd or call not present within $form in admin.a.processForm");
+					app.u.dump(" -> _tag in processForm: "); app.u.dump(_tag);
+					if(obj._cmd)	{
+						obj._tag = _tag; //when adding straight to Q, _tag should be a param in the cmd object.
+						app.model.addDispatchToQ(obj,q);
 						}
-					}, //processForm
-				
-
-//this is a function that brian has in the UI on some buttons.
-//it's diferent than showUI so we can add extra functionality if needed.
-//the app itself should never use this function.
-			navigateTo : function(path,$t)	{
-				return this.showUI(path,$t ? $t : {});
-				},
+					else if(obj.call)	{
+						var call = obj.call; //save to another var. obj.call needs to be deleted so it isn't passed in dispatch.
+						delete obj.call;
+						app.u.dump(" -> call: "+call);
+						app.ext.admin.calls[call.split('/')[1]].init(obj,_tag,q)
+						}
+					else{} //can't get here. either cmd or call are set by now.
+					
+					}
+				else	{
+					app.u.throwGMessage("Warning! $form was empty or _cmd or call not present within $form in admin.a.processForm");
+					}
+				}, //processForm
 				
 			showDomainConfig : function(){
-				$(app.u.jqSelector('#',app.ext.admin.vars.tab+"Content")).empty().showLoading();
+				$(app.u.jqSelector('#',app.ext.admin.vars.tab+"Content")).empty().showLoading({"message":"Requesting up to date list of domains."});
 				app.ext.admin.calls.adminDomainList.init({'callback':'showDomainConfig','extension':'admin'},'immutable');
 				app.model.dispatchThis('immutable')
 				},
@@ -1333,7 +1766,7 @@ set as onSubmit="app.ext.admin.a.processForm($(this)); app.model.dispatchThis('m
 					app.vars.domain = domain;
 					$('.domain','#appView').text(domain);
 //					app.rq.push(['script',0,'http://'+domain+'/jquery/config.js']); //load zGlobals. saves over existing values.
-					if(partition){}
+					if(Number(partition) >= 0){}
 					else	{
 						partition = app.ext.admin.a.getDataForDomain(domain,'prt');
 						}
@@ -1354,8 +1787,6 @@ set as onSubmit="app.ext.admin.a.processForm($(this)); app.model.dispatchThis('m
 					}
 
 				}, //changeDomain
-
-
 
 //used in the builder for when 'edit' is clicked on an element.
 //Params are set by B. This is for legacy support in the UI.
@@ -1379,8 +1810,6 @@ set as onSubmit="app.ext.admin.a.processForm($(this)); app.model.dispatchThis('m
 				$editor.dialog('open');
 				}, //loadElement
 
-
-			
 //run on a select list inside 'edit' for a product list element.
 //various select lists change what other options are available.
 //t is 'this' from the select.
@@ -1394,23 +1823,15 @@ set as onSubmit="app.ext.admin.a.processForm($(this)); app.model.dispatchThis('m
 				
 				}, //uiProdlistEditorUpdate
 
-
-
-
-
-
 /*
 
 ##############################    PRODUCT FINDER
 
 to generate an instance of the finder, run: 
 app.ext.admin.a.addFinderTo() passing in targetID (the element you want the finder appended to) and path (a cat safe id or list id)
-
+currently, executing this function directly is not supported. use the showFinderInModal.
+once multiple instances of the finder can be opened at one time, this will get used more.
 */
-
-
-//currently, executing this function directly is not supported. use the showFinderInModal.
-//once multiple instances of the finder can be opened at one time, this will get used more.
 			addFinderTo : function(targetID,vars)	{
 				app.u.dump("BEGIN admin.a.addFinderTo('"+targetID+"')"); app.u.dump(vars);
 				$(app.u.jqSelector('#',targetID)).parent().find('.ui-dialog-title').text('loading...'); //empty the title early to avoid confusion.
@@ -1435,8 +1856,6 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 					}
 				app.model.dispatchThis();
 				}, //addFinderTo
-
-
 //path - category safe id or product attribute in data-bind format:    product(zoovy:accessory_products)
 //vars is for variables. eventually, path and attrib should be move into the vars object.
 //vars will be used to contain all the 'chooser' variables.
@@ -1469,38 +1888,158 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 					}
 				}, //showFinderInModal
 
-
-
-	
-//opens a dialog with a list of domains for selection.
-//a domain being selected for their UI experience is important, so the request is immutable.
-//a domain is necessary so that API knows what data to respond with, including profile and partition specifics.
-//though domainChooserDialog is the element that's used, it's passed in the callback anyway for error handling purposes.
-			showDomainChooser : function(){
-//				app.u.dump("BEGIN admin.a.showDomainChooser");
-				$('#domainChooserDialog').dialog('open').showLoading();
-				app.ext.admin.calls.adminDomainList.init({'callback':'handleDomainChooser','extension':'admin','targetID':'domainChooserDialog'},'immutable'); 
-				app.model.dispatchThis('immutable');
-				},	 //showDomainChooser
-				
-
-
 			login : function($form){
-				$('#preloadAndLoginContents').showLoading();
+				$('body').showLoading({"message":"Authenticating credentials. One moment please."});
 				app.calls.authentication.accountLogin.init($form.serializeJSON(),{'callback':'showHeader','extension':'admin'});
 				app.model.dispatchThis('immutable');
 				}, //login
 
 			logout : function(){
-				$('body').showLoading();
+				$('body').showLoading({"message":"You are being logged out. One moment please."});
 				app.calls.authentication.authAdminLogout.init({'callback':'handleLogout','extension':'admin'});//always immutable.
 				app.model.dispatchThis('immutable');
 //nuke all this after the request so that the dispatch has the info it needs.
 				app.ext.admin.u.selectivelyNukeLocalStorage(); //get rid of most local storage content. This will reduce issues for users with multiple accounts.
 				app.model.destroy('authAdminLogin'); //clears this out of memory and local storage. This would get used during the controller init to validate the session.
 
-				} //logout
+				}, //logout
 
+			showAchievementList : function($target)	{
+				if($target && $target.length)	{
+					$target.show().append(app.renderFunctions.createTemplateInstance('achievementsListTemplate',{}));
+					app.ext.admin.u.handleAppEvents($target);
+					}
+				else	{
+					app.u.throwGMessage("In admin.a.showAchievementsList, $target is not specified or has no length.");
+					}				
+				},
+
+			showAppChooser : function()	{
+				var $target = $(app.u.jqSelector('#',app.ext.admin.vars.tab+'Content'));
+				$target.empty().append(app.renderFunctions.createTemplateInstance('pageTemplateSetupAppchooser',{}));
+				app.ext.admin.u.handleAppEvents($target);
+				},
+
+
+//opens a dialog with a list of domains for selection.
+//a domain being selected for their UI experience is important, so the request is immutable.
+//a domain is necessary so that API knows what data to respond with, including profile and partition specifics.
+//though domainChooserDialog is the element that's used, it's passed in the callback anyway for error handling purposes.
+			showDomainChooser : function(){
+//				app.u.dump("BEGIN admin.a.showDomainChooser");
+				$('#domainChooserDialog').dialog('open').showLoading({'message':'Fetching your list of domains.'});
+				app.ext.admin.calls.adminDomainList.init({'callback':'handleDomainChooser','extension':'admin','targetID':'domainChooserDialog'},'immutable'); 
+				app.model.dispatchThis('immutable');
+				},	 //showDomainChooser
+				
+			showDashboard : function()	{
+				var $content = $("#homeContent");
+				$content.empty().append(app.renderFunctions.createTemplateInstance('dashboardTemplate',{}));
+				app.ext.admin.u.bringTabIntoFocus();
+				app.ext.admin.u.bringTabContentIntoFocus($content);
+				
+//recent news panel.
+				$('#dashboardColumn1',$content).append($("<div \/>").attr('id','dashboardRecentNewsPanel').anypanel({
+					'title' : 'Recent News',
+					'showClose' : false,
+					'showLoading' : false,
+					'call' : 'appResource',
+					'callParams' : 'recentnews.json',
+					'_tag' : {'callback':'translateSelector','extension':'admin','selector':'#dashboardRecentNewsPanel'},
+					'content' : $("<div class='recentNewsContainer' data-bind='var:news(contents); format:processList; loadsTemplate:recentNewsItemTemplate;' \/>")
+					}));
+
+//quickstats ogms.
+				var $salesReportPanel = $("<div \/>").anypanel({
+					'title' : 'Sales Report',
+					'showClose' : false,
+					'showLoading' : false,
+					'content' : $("<div><table class='fullWidth'><thead><th><\/th><th>Count<\/th><th>Sales<\/th><th>Units<\/th><\/thead><tbody id='dashboardReportTbody'><\/tbody><\/table><p>These reports are for all domains since midnight.<\/p><\/div>")
+					});
+				$('#dashboardColumn2',$content).append($salesReportPanel);
+				app.ext.admin.calls.appResource.init('quickstats/OGMS.json',{'callback':'transmogrify','parentID':'dashboardReportTbody','templateID':'quickstatReportTemplate'},'mutable'); //total sales
+				app.ext.admin.calls.appResource.init('quickstats/OWEB.json',{'callback':'transmogrify','parentID':'dashboardReportTbody','templateID':'quickstatReportTemplate'},'mutable'); //web sales
+				app.ext.admin.calls.appResource.init('quickstats/OGRT.json',{'callback':'transmogrify','parentID':'dashboardReportTbody','templateID':'quickstatReportTemplate'},'mutable'); //return customer
+				app.ext.admin.calls.appResource.init('quickstats/OEXP.json',{'callback':'transmogrify','parentID':'dashboardReportTbody','templateID':'quickstatReportTemplate'},'mutable'); //expedited
+				app.ext.admin.calls.appResource.init('quickstats/SAMZ.json',{'callback':'transmogrify','parentID':'dashboardReportTbody','templateID':'quickstatReportTemplate'},'mutable'); //amazon
+				app.ext.admin.calls.appResource.init('quickstats/SBYS.json',{'callback':'transmogrify','parentID':'dashboardReportTbody','templateID':'quickstatReportTemplate'},'mutable'); //buy.com
+				app.ext.admin.calls.appResource.init('quickstats/SEBA.json',{'callback':'transmogrify','parentID':'dashboardReportTbody','templateID':'quickstatReportTemplate'},'mutable'); //ebay auction
+				app.ext.admin.calls.appResource.init('quickstats/SABF.json',{'callback':'transmogrify','parentID':'dashboardReportTbody','templateID':'quickstatReportTemplate'},'mutable'); //ebay fixed price
+				app.ext.admin.calls.appResource.init('quickstats/SSRS.json',{'callback':'transmogrify','parentID':'dashboardReportTbody','templateID':'quickstatReportTemplate'},'mutable'); //sears
+				
+/*
+## NOTE - if you use the code below, streamline so that all the appResource calls don't get executed twice.
+
+				$('#dashboardColumn2',$content).append($("<div \/>").attr('id','dashboardMktplacePanel').anypanel({
+					'title' : 'Popular Marketplace Summary',
+					'showClose' : false,
+					'showLoading' : false,
+					'content' : $("<div \/>")
+					}));
+
+//recent news panel.
+				app.ext.admin.calls.appResource.init('quickstats/SAMZ.json',{},'mutable'); //amazon
+				app.ext.admin.calls.appResource.init('quickstats/SEBA.json',{},'mutable'); //ebay auction
+				app.ext.admin.calls.appResource.init('quickstats/SABF.json',{},'mutable'); //ebay fixed price
+				app.ext.admin.calls.appResource.init('quickstats/SSRS.json',{},'mutable'); //sears
+				app.ext.admin.calls.appResource.init('quickstats/SGOO.json',{},'mutable'); //google
+				app.ext.admin.calls.appResource.init('quickstats/SBYS.json',{'callback':function(){
+
+$('#dashboardMktplacePanel .ui-widget-content',$content).append($("<div \/>").attr('id','container'));
+
+
+//build chart data arrray.
+var chartData = new Array();
+if(app.data['appResource|quickstats/SAMZ.json'].contents.count)	{chartData.push(['Amazon', Number(app.data['appResource|quickstats/SAMZ.json'].contents.count)])}
+if(app.data['appResource|quickstats/SEBA.json'].contents.count)	{chartData.push(['eBay Auction', Number(app.data['appResource|quickstats/SEBA.json'].contents.count)]);}
+if(app.data['appResource|quickstats/SABF.json'].contents.count)	{chartData.push(['eBay Store', Number(app.data['appResource|quickstats/SABF.json'].contents.count)]);}
+if(app.data['appResource|quickstats/SSRS.json'].contents.count)	{chartData.push(['Sears', Number(app.data['appResource|quickstats/SSRS.json'].contents.count)]);}
+if(app.data['appResource|quickstats/SBYS.json'].contents.count)	{chartData.push(['Buy.com', Number(app.data['appResource|quickstats/SBYS.json'].contents.count)]);}
+if(app.data['appResource|quickstats/SGOO.json'].contents.count)	{chartData.push(['Google', Number(app.data['appResource|quickstats/SGOO.json'].contents.count)]);}
+
+
+
+var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+            },
+            title: {
+                text: 'Sales Since Midnight'
+            },
+            tooltip: {
+        	    pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+            	percentageDecimals: 1
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        color: '#000000',
+                        connectorColor: '#000000',
+                        formatter: function() {
+                            return '<b>'+ this.point.name +'</b>: '+ Number(this.percentage).toFixed(2) +' %';
+                        }
+                    }
+                }
+            },
+            series: [{
+                type: 'pie',
+                name: 'Popular Marketplaces',
+                data: chartData
+            }]
+        });
+
+
+					}},'mutable'); //buy
+*/
+
+				app.model.dispatchThis('mutable');
+				} //showdashboard
 			}, //action
 
 
@@ -1516,16 +2055,19 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 //If a domain hasn't been selected (from a previous session) then a prompt shows up to choose a domain.
 //the entire UI experience revolves around having a domain.
 			showHeader : function(){
-//				$('#appPreView').hide();
-//				$('#appLogin').hide();
-				$('#appView').show();
-				$('#preloadAndLoginContainer').hide(); //hide all preView and login data.
-				$('#preloadAndLoginContents').hideLoading(); //make sure this gets turned off or it will be a layer over the content.
-				$('.username','#appView').text(app.vars.username);
-				var domain = this.getDomain();
-//				app.u.dump(" -> DOMAIN: ["+domain+"]");
+//hide all preView and login data.
+				$('#appLogin').hide(); 
+				$('#appPreView').hide();
+				$('#createAccountContainer').hide();
 
-//show the domain chooser if one is not set. see showDomainChooser function for more info on why.
+				$('#appView').show();
+				
+				$('body').hideLoading(); //make sure this gets turned off or it will be a layer over the content.
+				$('.username','#appView').text(app.vars.userid);
+				var domain = this.getDomain();
+//				app.ext.admin.calls.bossUserDetail(app.vars.userid.split('@')[0],{},'passive'); //will contain list of user permissions.
+
+//show the domain chooser if no domain is set. see showDomainChooser function for more info on why.
 //if a domain is already set, this is a return visit. Get the list of domains  passively because they'll be used.
 				if (!domain) {
 					//the selection of a domain name will load the page content. (but we'll still need to nav)
@@ -1534,7 +2076,7 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 				else {
 					app.ext.admin.calls.adminDomainList.init({},'passive');
 					$('.domain','#appView').text(domain);
-					app.ext.admin.a.showUI(app.ext.admin.u.whatPageToShow('/biz/recent.cgi'));
+					app.ext.admin.a.showUI(app.ext.admin.u.whatPageToShow('#!dashboard'));
 					}
 				}, //showHeader
 
@@ -1566,7 +2108,12 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 				if(app.model.fetchData('authAdminLogin'))	{
 					localVars = app.data['authAdminLogin'];
 					}
-				
+//will use the domain auto-created by a recently created account.
+				else if(app.model.fetchData('authNewAccountCreate'))	{
+					localVars = app.data['authNewAccountCreate'].domain;
+					}
+				else	{} //no other local lookup 
+
 				if(domain = app.u.getParameterByName('domain')) {} //the single = here is intentional. sets the val during the if so the function doesn't have to be run twice.
 				else if(app.vars.domain)	{domain = app.vars.domain}
 				else if(localVars.domain){domain = localVars.domain}
@@ -1574,44 +2121,33 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 				return domain;
 				}, //getDomain
 
-
-
-
-
-
-
-//used for bringing one of the top tabs into focus. does NOT impact content area.
-// !!! NOTE - when the old showUI goes away, so can this function. it's replaced with bringTabIntoFocus
-			handleTopTabs : function(tab){
-				$('li','#menutabs').addClass('off').removeClass('on'); //turn all tabs off.
-				$('.'+tab+'Tab','#menutabs').removeClass('off').addClass('on');
-				},
-
-
-
 			loadNativeApp : function(path,opts){
+//				app.u.dump("BEGIN loadNativeApp");
 				if(path == '#!mediaLibraryManageMode')	{
 					app.ext.admin_medialib.a.showMediaLib({'mode':'manage'});
 					}
 				else if(path == '#!domainConfigPanel')	{
 					app.ext.admin.a.showDomainConfig();
 					}
-				else if(path == '#!orderPrint')	{
-					app.ext.convertSessionToOrder.a.printOrder(opts.data.oid,opts);
-					}
-				else if(path == '#!orderCreate')	{
-					app.ext.convertSessionToOrder.a.openCreateOrderForm();
-					}
+				else if(path == '#!dashboard')	{app.ext.admin.a.showDashboard();}
+				else if(path == '#!userManager')	{app.ext.admin_user.a.showUserManager();}
+				else if(path == '#!eBayListingsReport')	{app.ext.admin_reports.a.showeBayListingsReport();}
+				else if(path == '#!orderPrint')	{app.ext.convertSessionToOrder.a.printOrder(opts.data.oid,opts);}
+				else if(path == '#!orderCreate')	{app.ext.convertSessionToOrder.a.openCreateOrderForm();}
+				else if(path == '#!domainConfigPanel')	{app.ext.admin.a.showDomainConfig();}
+
 				else if (path == '#!appChooser')	{
 					app.ext.admin.u.uiHandleBreadcrumb({}); //make sure previous breadcrumb does not show up.
 					app.ext.admin.u.uiHandleNavTabs({}); //make sure previous navtabs not show up.
-					app.ext.admin.u.showAppChooser();
+					app.ext.admin.a.showAppChooser();
 					}
 				else if(path == '#!orders')	{
-					app.ext.admin.u.bringTabIntoFocus('orders2');
-					app.ext.admin.u.bringTabContentIntoFocus($("#orders2Content"));
-//					app.ext.admin.vars.tab = 'orders2';
-					app.ext.admin_orders.a.initOrderManager({"targetID":"orders2Content"});
+//					app.u.dump("into loadNativeApp -> #!orders");
+					app.ext.admin.vars.tab = 'orders';
+					app.ext.admin.u.bringTabIntoFocus('orders');
+					app.ext.admin.u.bringTabContentIntoFocus($("#ordersContent"));
+					app.ext.admin_orders.a.initOrderManager({"targetID":"ordersContent"});
+//					app.u.dump("end of loadNativeApp  else statement -> #! orders");
 					}
 				else if(path == '#!products')	{
 					app.u.dump("Go to product editor");
@@ -1622,22 +2158,36 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 					app.ext.admin.u.uiHandleNavTabs({}); //make sure previous navtabs not show up.
 					app.ext.admin_task.a.showTaskManager();
 					}
-				else if(path == '#!domainConfigPanel')	{
-					app.ext.admin.a.showDomainConfig();
-					}
 				else	{
 					app.u.throwGMessage("WARNING! unrecognized app mode passed into showUI. ["+path+"]");
 					}
+//				app.u.dump("END loadNativeApp");
 				},
-
-
-
 
 //used for bringing one of the top tabs into focus. does NOT impact content area.
 			bringTabIntoFocus : function(tab){
-				$('li','#menutabs').addClass('off').removeClass('on'); //turn all tabs off.
-				$('.'+tab+'Tab','#menutabs').removeClass('off').addClass('on');
+				$('.mhTabsContainer ul','#mastHead').children().removeClass('active'); //strip active class from all other tabs.
+				$('.'+tab+'Tab','#mastHead').addClass('active'); ///!!! need to put this into a jqSelector function !!!
+				return false;
 				},
+
+
+			toggleMessagePane : function(state){
+
+				var $target = $('#messagesContent');
+				$target.css('top',$target.parent().height()); //positions messages pane directly below tab bar, regardless of tab bar height.
+
+				if(state == 'hide' && $target.css('display') == 'none')	{} //pane is already hidden. do nothing.
+				else if(state == 'show' || $target.css('display') == 'none')	{
+					$target.slideDown();
+					$('.messagesTab').addClass('messagesTabActive');
+					}
+				else	{
+					$target.slideUp();
+					$('.messagesTab').removeClass('messagesTabActive');
+					}
+
+				}, //toggleMessagePane
 
 //should only get run if NOT in dialog mode. This will bring a tab content into focus and hide all the rest.
 //this will replace handleShowSection
@@ -1645,7 +2195,11 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 				if($target.is('visible'))	{
 					//target is already visible. do nothing.
 					}
+				else if($target.attr('id') == 'messagesContent')	{
+					this.toggleMessagePane(); //message tab is handled separately.
+					}
 				else	{
+					app.ext.admin.u.toggleMessagePane('hide'); //make sure messages pane hides itself.
 					$('.tabContent').hide();
 					$target.show();
 					}
@@ -1678,7 +2232,7 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 //this is for handling legacy paths.
 			handleShowSection : function(path,P,$target)	{
 				var tab = app.ext.admin.u.getTabFromPath(path);
-				this.handleTopTabs(tab);
+				this.bringTabIntoFocus(tab);
 //				app.u.dump(" -> tab: "+tab);
 				if(tab == 'product' && !P.dialog)	{
 					app.u.dump(" -> open product editor");
@@ -1696,7 +2250,6 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 					app.ext.admin.u.uiHandleBreadcrumb({}); //make sure previous breadcrumb does not show up.
 					app.ext.admin.u.uiHandleNavTabs({}); //make sure previous navtabs not show up.
 					$('#setupContent').empty().append(app.renderFunctions.createTemplateInstance('pageSetupTemplate',{}));
-					app.ext.admin.u.handlePermissions($('#setupContent'),{'isVstore':true})
 //					app.ext.admin.u.uiHandleLinkRewrites(path,{},{'targetID':'setupContent'});  //navigateTo's hard coded on 2012/30
 					}
 				else if(tab == 'syndication' && path.split('/')[3] == 'index.cgi')	{
@@ -1704,6 +2257,11 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 					app.ext.admin.u.uiHandleNavTabs({}); //make sure previous navtabs not show up.
 					$('#syndicationContent').empty().append(app.renderFunctions.transmogrify('','pageSyndicationTemplate',{}));
 //					app.ext.admin.u.uiHandleLinkRewrites(path,{},{'targetID':'syndicationContent'});
+					}
+				else if(tab == 'orders' && path.split('/')[3] == 'index.cgi')	{
+					app.ext.admin.u.uiHandleBreadcrumb({}); //make sure previous breadcrumb does not show up.
+					app.ext.admin.u.uiHandleNavTabs({}); //make sure previous navtabs not show up.
+					app.ext.admin.u.loadNativeApp('#!orders',P);
 					}
 				else if(tab == 'utilities' && path.split('/')[3] == 'index.cgi')	{
 					app.ext.admin.u.uiHandleBreadcrumb({}); //make sure previous breadcrumb does not show up.
@@ -1751,12 +2309,6 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 				return r;
 				}, //getTabFromPath
 	
-	
-			handlePermissions : function($target,permissions)	{
-				app.u.dump("Permissions: "); app.u.dump(permissions);
-				if(permissions.isVstore)	{app.u.dump(" isVstore"); $(".showForVstoreOnly",$target).show();}
-				else	{$(".showForAppOnly",$target).show();}
-				},
 	
 	
 //the following function gets executed as part of any fetchAdminResource request. 
@@ -1844,7 +2396,7 @@ app.ext.admin.a.addFinderTo() passing in targetID (the element you want the find
 						if(msgObj.BATCH)	{
 							msgObj.errmsg += "<div><button class='buttonify' onClick='app.ext.admin_batchJob.a.showBatchJobStatus(\""+msgObj.BATCH+"\");'>View Batch Job Status<\/button><\/div>"
 							}
-						app.u.dump(msgObj);	
+//						app.u.dump(msgObj);	
 						var r = app.u.throwMessage(msgObj);
 						$('.buttonify','.'+r).button();
 						app.u.dump("throwMessage response = "+r);
@@ -2152,6 +2704,9 @@ else if(vars.findertype == 'PAGE')	{
 	if(vars.path.charAt(0) === '@')	{
 		$target.parent().find('.ui-dialog-title').text('Product Finder: Newsletter');
 		}
+	else if(vars.path == '*cart')	{
+		$target.parent().find('.ui-dialog-title').text('Product Finder: Cart');
+		}
 	else	{
 		$target.parent().find('.ui-dialog-title').text('Product Finder: '+app.data['appCategoryDetail|'+vars.path].pretty); //updates modal title
 		}
@@ -2391,7 +2946,7 @@ else	{
 				var data = app.data['adminDomainList']['@DOMAINS'];
 				var L = data.length;
 				for(var i = 0; i < L; i += 1)	{
-					$target.append(app.renderFunctions.transmogrify({},'domainPanelTemplate',app.data['adminDomainList']['@DOMAINS'][i]));
+					$target.append(app.renderFunctions.transmogrify({'domain':app.data['adminDomainList']['@DOMAINS'][i].id},'domainPanelTemplate',app.data['adminDomainList']['@DOMAINS'][i]));
 					}
 				},
 
@@ -2405,11 +2960,14 @@ else	{
 
 			adminUIDomainPanelExecute : function($t){
 //				app.u.dump("BEGIN admin.u.adminUIDomainPanelExecute");
+
 				var data = $t.data();
 				if(data && data.verb && data.domain)	{
-					var obj = {};
-					var targetID = 'panelContents_'+app.u.makeSafeHTMLId(data.domain);
-					$(app.u.jqSelector('#',targetID)).showLoading();
+					var obj = {},
+					$panel = $t.closest("[data-app-role='domainPanel']"),
+					$fieldset = $("[data-app-role='domainEditorContents']",$panel);
+					
+					$fieldset.showLoading({'message':'Loading information for domain: '+data.domain});
 					$t.parent().find('.panelContents').show()
 					if(data.verb == 'LOAD')	{
 						//do nothing. data gets passed in as is.
@@ -2418,7 +2976,12 @@ else	{
 						data = $.extend(data,$t.closest('form').serializeJSON());
 						}
 					
-					app.ext.admin.calls.adminUIDomainPanelExecute.init(data,{'callback':'showDataHTML','extension':'admin','targetID':targetID},'immutable');
+					app.ext.admin.calls.adminUIDomainPanelExecute.init(data,{'callback': function(rd){
+						if(app.model.responseHasErrors(rd)){app.u.throwMessage(rd);}
+						else	{
+							$fieldset.hideLoading().removeClass('loadingBG').html(app.data[rd.datapointer].html);
+							}
+						}},'immutable');
 					app.model.dispatchThis('immutable')
 					}
 				else	{
@@ -2492,13 +3055,30 @@ just lose the back button feature.
 					}
 				},
 
-
-
-			showAppChooser : function()	{
-				var $target = $(app.u.jqSelector('#',app.ext.admin.vars.tab+'Content'));
-				$target.empty().append(app.renderFunctions.createTemplateInstance('pageTemplateSetupAppchooser',{}));
-				$('button',$target).button();
+//does everything. pass in a docid and this 'll handle the call, request and display.
+//will check to see if a dom element already exists and , if so, just open that and make it flash. 
+			showHelpInDialog : function(docid)	{
+				if(docid)	{
+					var targetID = 'helpfile_'+docid
+					var $target = $(app.u.jqSelector('#',targetID));
+//already on the dom. just open it.
+					if($target.length)	{
+						$target.dialog('open')
+						$target.effect("highlight", {}, 1500);
+						}
+					else	{
+						$target = $("<div \/>",{'id':targetID,'title':'help doc: '+docid}).attr("data-bind","var: help(body); format:text;").addClass('helpDoc').appendTo('body');
+						$target.dialog({width:500, height:500}).showLoading({'message':'Fetching documentation, one moment please.'});
+						app.ext.admin.calls.helpDocumentGet.init('prodmgr_detail_ogoverview',{'callback':'translateSelector','extension':'admin','selector':'#'+targetID},'mutable');
+						app.model.dispatchThis('mutable');
+						}
+					}
+				else	{
+					app.u.throwMessage("In admin.u.showHelpInModal, no docid specified.");
+					}
 				},
+
+
 
 //a UI Action should have a databind of data-app-event (this replaces data-btn-action).
 //value of action should be EXT|buttonObjectActionName.  ex:  admin_orders|orderListFiltersUpdate
@@ -2507,7 +3087,7 @@ just lose the back button feature.
 			handleAppEvents : function($target)	{
 //				app.u.dump("BEGIN admin.u.handleAppEvents");
 				if($target && $target.length && typeof($target) == 'object')	{
-//					app.u.dump(" -> target exists");
+//					app.u.dump(" -> target exists"); app.u.dump($target);
 					$("[data-app-event]",$target).each(function(){
 						var $ele = $(this),
 						extension = $ele.data('app-event').split("|")[0],
@@ -2521,10 +3101,10 @@ just lose the back button feature.
 						else	{
 							app.u.throwGMessage("In admin.u.handleAppEvents, unable to determine action ["+action+"] and/or extension ["+extension+"] and/or extension/action combination is not a function");
 							}
-						})
+						});
 					}
 				else	{
-					app.u.throwGMessage("In admin_orders.u.handleButtonActions, target was either not specified, not an object ["+typeof $target+"] or does not exist ["+$target.length+"] on DOM.");
+					app.u.throwGMessage("In admin_orders.u.handleButtonActions, target was either not specified/an object ["+typeof $target+"] or does not exist ["+$target.length+"] on DOM.");
 					}
 				
 				} //handleButtonActions
@@ -2534,7 +3114,117 @@ just lose the back button feature.
 
 			},	//util
 
-		e : {}
+		e : {
+			
+
+			
+			achievementDetail : function($row)	{
+				$row.on('mouseover.achievementDetail',function(){
+					$(this).addClass("ui-state-highlight").css({'border':'none','cursor':'pointer'});
+					})
+					.on('mouseout.achievementDetail',function(){
+					$(this).removeClass('ui-state-highlight');
+					})
+					.on('click.achievementDetail',function(event){
+						event.preventDefault();
+						if($(this).data('app-contentid') && $(app.u.jqSelector('#',$(this).data('app-contentid'))).length)	{
+							app.u.dump(" -> $(this).data('app-contentid'): "+$(this).data('app-contentid'));
+							$(app.u.jqSelector('#',$(this).data('app-contentid'))).dialog({'modal':true});
+							}
+						else	{
+							app.u.throwGMessage("In admin.e.achievementDetail, no data-content-id specified on element.");
+							}
+						});
+				},
+
+/* app chooser */
+
+			appChooserAppChoose : function($btn)	{
+				$btn.button();
+				$btn.off('click.appChooserAppChoose').on('click.appChooserAppChoose',function(event){
+					event.preventDefault();
+					var $parent = $btn.closest(['data-appid']);
+					})
+				},
+
+			appChooserFork : function($btn)	{
+				$btn.button();
+				$btn.off('click.appChooserFork').on('click.appChooserFork',function(event){
+					event.preventDefault();
+					var $parent = $(this).closest(['data-appid']);
+					app.u.dump("$parent.length: "+$parent.length);
+					app.u.dump("$parent.data: "); app.u.dump($parent.data());
+					window.open($parent.data('app-repo')+"archive/master.zip");
+					})
+				},
+
+			appChooserAppDownload : function($btn)	{
+				$btn.button();
+				$btn.off('click.appChooserAppChoose').on('click.appChooserAppChoose',function(event){
+					event.preventDefault();
+					var $parent = $btn.closest(['data-appid']);
+					alert("Open a confirm dialog that shows the app id AND the domain in focus. after confirm, 'this may take a few moments...' then go through process.. creating project, adding files to project, selecting app for domain xyz.com, etc");
+					})
+				},
+
+/* login and create account */
+
+			accountLogin : function($btn)	{
+				$btn.button();
+				$btn.off('click.accountLogin').on('click.accountLogin',function(event){
+					event.preventDefault();
+					app.ext.admin.a.login($btn.closest('form'));
+					});
+				},
+			
+			showCreateAccount : function($btn)	{
+				$btn.button();
+				$btn.off('click.showCreateAccount').on('click.showCreateAccount',function(event){
+					event.preventDefault();
+					localStorage.clear();
+					app.ext.admin.u.handleAppEvents($('#createAccountContainer'));
+					$("#appLogin").css('position','relative').animate({right:($('body').width() + $("#appLogin").width() + 100)},'slow','',function(){
+						$("#appLogin").hide();
+						$('#createAccountContainer').css({'left':'1000px','position':'relative'}).removeClass('displayNone').show().animate({'left':'0'},'slow'); //show and remove class. show needed for toggling between login and create account.
+						});
+					})
+				},
+			authShowLogin : function($ele)	{
+				$ele.off('click.authShowLogin').on('click.authShowLogin',function(event){
+					event.preventDefault();
+					$("#createAccountContainer").css('position','relative').animate({right:($('body').width() + $("#createAccountContainer").width() + 100)},'slow','',function(){
+						$("#createAccountContainer").hide();
+						$('#appLogin').css({'left':'1000px','position':'relative'}).show().removeClass('displayNone').animate({'left':'0'},'slow');
+						});
+					})			
+				},
+			authNewAccountCreate : function($btn)	{
+				$btn.button();
+				$btn.off('authNewAccountCreate').on('click.authNewAccountCreate',function(event){
+					event.preventDefault();
+					var $form = $btn.parents('form'),
+					formObj = $form.serializeJSON(),
+					$errors = $("<ul \/>");
+//					app.u.dump(" -> authNewAccountCreate.formObj: "); app.u.dump(formObj);
+					if(!formObj.firstname){$("<li \/>").text("First name").appendTo($errors)}
+					if(!formObj.lastname){$("<li \/>").text("Last name").appendTo($errors)}
+					if(!formObj.email){$("<li \/>").text("Email").appendTo($errors)}
+					if(!formObj.company){$("<li \/>").text("Company").appendTo($errors)}
+					if(!formObj.domain){$("<li \/>").text("Domain").appendTo($errors)}
+					if(!formObj.phone){$("<li \/>").text("Phone").appendTo($errors)}
+					
+					if($errors.children().length)	{
+						$("fieldset",$form).prepend($errors).prepend("It seems a few required fields were left blank. Please provide the following pieces of information:");
+						}
+					else	{
+						$('body').showLoading({'message':'Creating new account. One moment please.'});
+						app.ext.admin.calls.authNewAccountCreate.init(formObj,{'callback':'showHeader','extension':'admin'},'immutable');
+						app.model.dispatchThis('immutable');
+						}
+					
+					});
+				}
+			}
 
 		} //r object.
 	return r;

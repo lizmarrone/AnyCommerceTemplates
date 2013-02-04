@@ -19,10 +19,10 @@ CHECOUT_NICE.JS (just here to make it easier to know which extension is open)
 ************************************************************** */
 
 var convertSessionToOrder = function() {
-	var theseTemplates = new Array("productListTemplateCheckout","checkoutSuccess","checkoutTemplateBillAddress","checkoutTemplateShipAddress","checkoutTemplateOrderNotesPanel","checkoutTemplateCartSummaryPanel","checkoutTemplateShipMethods","checkoutTemplatePayOptionsPanel","checkoutTemplate","checkoutTemplateAccountInfo","invoiceTemplate","productListTemplateInvoice");
+	var theseTemplates = new Array("productListTemplateCheckout","checkoutSuccess","checkoutTemplateBillAddress","checkoutTemplateShipAddress","checkoutTemplateOrderNotesPanel","checkoutTemplateCartSummaryPanel","checkoutTemplateShipMethods","checkoutTemplatePayOptionsPanel","checkoutTemplate","checkoutTemplateAccountInfo","invoiceTemplate","productListTemplateInvoice","cartPaymentQTemplate");
 	var r = {
 	vars : {
-		willFetchMyOwnTemplates : app.vars._clientid == '1pc' ? false : true, //1pc loads it's templates locally to avoid XSS issue.
+		willFetchMyOwnTemplates : true, //1pc loads it's templates locally to avoid XSS issue.
 		containerID : '',
 		legends : {
 			"chkoutPreflight" : "Contact Information",
@@ -30,7 +30,7 @@ var convertSessionToOrder = function() {
 			"chkoutBillAddress" : "Billing Address",
 			"chkoutShipAddress" : "Shipping Address",
 			"chkoutShipMethods" : "Shipping Options",
-			"chkoutPayOptions" : "Payment Choices",
+			"chkoutPayOptions" : "Payment",
 			"chkoutOrderNotes" : "Order Notes"
 			},
 //though most extensions don't have the templates specified, checkout does because so much of the code is specific to these templates.
@@ -239,17 +239,7 @@ _gaq.push(['_trackEvent','Checkout','User Event','Create order button pushed']);
 
 
 
-
-
-
-
-
 					////////////////////////////////////   CALLBACKS    \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-
-
-
-
 
 
 
@@ -261,14 +251,14 @@ _gaq.push(['_trackEvent','Checkout','User Event','Create order button pushed']);
 //				app.u.dump('BEGIN app.ext.convertSessionToOrder.init.onSuccess');
 //1PC can't load the templates remotely. causes XSS issue.
 				if(app.vars._clientid == '1pc')	{
-					//Do Nothing.  BAD 1pc, go home.
-				}
+					app.model.loadTemplates(theseTemplates); //loaded from local file (main.xml)
+					}
 				else {
-					app.model.fetchNLoadTemplates(app.vars.baseURL+'extensions/checkout_nice/templates.html',theseTemplates);
-				}
+					app.model.fetchNLoadTemplates(app.vars.baseURL+'extensions/checkout_active/templates.html',theseTemplates);
+					}
 				var r; //returns false if checkout can't load due to account config conflict.
 //				app.u.dump('BEGIN app.ext.convertSessionToOrder.init.onSuccess');
-				if(!zGlobals || $.isEmptyObject(zGlobals.checkoutSettings))	{
+/*				if(!zGlobals || $.isEmptyObject(zGlobals.checkoutSettings))	{
 					$('#globalMessaging').toggle(true).append(app.u.formatMessage({'message':'<strong>Uh Oh!<\/strong> It appears an error occured. Please try again. If error persists, please contact the site administrator.','uiClass':'error','uiIcon':'alert'}));
 					r = false;
 					}
@@ -287,7 +277,8 @@ _gaq.push(['_trackEvent','Checkout','User Event','Create order button pushed']);
 					$('#globalMessaging').toggle(true).append(app.u.formatMessage({'message':'<strong>Uh Oh!<\/strong> There appears to be an issue with the store configuration. Please change your checkout setting to \'nice\' if you wish to use this layout.','uiClass':'error','uiIcon':'alert'}));
 					r = false;
 					}
-				else if(typeof _gaq === 'undefined')	{
+*/					
+				if(typeof _gaq === 'undefined')	{
 //					app.u.dump(" -> _gaq is undefined");
 					$('#globalMessaging').toggle(true).append(app.u.formatMessage({'message':'<strong>Uh Oh!<\/strong> It appears you are not using the Asynchronous version of Google Analytics. It is required to use this checkout.','uiClass':'error','uiIcon':'alert'}));
 					r = false;					
@@ -677,8 +668,13 @@ _gaq.push(['_trackEvent','Checkout','User Event','Order created ('+orderID+')'])
 
 				$('#invoiceContainer').append(app.renderFunctions.transmogrify({'id':'invoice_'+orderID,'orderid':orderID},'invoiceTemplate',app.data['order|'+orderID]));
 
+if(app.vars._clientid == '1pc')	{
 //add the html roi to the dom. this likely includes tracking scripts. LAST in case script breaks something.
-setTimeout("$('#"+app.ext.convertSessionToOrder.vars.containerID+"').append(app.data['"+tagObj.datapointer+"']['html:roi']); app.u.dump('wrote html:roi to DOM.');",2000); 
+	setTimeout("$('#"+app.ext.convertSessionToOrder.vars.containerID+"').append(app.data['"+tagObj.datapointer+"']['html:roi']); app.u.dump('wrote html:roi to DOM.');",2000); 
+	}
+else	{
+	//roi code should be handled by the app itself, not use the output from the UI
+	}
 
 				},
 			onError : function(responseData,uuid)	{
@@ -1370,6 +1366,8 @@ two of it's children are rendered each time the panel is updated (the prodlist a
 					$(":radio[value='"+app.ext.convertSessionToOrder.vars['want/payby']+"']",$panelFieldset).click();
 					}
 
+				app.renderFunctions.translateSelector('#paymentQContainer',app.data.cartDetail);  //used for translating paymentQ
+
 //				app.ext.convertSessionToOrder.u.updatePayDetails(app.ext.convertSessionToOrder.vars['want/payby']);
 				}, //paymentOptions
 		
@@ -1731,21 +1729,6 @@ $('#paybySupplemental_PAYPALEC').empty().append("<a href='#top' onClick='app.ext
 					}
 				},
 				
-				
-				
-/*
-CHANGE LOG: 2012-04-04
-addressFieldUpdated was changed in such a way that the zip and country inputs should NOT have recalculateShipMethods on them anymore IF addressFieldUpdated is present (bill inputs).
-ship inputs or other inputs that do NOT have the addressFieldUpdated function executed can still use recalculateShipMethods directly. SUCR should be blank or false for these instances.
-
-addressFieldUpdated should now also have the fieldID passed in. ex:
-app.ext.convertSessionToOrder.u.addressFieldUpdated(this.id);
-
-this change was made to reduce duplicate requests AND solve an issue where the session wasn't being updated prior to new ship/pay methods being requested.
-recalculateShipMethods function was also modified to support SUCR var.
-handleBill2Ship function added.
-*/
-
 
 //executed when any billing address field is updated so that tax is accurately computed/recomputed and displayed in the totals area.
 			addressFieldUpdated : function(fieldID)	{
@@ -1888,14 +1871,23 @@ the refreshCart call can come second because none of the following calls are upd
 				var isSelectedMethod = false;
 //				app.u.dump(" -> # payment options (L): "+L);
 				if(L > 0)	{
-					for(var i = 0; i < L; i += 1)	{
-						id = data.value[i].id;
-//onClick event is added through panelContent.paymentOptions
-//setting selected method to checked is also handled there.
-						o += "<li class='paycon_"+id+"' id='payby_"+id+"'><div class='paycon'><input type='radio' name='want/payby' id='want-payby_"+id+"' value='"+id+"' /><label for='want-payby_"+id+"'>"+data.value[i].pretty+"<\/label></div><\/li>";
+					
+					//ZERO will be in the list of payment options if customer has a zero due (giftcard or paypal) order.
+					if(data.value[0].id == 'ZERO')	{
+						$tag.hide(); //hide payment options.
+						$tag.append("<li><input type='radio' name='want/payby' id='want-payby_ZERO' value='ZERO' checked='checked' \/><\/li>");
 						}
-	
-					$tag.html(o);
+					else	{
+						$tag.show(); //make sure visible. could be hidden as part of paypal, then paypal could be cancelled.
+						for(var i = 0; i < L; i += 1)	{
+							id = data.value[i].id;
+	//onClick event is added through panelContent.paymentOptions
+	//setting selected method to checked is also handled there.
+							o += "<li class='paycon_"+id+"' id='payby_"+id+"'><div class='paycon'><input type='radio' name='want/payby' id='want-payby_"+id+"' value='"+id+"' /><label for='want-payby_"+id+"'>"+data.value[i].pretty+"<\/label></div><\/li>";
+							}
+		
+						$tag.html(o);
+						}
 					}
 				else	{
 					app.u.dump("No payment methods are available. This happens if the session is non-secure and CC is the only payment option. Other circumstances could likely cause this to happen too.");
