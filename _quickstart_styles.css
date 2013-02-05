@@ -1,0 +1,112 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	background: white;	
+}
+
+#appPreview, #appVeiw {
+	background: white;
+	margin: 0px, auto;
+	width: 900px	
+}
+
+
+/*************************
+
+PERSISTENT CONTENT
+
+*************************/
+
+#topNav {
+	height: 30px;
+	background: #a3033d;
+	padding-top:8px;
+	padding-left: 3em;
+}
+
+#topNav p {
+	font-family: "Arial Black", Gadget, sans-serif;
+	color: white;	
+}
+
+#logo {
+	margin-left: 40px;
+	padding-top: 40px;	
+}
+
+#searchBar {
+	height: 20px;
+	background: white;
+	text-align: center;
+	margin-right: 40px;
+	padding-top: 60px;
+	float: right;
+	width: 230px;
+	height:100%;
+}
+
+#searchButton {
+	height: 20px;
+	text-align: center;
+	background: #a3033d;
+	border: 0 none;
+	color: white;
+}
+
+.mainNav {
+	padding-top: 50px;
+	padding-left: 20px;
+	background: white;
+	height: 50px;
+}
+
+.mainNavLink {
+	font-family: "Arial Black", Gadget, sans-serif;
+	padding-top: 15px;
+	text-align: center;
+	color: 	#a3033d;
+	width: 210px;
+	height: 35px;
+}
+
+#browse:hover {
+	color: white;
+	background: #a3033d;	
+}
+
+
+
+
+
+
+
+#footerLinks {
+	background: #a3033d;
+	height: 300px;
+	width: 95%;	
+	margin-left: auto;
+  	margin-right: auto;
+}
+
+#footerInformation {
+	padding-top: 20px;
+	height: 35px;
+	width: 100%;
+	text-align: center;
+	color: #a3033d;
+}
+
+#footerInformation a {
+	color: black;	
+}
+
+
+
+
+
+
+
+
+
+

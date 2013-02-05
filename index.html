@@ -41,6 +41,7 @@ all css includes need to be after the js that changes the base url.
 css files should be included before any .js file to ensure they are downloaded in parallel
 -->
 <link rel="stylesheet" type="text/css" href="qs_styles.css" />
+<link rel="stylesheet" type="text/css" href="_quickstart_styles.css" />
 <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/redmond/jquery-ui.css" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -58,11 +59,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 </head>
 
 <body>
-<!-- DELETE THIS WHEN YOU GET STARTED -->
-<h1>WELCOME TO QUICKSTART</h1>
-This file is intended to go along with the 10-step tutorial at:
-<a href="https://github.com/zoovy/AnyCommerce-Development/wiki/quickstart">https://github.com/zoovy/AnyCommerce-Development/wiki/quickstart</a>
-<!-- /DELETE THIS WHEN YOU GET STARTED -->
+
 
 
 
@@ -102,9 +99,73 @@ This file is intended to go along with the 10-step tutorial at:
 	** REMINDER : DO NOT PUT ANY GRAPHICS/CONTENT THAT SHOULD NOT APPEAR ON EVERY PAGE IN THE VIEW (HERE)
 	**				  INSTEAD PUT THEM INTO <div id="homepageTemplate"></div>
 	-->
-<div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
-<div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
-
+    
+    <div id='header'>
+    	<div id='topNav'>
+		    <p>WELCOME, GUEST! (Not you? 
+            <a href="#" onClick="return showContent('customer',{'show':'myaccount'});">LOGIN</a>
+            or 
+            <a href="#"></a><a href="#"onClick="return showContent('customer',{'show':'newsletter'});">SIGNUP</a>)
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
+            &nbsp&nbsp&nbsp&nbsp           
+            <b>734 Items</b> in your Cart | 
+            <a href='#' onClick="return showContent('cart',{});"><b>VIEW SHOPPING CART</b></a>
+            <a href='#' onClick="return showContent('company',{'show':'contact'});"><b>HELP</b></a></p>
+        </div>
+        
+        <a href='#' onClick="return showContent('homepage',{});"><img id='logo' src="CompanyName.jpg"></a>
+        <div id='searchBar'>
+			<form name='headerSearchFrm' action='#' class='productSearchForm' method="get" id="searchFunc">
+				<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="find it here..." />
+				<input class="search pointer" type="submit" value="Search" id="searchButton" />
+   		    </form>
+		</div>	
+        
+        <div class='mainNav'>
+        	<table border='0'> 
+        		<tr>
+        		<td><div class='mainNavLink' id='browse'>BROWSE    	
+           		</div></td>
+        		<td><div class='mainNavLink' id='browse'>WHAT'S HOT      	
+            	</div></td>
+            	<td><div class='mainNavLink' id='browse'>NEW ARRIVALS	            	
+            	</div></td>
+            	<td><div class='mainNavLink' id='browse'>SALE        	
+            	</div></td>
+            	<td><div class='mainNavLink' id='browse'>CLEARANCE           	
+            	</div></td>
+            	<td><div class='mainNavLink' id='browse'>MY ACCOUNT         	
+            	</div></td>
+        		</tr>
+        	</table>
+        </div>
+        
+        <div mainBanner>
+        	
+        </div>
+        
+    </div>
+    
+    
+	<div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
+    <div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
+	
+    <div id='footer'>
+    
+    	<div id='footerNewsletter'>
+        	
+        </div>
+    	
+        <div id='footerLinks'>
+        	
+        </div>
+        
+    	<div id='footerInformation'>
+        	Company Name<a> 2012 All Rights Reserved. eCommerce by</a> Zoovy
+        </div>
+    </div>
 
 <!-- ... your html ends -->
 <!-- /VIEW CONTENT -->
