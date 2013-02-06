@@ -18,6 +18,12 @@ PERSISTENT CONTENT
 
 *************************/
 
+/*************************
+
+HEADER
+
+*************************/
+
 #topNav {
 	height: 30px;
 	background: #a3033d;
@@ -76,10 +82,50 @@ PERSISTENT CONTENT
 }
 
 
+/*************************
+
+FOOTER
+
+*************************/
+
+
+#footerNewsletter {
+	background: #ce004e;
+	height: 60px;
+	width: 95%;	
+	margin-left: auto;
+  	margin-right: auto;
+	padding-bottom: 10px;
+}
+
+#upToDate {
+	color: white;
+	padding-top: 25px;
+	padding-left: 40px;
+	float: left;
+	font-family: "Arial Black", Gadget, sans-serif;	
+}
 
 
 
+#nameBar{
+	height: 10px;
+	background: #ce004e;
+	text-align: center;
+	padding-top: 22px;
+	padding-right: 25px;
+	float: right;
+	width: 230px;	
+}
 
+#emailBar{
+	height: 20px;
+	background: #ce004e;
+	text-align: center;
+	padding-top: 22px;
+	float: right;
+	width: 200px;
+}
 
 #footerLinks {
 	background: #a3033d;
@@ -87,6 +133,47 @@ PERSISTENT CONTENT
 	width: 95%;	
 	margin-left: auto;
   	margin-right: auto;
+}
+
+.listHead {
+	font-family: "Arial Black", Gadget, sans-serif;
+	color: white;	
+}
+
+.bottomLinkListContainer {
+	float: left;
+	width:25%;	
+	padding: 5px;
+}
+
+.bottomLinkList {
+	list-style-type: none;
+	color: white;	
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+#catagories { 
+	float: left; 
+	width: 23%;
+	padding: 5px;
+}
+
+#help {
+	float: left; 
+	width: 23%;
+	padding: 5px;
+}
+
+#myaccount {
+	float: left; 
+	width: 23%;
+	padding: 5px;
+}
+
+#morefashion {
+	float: left; 
+	width: 23%;	
+	padding: 5px;
 }
 
 #footerInformation {
@@ -102,7 +189,38 @@ PERSISTENT CONTENT
 }
 
 
+/********************************
 
+NON PERSISTEN CONTENT
+
+********************************/
+
+.productList li { 
+	float: left;
+	width: 20%;
+	margin: 20px;
+}
+
+.price {
+	float: left;
+	font-family: Arial, Helvetica, sans-serif;
+	color: 	#b1ad8f;
+	text-align: left;
+	font-size: large;
+	padding-top: 5px;
+}
+
+.detailButton {
+	float: right;
+	width: 70px;
+	height: 30px;
+	text-align: center;
+	padding-top: 10px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size-adjust: 80%;
+	color: white;
+	background-color: #b1ad8f;	
+}
 
 
 
