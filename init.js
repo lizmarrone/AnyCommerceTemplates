@@ -128,8 +128,26 @@ app.u.loadApp = function() {
 		var tmp = new zController(app);
 //instantiate wiki parser.
 		myCreole = new Parse.Simple.Creole();
-}
+		
 
+		//sets individual values for dollars and cents to allow separate manipulation 
+		app.renderFormats.superscriptCents = function ($tag, data){
+			//app.u.dump('BEGIN view.formats.money');
+			var amount = data.bindData.isElastic ? (data.value / 100) : data.value;
+			
+			if(amount){
+				var sDataValue = String(data.value);
+				var sDataArray = sDataValue.split(".");
+				var dollars = sDataArray[0];	
+				var cents = sDataArray[1];
+				var $cents = $('<span class="superscript"></span>')
+				$cents.text(cents);
+				$tag.text('$'+dollars+'.');
+				$tag.append($cents);
+			}
+		}
+		
+}
 
 //Any code that needs to be executed after the app init has occured can go here.
 //will pass in the page info object. (pageType, templateID, pid/navcat/show and more)

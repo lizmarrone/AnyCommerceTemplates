@@ -8,7 +8,7 @@ body {
 #appPreview, #appVeiw {
 	background: white;
 	margin: 0px, auto;
-	width: 900px	
+	width: 900px;	
 }
 
 
@@ -79,6 +79,28 @@ HEADER
 #browse:hover {
 	color: white;
 	background: #a3033d;	
+}
+
+.mainBannerContainer {
+	
+	width: 95%;
+	height: 300px;
+	margin-left: auto;
+  	margin-right: auto;
+}
+
+.mainBannerGraphic {
+	background-color: blue;
+	width: 75%;	
+	height: 300px;
+	float: left;
+}
+
+.mainBannerNewsletter {
+	background-color: black;
+	width: 25%;
+	height: 300px;
+	float: right;
 }
 
 
@@ -195,28 +217,61 @@ NON PERSISTEN CONTENT
 
 ********************************/
 
+.prodDesc {
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif; 
+	color: #a3033d;	
+}
+
+.prodMfg {
+	margin-bottom: 20px;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif; 
+	color: #b1ad8f;				
+}
+
 .productList li { 
 	float: left;
 	width: 20%;
 	margin: 20px;
 }
 
+.pointer {
+	margin-left: auto;	
+	margin-right: auto;
+}
+
+.prodThumbContainer {
+	margin-left: auto;	
+	margin-right: auto;
+}
+
+.priceDetail {
+	margin-top: 20px;		
+}
+
+.superscript {
+	vertical-align: super;
+	font-size: 13px;	
+}
+
 .price {
+	width: 50%;
 	float: left;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: "Arial Black", Gadget, sans-serif;
 	color: 	#b1ad8f;
-	text-align: left;
+	text-align: center;
 	font-size: large;
-	padding-top: 5px;
+	padding-top: 9px;
 }
 
 .detailButton {
+	width: 50%;
 	float: right;
-	width: 70px;
 	height: 30px;
 	text-align: center;
 	padding-top: 10px;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: "Arial Black", Gadget, sans-serif;
 	font-size-adjust: 80%;
 	color: white;
 	background-color: #b1ad8f;	
