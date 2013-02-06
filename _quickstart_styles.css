@@ -20,3 +20,12 @@ a:hover{color:#000000; text-decoration:none;}
 
 #homepageTemplate{width:700px; margin:0 40px 0 0;}
 .catName{font-size:12px; font-weight:bold;}
+
+.sidebar{width:280px; }
+.homewidth{width:700px;}
+#logo{margin-bottom:39px;}
+.search{background:#111111; padding:15px 10px 15px 29px; margin-right:20px;}
+.search .inputtxt input{background:url(images/z_searchbg-140x30.gif) no-repeat; padding:8px; font-family:"myriad Pro", arial, verdana; color:#999999; font-size:11px; border:0;}
+.search .searchbtn input{background:url(images/z_searchbtn-80x30.gif) no-repeat; width:80px; height:30px; display:block; cursor:pointer; border:0;}
+
+.sidebarbg{background:url(images/z_sidebarbg-280x1.gif) repeat-y;}
