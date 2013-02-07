@@ -58,7 +58,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 
 </head>
 
-<body>
+<body>	
 
 
 
@@ -107,54 +107,70 @@ app.u.loadScript(app.vars.baseURL+"init.js");
             	or 
             	<a href="#"></a><a href="#"onClick="return showContent('customer',{'show':'newsletter'});">SIGNUP</a>)
             </div>
-            <div id='cart'><b>734 Items</b> in your Cart | 
-            	<a href='#' onClick="return showContent('cart',{});"><b>VIEW SHOPPING CART</b></a>
+            <div id='cart'><b>734 Items</b> in your Cart&nbsp&nbsp  |  &nbsp&nbsp 
+            	<a href='#' onClick="return showContent('cart',{});"><b>VIEW SHOPPING CART</b></a>&nbsp&nbsp&nbsp&nbsp
             	<a href='#' onClick="return showContent('company',{'show':'contact'});"><b>HELP</b></a>
             </div>
     	</div>
         
         <div class='logoSearchContainer'>
         	<div id='logo'><a href='#' onClick="return showContent('homepage',{});"><img id='logo' src="CompanyName.jpg"></a></div>
-        	<div id='searchBar'>
+        	<div class='searchBarContainer'>
 				<form name='headerSearchFrm' action='#' class='productSearchForm' method="get" id="searchFunc">
-					<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="Find it here..." />
+					<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="Find it here..." id="searchBar"/>
 					<input class="search pointer" type="submit" value="SEARCH" id="searchButton" />
    		    	</form>
 			</div>	
         </div>
         
         <div class='mainNavContainer'>
-        	<div id='headerCatagories' class='mainNavContainer'>
-        		<div class='mainNavLink' id='browse'>BROWSE</div>
-        		<div class='mainNavLink' id='browse'>WHAT'S HOT</div>
-           		<div class='mainNavLink' id='browse'>NEW ARRIVALS</div>
-            	<div class='mainNavLink' id='browse'>SALE</div>
-            	<div class='mainNavLink' id='browse'>CLEARANCE</div>
-            	<div class='mainNavLink' id='browse'>MY ACCOUNT</div>
-        	</div>
+        	<div class='mainNavLink' id='browse'>BROWSE</div>
+        	<div class='mainNavLink' id='browse'>WHAT'S HOT</div>
+           	<div class='mainNavLink' id='browse'>NEW ARRIVALS</div>
+            <div class='mainNavLink' id='browse'>SALE</div>
+            <div class='mainNavLink' id='browse'>CLEARANCE</div>
+            <div class='mainNavLink' id='browse'>MY ACCOUNT</div>
         </div>	
         
         <div class='mainBannerContainer'>
         	
             <div class='mainBannerGraphic'>
+<!--<div id='arrowLeft'><img src='Arrow-Left.png'></div>
+<div id='arrowRight'><img src='Arrow-Right.png'></div>-->
             	<img src='FallCollectionImage.jpg'>
+
             </div>
             
             <div class='mainBannerNewsletter'>
+            
             	<div id='scoop'>GET THE SCOOP ON</div>
                 <div id='latest'>THE LATEST IN FASHION</div>
-                <div id='headerNameBar'>
-					<form name='headerNameForm' action='#' class='clientNameForm' method="get" id="nameFunc">
+                       
+                <div id='headerNameBar'>              
+                    <form name='headerNameForm' action='#' class='clientNameForm' method="get" id="nameFunc">
 					<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="Full Name" /></form>
 				</div>	
         		<div id='headerEmailBar'>
 					<form name='footerEmailFrm' action='#' class='clientEmailForm' method="get" id="emailFunc">
 					<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="E-mail Address" /></form>
-                    <input class="search pointer" type="submit" value="SIGN UP!" id="searchButton" />
+                    <input class="search pointer" type="submit" value="SIGN UP!" id="headerSignUpButton" />
 				</div>
+                
+                <div id='followUs'>
+                	<img src='FollowUs.png'>
+                </div>
+                <div class='socialIconContainer'>
+					<div id='facebook'><img src='facebook.png'></div>
+					<div id='twitter'><img src='twitter.png'></div>
+                    <div id='youtube'><img src='youtube.png'></div>
+                    <div id='tumbler'><img src='tumblr.png'></div>
+                </div> 
+                
             </div>
-        	
+                  	
         </div>
+        
+        <div class='catagorySelectNavContainer'><img src='CatagoryNav.png'</div>
         
     </div>
     <!-- **************************** END HEADER ******************************************-->
@@ -283,13 +299,13 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 		<img src='images/blank.gif' width='712' height='400' data-bind="var: category(%page.banner_slideshow1); format: banner; extension:myRIA; editor:banner; wrap:<li>;" />
 	</ul>
 	
-	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>
+	<!--<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>-->
 
-	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; hide_summary:1; before:<h2>Featured Items</h2>; withReviews:1;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
-	<p data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>
+	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; hide_summary:1; withReviews:1;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
+	<!--<p data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>-->
 
 <!-- a sample of how to format an elastic native search in a data-bind -->
-	<ul id='homeProdSearchBestSellers' data-bind='var: elastic-native({"size":"4","mode":"elastic-native","filter":{"term":{"tags":"IS_BESTSELLER"}}}); format: productSearch; extension: myRIA; loadsTemplate: productListTemplateResults; before:<h2>Best Sellers</h2>;' class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
+<!--	<ul id='homeProdSearchBestSellers' data-bind='var: elastic-native({"size":"4","mode":"elastic-native","filter":{"term":{"tags":"IS_BESTSELLER"}}}); format: productSearch; extension: myRIA; loadsTemplate: productListTemplateResults; before:<h2>Best Sellers</h2>;' class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>-->
 
 <!-- a sample of how to get a 'list' src onto the page. -->
 	<ul data-bind="var: list($models.@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; withReviews:1; items_per_page: 25;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
