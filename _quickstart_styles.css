@@ -28,4 +28,16 @@ a:hover{color:#000000; text-decoration:none;}
 .search .inputtxt input{background:url(images/z_searchbg-140x30.gif) no-repeat; padding:8px; font-family:"myriad Pro", arial, verdana; color:#999999; font-size:11px; border:0;}
 .search .searchbtn input{background:url(images/z_searchbtn-80x30.gif) no-repeat; width:80px; height:30px; display:block; cursor:pointer; border:0;}
 
-.sidebarbg{background:url(images/z_sidebarbg-280x1.gif) repeat-y;}
+.sidebarbg{background:url(images/z_sidebarbg-280x1.gif) repeat-y; padding-top:20px; text-transform:uppercase;}
+.category{font-size:16px; font-family:"myriad Pro", arial, verdana;}
+.category ul{margin:0 20px 0 0; padding:0; text-align:right;}
+.category ul li{margin:0 20px 0 0; padding:0; list-style:none; background:url(images/z_arrow-20x20.gif) right 9px no-repeat; padding:10px 40px 10px 0; }
+.category ul li a{color:#FFFFFF;}
+.category ul li a:hover{color:#5c5c5c;}
+.category ul.redbg{background:url(images/z_sidebar_arrowbg-270x40.gif) no-repeat; margin:0 !important; padding:10px 60px 10px 0; color:#FFFFFF;}
+
+.needhelp{background:url(images/z_helpbg-1x26.gif) repeat-x; margin:0 20px 0 0; text-align:right; font-size:10px; color:#444444; line-height:24px;}
+.needhelp .arrowbg{background:url(images/z_helparrow-19x18.gif) no-repeat left 5px; width:19px; height:18px; display:inline-block; margin:0 20px 0 20px; padding:0;}
+.listitems{background:#111111; margin:0 20px 0 0;}
+.listitems ul{margin:0; padding:0;}
+.listitems ul li{margin:0; padding:0; list-style:none; }
