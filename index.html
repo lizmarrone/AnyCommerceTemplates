@@ -101,58 +101,63 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 	-->
     
     <div id='header'>
-    	<div id='topNav'>
-		    <p>WELCOME, GUEST! (Not you? 
-            <a href="#" onClick="return showContent('customer',{'show':'myaccount'});">LOGIN</a>
-            or 
-            <a href="#"></a><a href="#"onClick="return showContent('customer',{'show':'newsletter'});">SIGNUP</a>)
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
-            &nbsp&nbsp&nbsp&nbsp           
-            <b>734 Items</b> in your Cart | 
-            <a href='#' onClick="return showContent('cart',{});"><b>VIEW SHOPPING CART</b></a>
-            <a href='#' onClick="return showContent('company',{'show':'contact'});"><b>HELP</b></a></p>
+    	<div class='topNav'>
+		    <div id='welcome'>WELCOME, GUEST! (Not you? 
+            	<a href="#" onClick="return showContent('customer',{'show':'myaccount'});">LOGIN</a>
+            	or 
+            	<a href="#"></a><a href="#"onClick="return showContent('customer',{'show':'newsletter'});">SIGNUP</a>)
+            </div>
+            <div id='cart'><b>734 Items</b> in your Cart | 
+            	<a href='#' onClick="return showContent('cart',{});"><b>VIEW SHOPPING CART</b></a>
+            	<a href='#' onClick="return showContent('company',{'show':'contact'});"><b>HELP</b></a>
+            </div>
+    	</div>
+        
+        <div class='logoSearchContainer'>
+        	<div id='logo'><a href='#' onClick="return showContent('homepage',{});"><img id='logo' src="CompanyName.jpg"></a></div>
+        	<div id='searchBar'>
+				<form name='headerSearchFrm' action='#' class='productSearchForm' method="get" id="searchFunc">
+					<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="Find it here..." />
+					<input class="search pointer" type="submit" value="SEARCH" id="searchButton" />
+   		    	</form>
+			</div>	
         </div>
         
-        <a href='#' onClick="return showContent('homepage',{});"><img id='logo' src="CompanyName.jpg"></a>
-        <div id='searchBar'>
-			<form name='headerSearchFrm' action='#' class='productSearchForm' method="get" id="searchFunc">
-				<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="find it here..." />
-				<input class="search pointer" type="submit" value="Search" id="searchButton" />
-   		    </form>
-		</div>	
-        
-        <div class='mainNav'>
-        	<table border='0'> 
-        		<tr>
-        		<td><div class='mainNavLink' id='browse'>BROWSE    	
-           		</div></td>
-        		<td><div class='mainNavLink' id='browse'>WHAT'S HOT      	
-            	</div></td>
-            	<td><div class='mainNavLink' id='browse'>NEW ARRIVALS	            	
-            	</div></td>
-            	<td><div class='mainNavLink' id='browse'>SALE        	
-            	</div></td>
-            	<td><div class='mainNavLink' id='browse'>CLEARANCE           	
-            	</div></td>
-            	<td><div class='mainNavLink' id='browse'>MY ACCOUNT         	
-            	</div></td>
-        		</tr>
-        	</table>
-        </div>
+        <div class='mainNavContainer'>
+        	<div id='headerCatagories' class='mainNavContainer'>
+        		<div class='mainNavLink' id='browse'>BROWSE</div>
+        		<div class='mainNavLink' id='browse'>WHAT'S HOT</div>
+           		<div class='mainNavLink' id='browse'>NEW ARRIVALS</div>
+            	<div class='mainNavLink' id='browse'>SALE</div>
+            	<div class='mainNavLink' id='browse'>CLEARANCE</div>
+            	<div class='mainNavLink' id='browse'>MY ACCOUNT</div>
+        	</div>
+        </div>	
         
         <div class='mainBannerContainer'>
-        	<div class='mainBannerGraphic'>
-            	
+        	
+            <div class='mainBannerGraphic'>
+            	<img src='FallCollectionImage.jpg'>
             </div>
+            
             <div class='mainBannerNewsletter'>
-            	
+            	<div id='scoop'>GET THE SCOOP ON</div>
+                <div id='latest'>THE LATEST IN FASHION</div>
+                <div id='headerNameBar'>
+					<form name='headerNameForm' action='#' class='clientNameForm' method="get" id="nameFunc">
+					<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="Full Name" /></form>
+				</div>	
+        		<div id='headerEmailBar'>
+					<form name='footerEmailFrm' action='#' class='clientEmailForm' method="get" id="emailFunc">
+					<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="E-mail Address" /></form>
+                    <input class="search pointer" type="submit" value="SIGN UP!" id="searchButton" />
+				</div>
             </div>
         	
         </div>
         
     </div>
+    <!-- **************************** END HEADER ******************************************-->
     
     
 	<div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
@@ -164,15 +169,15 @@ app.u.loadScript(app.vars.baseURL+"init.js");
         	<div id='upToDate'>
             	STAY UP-TO-DATE WITH US
             </div>
-        	<div id='nameBar'>
+        	<div id='footerNameBar' class='nameBar'>
 			<form name='footerNameForm' action='#' class='clientNameForm' method="get" id="nameFunc">
-				<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="Name..." />
+				<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="Name" />
 				<input class="search pointer" type="submit" value="SIGN UP!" id="searchButton" />
    		    </form>
 			</div>	
-        	<div id='emailBar'>
+        	<div id='footerEmailBar' class='emailBar'>
 			<form name='footerEmailFrm' action='#' class='clientEmailForm' method="get" id="emailFunc">
-				<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="E-mail Address..." />
+				<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="E-mail Address" />
    		    </form>
 			</div>	
         </div>	
