@@ -28,7 +28,7 @@ a:hover{color:#000000; text-decoration:none;}
 .search .inputtxt input{background:url(images/z_searchbg-140x30.gif) no-repeat; padding:8px; font-family:"myriad Pro", arial, verdana; color:#999999; font-size:11px; border:0;}
 .search .searchbtn input{background:url(images/z_searchbtn-80x30.gif) no-repeat; width:80px; height:30px; display:block; cursor:pointer; border:0;}
 
-.sidebarbg{background:url(images/z_sidebarbg-280x1.gif) repeat-y; padding-top:20px; text-transform:uppercase;}
+.sidebarbg{background:url(images/z_sidebarbg-280x1.gif) repeat-y; padding-top:10px; text-transform:uppercase;}
 .category{font-size:16px; font-family:"myriad Pro", arial, verdana;}
 .category ul{margin:0 20px 0 0; padding:0; text-align:right;}
 .category ul li{margin:0 20px 0 0; padding:0; list-style:none; background:url(images/z_arrow-20x20.gif) right 9px no-repeat; padding:10px 40px 10px 0; }
@@ -38,6 +38,14 @@ a:hover{color:#000000; text-decoration:none;}
 
 .needhelp{background:url(images/z_helpbg-1x26.gif) repeat-x; margin:0 20px 0 0; text-align:right; font-size:10px; color:#444444; line-height:24px;}
 .needhelp .arrowbg{background:url(images/z_helparrow-19x18.gif) no-repeat left 5px; width:19px; height:18px; display:inline-block; margin:0 20px 0 20px; padding:0;}
-.listitems{background:#111111; margin:0 20px 0 0;}
+.listitems{background:#111111; margin:0 20px 0 0; padding:15px 56px 15px 40px; }
 .listitems ul{margin:0; padding:0;}
-.listitems ul li{margin:0; padding:0; list-style:none; }
+.listitems ul li{margin:0; padding:0; list-style:none; font-size:15px;  font-family:"myriad Pro", arial, verdana; }
+.listitems ul ul{margin:0; padding:0;}
+.listitems ul ul li{margin:10px 0; padding:0 0 0 8px; background:url(images/z_listitemarrow-5x6.gif) no-repeat left 5px; font-size:11px; color:#FFFFFF; text-transform:none;}
+.listitems ul ul li a{color:#FFFFFF;}
+.listitems ul ul li a:hover{color:#5c5c5c;}
+.listitems ul.marginbtm{margin-top:25px;}
+
+.copyright{color:#333333; text-align:center; margin:25px 0; line-height:18px;}
+.copyright a{color:#770000; font-weight:bold;}
