@@ -129,7 +129,7 @@ app.u.loadApp = function() {
 //instantiate wiki parser.
 		myCreole = new Parse.Simple.Creole();
 		
-
+		
 		//sets individual values for dollars and cents to allow separate manipulation 
 		app.renderFormats.superscriptCents = function ($tag, data){
 			//app.u.dump('BEGIN view.formats.money');
