@@ -137,7 +137,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
             <div class='mainBannerGraphic'>
 <!--<div id='arrowLeft'><img src='Arrow-Left.png'></div>
 <div id='arrowRight'><img src='Arrow-Right.png'></div>-->
-            	<img src='FallCollectionImage.jpg'>
+            	<img src='FallCollectionImage.png'>
 
             </div>
             
@@ -146,14 +146,21 @@ app.u.loadScript(app.vars.baseURL+"init.js");
             	<div id='scoop'>GET THE SCOOP ON</div>
                 <div id='latest'>THE LATEST IN FASHION</div>
                        
-                <div id='headerNameBar'>              
-                    <form name='headerNameForm' action='#' class='clientNameForm' method="get" id="nameFunc">
-					<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="Full Name" /></form>
-				</div>	
-        		<div id='headerEmailBar'>
-					<form name='footerEmailFrm' action='#' class='clientEmailForm' method="get" id="emailFunc">
-					<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="E-mail Address" /></form>
-                    <input class="search pointer" type="submit" value="SIGN UP!" id="headerSignUpButton" />
+                <div class='headerNewsletterSignUpContainer'>              
+                    <form action='#' id='subscribeFrm' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe('subscribeFrm'); return false">
+                    	<fieldset'>
+							<div>
+								<input type='email'  maxlength='50' size='30' name='login' class='headerSubscribeFrm' placeholder='Full Name' />
+							</div>
+
+							<div id='headerNewsletterEmail'>
+								<input type='text'  maxlength='50' size='30' name='fullname' class='headerSubscribeFrm' placeholder='E-mail Address' />
+							</div>
+						</fieldset>
+                        
+					
+					<input type='submit' class='socialIconContainer' value='SIGN UP!' id='headerSignUpButton'>
+					</form>
 				</div>
                 
                 <div id='followUs'>
@@ -181,12 +188,27 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 	
     <div id='footer'>
     
-    	<div id='footerNewsletter'>
+    	<div class='footerNewsletter'>
         	<div id='upToDate'>
             	STAY UP-TO-DATE WITH US
             </div>
-        	<div id='footerNameBar' class='nameBar'>
-			<form name='footerNameForm' action='#' class='clientNameForm' method="get" id="nameFunc">
+        	<div id='footerFields'>
+            <div class='footerFieldContainer'>             
+            	<form action='#' id='subscribeFrm' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe('subscribeFrm'); return false">
+					<div>
+						<input type='email'  maxlength='50' size='30' name='login' class='footerSubscribeFrmName' placeholder='Full Name' />
+					</div>
+					<div id='footerEmailBar' class='emailBar'>
+						<input type='text'  maxlength='50' size='30' name='fullname' class='footerSubscribeFrmEmail' placeholder='E-mail Address' />
+					</div>
+					<input type='submit' value='SIGN UP!' id='footerSignUpButton'>
+				</form>
+            </div>
+			</div>	
+            
+            
+            
+			<!--<form name='footerNameForm' action='#' class='clientNameForm' method="get" id="nameFunc">
 				<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="Name" />
 				<input class="search pointer" type="submit" value="SIGN UP!" id="searchButton" />
    		    </form>
@@ -194,7 +216,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
         	<div id='footerEmailBar' class='emailBar'>
 			<form name='footerEmailFrm' action='#' class='clientEmailForm' method="get" id="emailFunc">
 				<input type='search' name='KEYWORDS' class="productSearchKeyword handleDefault" placeholder="E-mail Address" />
-   		    </form>
+   		    </form>-->
 			</div>	
         </div>	
 	</div>

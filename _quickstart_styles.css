@@ -8,7 +8,7 @@ body {
 #appPreview, #appView {
 	background: white;
 	margin: 0px auto;
-	width: 900px;	
+	width: 1020px;	
 }
 
 
@@ -107,14 +107,14 @@ HEADER
 
 .mainBannerContainer {
 	width: 95%;
-	height: 300px;
+	height: 295px;
 	margin-left: auto;
   	margin-right: auto;
 }
 
 .mainBannerGraphic {
-	width: 75%;	
-	height: 300px;
+	width: 72.5%;	
+	height: 295px;
 	float: left;
 }
 
@@ -128,15 +128,15 @@ HEADER
 
 .mainBannerNewsletter {
 	background-color: #ce004e;
-	width: 25%;
-	height: 300px;
+	width: 27.5%;
+	height: 295px;
 	float: right;
 	text-align: center;
 	color: white;
 }
 
 #scoop {
-	margin-top: 25px;
+	margin-top: 10px;
 	font-family: Arial, Helvetica, sans-serif;	
 }
 
@@ -145,24 +145,25 @@ HEADER
 	font-weight: bold;
 }
 
-#headerNameBar {
+.headerNewsletterSignUpContainer {
+	width: 95%;
+	heigth: 75px;
 	background: #ce004e;
-	text-align: center;
-	margin-top: 22px;
 	margin-right: auto;
 	margin-left: auto;	
 }
 
-#headerEmailBar {
-	background: #ce004e;
-	text-align: center;
+.headerSubscribeFrm {
+	height: 29px;
+	width: 230px;
 	margin-top: 10px;
 	margin-right: auto;
 	margin-left: auto;
 }
 
 #headerSignUpButton {
-	height: 20px;
+	height: 35px;
+	width: 70px;
 	text-align: center;
 	background: #a3033d;
 	border: 0 none;
@@ -175,7 +176,7 @@ HEADER
 #followUs { 
 	margin-left: auto;
 	margin-right: auto;
-	margin-top: 40px;	
+	margin-top: 65px;	
 }
 
 .socialIconContainer {
@@ -208,7 +209,7 @@ HEADER
 .catagorySelectNavContainer {
 	background-color: white;
 	width: 95%;
-	height: 90px;
+	height: 110px;
 	padding-top: 15;
 	margin-left: auto;
   	margin-right: auto;
@@ -221,7 +222,7 @@ FOOTER
 **************************************************************************************/
 
 
-#footerNewsletter {
+.footerNewsletter {
 	background: #ce004e;
 	height: 60px;
 	width: 95%;	
@@ -238,21 +239,52 @@ FOOTER
 	font-family: "Arial Black", Gadget, sans-serif;	
 }
 
+#footerFields {
+	width: 400px;
+	float: right;	
+}
 
+.footerFieldContainer {
+	float: left;
+	width:25%;	
+	padding: 5px;	
+}
 
-.nameBar{
+.footerSubscribeFrmName {
+	height: 29px;
+	width: 230px;
+	margin-top: 10px;
+}
+
+.footerSubscribeFrmEmail {
+	height: 29px;
+	width: 230px;
+	margin-top: 10px;
+}
+
+.footerNameBar{
 	background: #ce004e;
-	text-align: center;
 	margin-top: 22px;
 	margin-right: 14px;
 	float: right;	
 }
 
-.emailBar{
+.footerEmailBar{
 	background: #ce004e;
-	text-align: center;
 	margin-top: 22px;
 	margin-right: 7Px;
+	float: right;
+}
+
+#footerSignUpButton {
+	height: 35px;
+	width: 70px;
+	text-align: center;
+	background: #a3033d;
+	border: 0 none;
+	color: white;
+	margin-top: 0px;
+	margin-right: 10px;
 	float: right;
 }
 
