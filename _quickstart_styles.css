@@ -380,12 +380,14 @@ NON PERSISTEN CONTENT
 *************************************************************************************/
 
 .prodDesc {
+	height: 50px;
 	text-align: center;
 	font-family: Arial, Helvetica, sans-serif; 
 	color: #a3033d;	
 }
 
 .prodMfg {
+	height: 20px;
 	margin-bottom: 20px;
 	text-align: center;
 	font-family: Arial, Helvetica, sans-serif; 
@@ -394,8 +396,9 @@ NON PERSISTEN CONTENT
 
 .productList li { 
 	float: left;
+	height: 300px;
 	width: 20%;
-	margin: 20px;
+	margin: 25px;
 }
 
 .pointer {
@@ -404,6 +407,7 @@ NON PERSISTEN CONTENT
 }
 
 .prodThumbContainer {
+	height: 120px;
 	margin-left: auto;	
 	margin-right: auto;
 }

@@ -107,8 +107,9 @@ app.u.loadScript(app.vars.baseURL+"init.js");
             	or 
             	<a href="#"></a><a href="#"onClick="return showContent('customer',{'show':'newsletter'});" class='topNavLinkStyle'>SIGNUP</a>)
             </div>
+            <a href='#' onClick="return showContent('cart',{});" class='topNavLinkStyle'>
             <div id='cart'><b><span class="cartItemCount"></span>	Items</b> in your Cart&nbsp&nbsp  |  &nbsp&nbsp 
-            	<a href='#' onClick="return showContent('cart',{});" class='topNavLinkStyle'><b>VIEW SHOPPING CART</b></a>&nbsp&nbsp&nbsp&nbsp
+            	<b>VIEW SHOPPING CART</b></a>&nbsp&nbsp&nbsp&nbsp
             	<a href='#' onClick="return showContent('company',{'show':'contact'});" class='topNavLinkStyle'><b>HELP</b></a>
             </div>
     	</div>
@@ -123,62 +124,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 			</div>	
         </div>
         
-        <div class='mainNavContainer'>
-        	<!-- place holder links, will need to replace safe.name later -->
-            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>BROWSE</div></a>
-            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>WHAT'S HOT</div></a>
-            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>NEW ARRIVALS</div></a>
-            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>SALE</div></a>
-            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>CLEARANCE</div></a>
-			<a href='#top' onClick="return showContent('customer',{'show':'myaccount'});"><div class='mainNavLink' id='browse'>MY ACCOUNT</div></a>
-        </div>	
-        
-        <div class='mainBannerContainer'>
-        	
-            <div class='mainBannerGraphic'>
-<!--<div id='arrowLeft'><img src='Arrow-Left.png'></div>
-<div id='arrowRight'><img src='Arrow-Right.png'></div>-->
-            	<img src='FallCollectionImage.png'>
 
-            </div>
-            
-            <div class='mainBannerNewsletter'>
-            
-            	<div id='scoop'>GET THE SCOOP ON</div>
-                <div id='latest'>THE LATEST IN FASHION</div>
-                       
-                <div class='headerNewsletterSignUpContainer'>              
-                    <form action='#' id='subscribeFrm' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe('subscribeFrm'); return false">
-                    	<fieldset'>
-							<div>
-								<input type='email'  maxlength='50' size='30' name='login' class='headerSubscribeFrm' placeholder='Full Name' />
-							</div>
-
-							<div id='headerNewsletterEmail'>
-								<input type='text'  maxlength='50' size='30' name='fullname' class='headerSubscribeFrm' placeholder='E-mail Address' />
-							</div>
-						</fieldset>
-                        
-					
-					<input type='submit' class='socialIconContainer' value='SIGN UP!' id='headerSignUpButton'>
-					</form>
-				</div>
-                
-                <div id='followUs'>
-                	<img src='FollowUs.png'>
-                </div>
-                <div class='socialIconContainer'>
-					<a href='https://www.facebook.com/'><div id='facebook'><img src='facebook.png'></div></a>
-					<a href='https://twitter.com/'><div id='twitter'><img src='twitter.png'></div></a>
-                    <a href='http://www.youtube.com/'><div id='youtube'><img src='youtube.png'></div></a>
-                    <a href='http://www.tumblr.com'><div id='tumbler'><img src='tumblr.png'></div></a>
-                </div> 
-                
-            </div>
-                  	
-        </div>
-        
-        <div class='catagorySelectNavContainer'><img src='CatagoryNav.png'></div>
         
     </div>
     <!-- **************************** END HEADER ******************************************-->
@@ -186,8 +132,6 @@ app.u.loadScript(app.vars.baseURL+"init.js");
     
 	<div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
     <div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
-	
-   	<div class='catagorySelectNavContainer'><img src='CatagoryNav.png'></div>
     
     <div class='footerNewsletter'>
        	<div id='upToDate'>
@@ -308,6 +252,64 @@ COMMONLY EDITED TEMPLATES
 the homepageTemplate template is loaded into mainContentArea by default when the application loads
 -->
 <div id='homepageTemplate' class='homeTemplate'>
+
+        <div class='mainNavContainer'>
+        	<!-- place holder links, will need to replace safe.name later -->
+            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>BROWSE</div></a>
+            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>WHAT'S HOT</div></a>
+            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>NEW ARRIVALS</div></a>
+            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>SALE</div></a>
+            <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>CLEARANCE</div></a>
+			<a href='#top' onClick="return showContent('customer',{'show':'myaccount'});"><div class='mainNavLink' id='browse'>MY ACCOUNT</div></a>
+        </div>	
+        
+        <div class='mainBannerContainer'>
+        	
+            <div class='mainBannerGraphic'>
+<!--<div id='arrowLeft'><img src='Arrow-Left.png'></div>
+<div id='arrowRight'><img src='Arrow-Right.png'></div>-->
+            	<img src='FallCollectionImage.png'>
+
+            </div>
+            
+            <div class='mainBannerNewsletter'>
+            
+            	<div id='scoop'>GET THE SCOOP ON</div>
+                <div id='latest'>THE LATEST IN FASHION</div>
+                       
+                <div class='headerNewsletterSignUpContainer'>              
+                    <form action='#' id='subscribeFrm' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe('subscribeFrm'); return false">
+                    	<fieldset'>
+							<div>
+								<input type='email'  maxlength='50' size='30' name='login' class='headerSubscribeFrm' placeholder='Full Name' />
+							</div>
+
+							<div id='headerNewsletterEmail'>
+								<input type='text'  maxlength='50' size='30' name='fullname' class='headerSubscribeFrm' placeholder='E-mail Address' />
+							</div>
+						</fieldset>
+                        
+					
+					<input type='submit' class='socialIconContainer' value='SIGN UP!' id='headerSignUpButton'>
+					</form>
+				</div>
+                
+                <div id='followUs'>
+                	<img src='FollowUs.png'>
+                </div>
+                <div class='socialIconContainer'>
+					<a href='https://www.facebook.com/'><div id='facebook'><img src='facebook.png'></div></a>
+					<a href='https://twitter.com/'><div id='twitter'><img src='twitter.png'></div></a>
+                    <a href='http://www.youtube.com/'><div id='youtube'><img src='youtube.png'></div></a>
+                    <a href='http://www.tumblr.com'><div id='tumbler'><img src='tumblr.png'></div></a>
+                </div> 
+                
+            </div>
+                  	
+        </div>
+        
+        <div class='catagorySelectNavContainer'><img src='CatagoryNav.png'></div>
+
 <ul id="wideSlideshow" class="pics slideshow">
 		<img src='images/blank.gif' width='712' height='400' data-bind="var: category(%page.banner_slideshow1); format: banner; extension:myRIA; editor:banner; wrap:<li>;" />
 	</ul>
@@ -316,6 +318,8 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 
 	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; hide_summary:1; withReviews:1;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
 	<!--<p data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>-->
+
+	<div class='catagorySelectNavContainer'><img src='CatagoryNav.png'></div>
 
 <!-- a sample of how to format an elastic native search in a data-bind -->
 <!--	<ul id='homeProdSearchBestSellers' data-bind='var: elastic-native({"size":"4","mode":"elastic-native","filter":{"term":{"tags":"IS_BESTSELLER"}}}); format: productSearch; extension: myRIA; loadsTemplate: productListTemplateResults; before:<h2>Best Sellers</h2>;' class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>-->

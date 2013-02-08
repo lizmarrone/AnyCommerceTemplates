@@ -141,9 +141,9 @@ app.u.loadApp = function() {
 				var dollars = sDataArray[0];	
 				var cents = sDataArray[1];
 				var $cents = $('<span class="superscript"></span>')
-				$cents.text(cents);
-				$tag.text('$'+dollars+'.');
-				$tag.append($cents);
+				$cents.text('.'+cents);
+				$tag.text('$'+dollars);
+				$tag.append($cents);	
 			}
 		}
 		
