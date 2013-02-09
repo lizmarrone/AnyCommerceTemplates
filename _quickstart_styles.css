@@ -53,6 +53,12 @@ HEADER
 	float: left;	
 }
 
+.itemsInCart {
+	color: white;
+	text-decoration: none;
+	font-family: Arial, Helvetica, sans-serif;	
+}
+
 #cart {
 	margin-top: 10px;
 	margin-right: 25px;
