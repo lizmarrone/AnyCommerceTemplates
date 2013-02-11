@@ -102,13 +102,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 	-->
     
     <div id='header'>
-    	<div class='topNav'>
-		    <div id='welcome'>WELCOME, GUEST! (Not you? 
-            	<a href="#" onClick="return showContent('customer',{'show':'myaccount'});" class='topNavLinkStyle'>LOGIN</a>
-            	or 
-            	<a href="#"></a><a href="#"onClick="return showContent('customer',{'show':'newsletter'});" class='topNavLinkStyle'>SIGNUP</a>)
-            </div>
-            
+    	<div class='topNav'>        
             <div id='cart' ><b><span class="cartItemCount"></span>	
             	<a href='#' onClick="return showContent('cart',{});" class='itemsInCart'>Items</b> in your Cart&nbsp&nbsp  |  &nbsp&nbsp 
             	<a href='#' onClick="return showContent('cart',{});" class='topNavLinkStyle'><b>VIEW SHOPPING CART</b></a>&nbsp&nbsp&nbsp&nbsp
@@ -159,44 +153,43 @@ app.u.loadScript(app.vars.baseURL+"init.js");
     		<ul class='bottomLinkList'>
                	<li class='listHead'>CATEGORIES</li>
 		        	<!-- place holder links, will need to replace safe.name later -->                
-                    <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Browse All Catagories</li></a>
-                    <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>What's Hot</li></a>
-                    <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>New Arrivals</li></a>
-                    <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Sale</li></a>
-                    <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Clearance</li></a>
+                    <a href='#' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Browse All Catagories</li></a>
+                    <a href='#' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>What's Hot</li></a>
+                    <a href='#' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>New Arrivals</li></a>
+                    <a href='#' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Sale</li></a>
+                    <a href='#' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Clearance</li></a>
                 </ul>    
 		</div>
         <div id='help' class="bottomLinkListContainer">
         	<ul class='bottomLinkList'>
             	<li class='listHead'>HELP</li>
-                	<a href='#top' onClick="return showContent('company',{'show':'about'});" class='footerLinkStyle'><li>About CompanyName</li></a>
-                    <a href='#top' onClick="return showContent('company',{'show':'contact'});" class='footerLinkStyle'><li>Contact Us</li></a>
-                    <a href='#top' onClick="return showContent('company',{'show':'faq'});" class='footerLinkStyle'><li>FAQ</li></a>
-                    <a href='#top' onClick="return showContent('company',{'show':'shipping'});" class='footerLinkStyle'><li>Shipping Policy</li></a>
-                    <a href='#top' onClick="return showContent('company',{'show':'return'});" class='footerLinkStyle'><li>Return Policy</li></a>
-                    <a href='#top' onClick="return showContent('company',{'show':'payment'});" class='footerLinkStyle'><li>Payment Policy</li></a>
-                    <a href='#top' onClick="return showContent('company',{'show':'privacy'});" class='footerLinkStyle'><li>Privacy Policy</li></a>
+                	<a href='#' onClick="return showContent('company',{'show':'about'});" class='footerLinkStyle'><li>About</li></a>
+                    <a href='#' onClick="return showContent('company',{'show':'contact'});" class='footerLinkStyle'><li>Contact Us</li></a>
+                    <a href='#' onClick="return showContent('company',{'show':'faq'});" class='footerLinkStyle'><li>FAQ</li></a>
+                    <a href='#' onClick="return showContent('company',{'show':'shipping'});" class='footerLinkStyle'><li>Shipping Policy</li></a>
+                    <a href='#' onClick="return showContent('company',{'show':'return'});" class='footerLinkStyle'><li>Return Policy</li></a>
+                    <a href='#' onClick="return showContent('company',{'show':'payment'});" class='footerLinkStyle'><li>Payment Policy</li></a>
+                    <a href='#' onClick="return showContent('company',{'show':'privacy'});" class='footerLinkStyle'><li>Privacy Policy</li></a>
             </ul>
 		</div>
         <div id='myaccount' class="bottomLinkListContainer">
             <ul class='bottomLinkList'>
                 <li class='listHead'>MY ACCOUNT</li>
-                <a href='#top' onClick="return showContent('customer',{'show':newsletter'});" class='footerLinkStyle'><li>Create An Acount</li></a>
-                <a href='#top' onClick="return showContent('customer',{'show':'myaccount'});" class='footerLinkStyle'><li>Sign In</li></a>
-                <a href='#top' onClick="return showContent('customer',{'show':'myaccount'});" class='footerLinkStyle'><li>Change Password</li></a>
+                <a href='#' onClick="return showContent('customer',{'show':newsletter'});" class='footerLinkStyle'><li>Create An Acount</li></a>
+                <a href='#' onClick="return showContent('customer',{'show':'myaccount'});" class='footerLinkStyle'><li>Sign In</li></a>
+                <a href='#' onClick="return showContent('customer',{'show':'myaccount'});" class='footerLinkStyle'><li>Change Password</li></a>
 	        	<!-- place holder links, will need to replace safe.name later -->                
-                <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Wishlist Items</li></a>
-                <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Previously Viewed Items</li></a>
-                <a href='#top' onClick="return showContent('customer',{'show':'orders'});" class='footerLinkStyle'><li>Order Tracking</li></a>
+                <a href='#' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Wishlist Items</li></a>
+                <a href='#' onClick="return showContent('customer',{'show':'orders'});" class='footerLinkStyle'><li>Order Tracking</li></a>
             </ul>
         </div>
         <div id='morefashion' class="bottomLinkListContainer">
             <ul class='bottomLinkList'>
                 <li class='listHead'>MORE FASHION</li>
-               	<!-- place holder links, will need to replace safe.name later -->
-                <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Blog</li></a>
-                <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'> <li>Tutorials</li></a>
-                <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});" class='footerLinkStyle'><li>Tips and Tricks</li></a>
+               	<!-- place holder links, will need to later -->
+                <a href='#' class='footerLinkStyle'> <li>Blog</li></a>
+                <a href='#' class='footerLinkStyle'> <li>Tutorials</li></a>
+                <a href='#' class='footerLinkStyle'> <li>Tips and Tricks</li></a>
                 
                 <a href='http://www.youtube.com/' class='footerLinkStyle'><li>You Tube</li></a>
                 <a href='https://www.facebook.com/' class='footerLinkStyle'><li>Facebook</li></a>
@@ -206,7 +199,7 @@ app.u.loadScript(app.vars.baseURL+"init.js");
     </div>
         
     <div id='footerInformation'>
-        Company Name<a> 2012 All Rights Reserved. eCommerce by</a> Zoovy
+        <a>2012 All Rights Reserved. eCommerce by</a> Zoovy
     </div>
 
 
@@ -310,7 +303,10 @@ the homepageTemplate template is loaded into mainContentArea by default when the
                   	
         </div>
         
-        <div class='catagorySelectNavContainer'><img src='CatagoryNav.png'></div>
+        
+        <!-- placeholder icon for text catagory carousel. 
+		<div class='catagorySelectNavContainer'><img src='CatagoryNav.png'></div> -->
+
 
 <ul id="wideSlideshow" class="pics slideshow">
 		<img src='images/blank.gif' width='712' height='400' data-bind="var: category(%page.banner_slideshow1); format: banner; extension:myRIA; editor:banner; wrap:<li>;" />
@@ -321,7 +317,8 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; hide_summary:1; withReviews:1;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
 	<!--<p data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>-->
 
-	<div class='catagorySelectNavContainer'><img src='CatagoryNav.png'></div>
+	<!-- placeholder icon for text catagory carousel. 
+	<div class='catagorySelectNavContainer'><img src='CatagoryNav.png'></div> -->
 
 <!-- a sample of how to format an elastic native search in a data-bind -->
 <!--	<ul id='homeProdSearchBestSellers' data-bind='var: elastic-native({"size":"4","mode":"elastic-native","filter":{"term":{"tags":"IS_BESTSELLER"}}}); format: productSearch; extension: myRIA; loadsTemplate: productListTemplateResults; before:<h2>Best Sellers</h2>;' class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>-->
