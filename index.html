@@ -142,10 +142,10 @@ app.u.loadScript(app.vars.baseURL+"init.js");
        	<div class='footerFieldContainer'>
         	<div class='footerNameBar'>
               	<form action='#' class='footerFormFrm' id='subscribeFrm' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe('subscribeFrm'); return false">
-					<input type='email'  maxlength='50' size='30' name='login' class='footerSubscribeFrm' placeholder='Full Name' />
+					<input type='text'  maxlength='50' size='30' name='fullname' class='footerSubscribeFrm' placeholder='Full Name' />
 			</div>
 					<div class='footerEmailBar'>
-					<input type='text'  maxlength='50' size='30' name='fullname' class='footerSubscribeFrm' placeholder='E-mail Address' />
+                    <input type='email'  maxlength='50' size='30' name='login' class='footerSubscribeFrm' placeholder='E-mail Address' />
 					</div>
             		<div class='footerButtonContainer'>
 						<input type='submit' value='SIGN UP!' id='footerSignUpButton'>
@@ -283,11 +283,11 @@ the homepageTemplate template is loaded into mainContentArea by default when the
                     <form action='#' id='subscribeFrm' name='subscribeFrm' onSubmit="app.ext.store_crm.u.handleSubscribe('subscribeFrm'); return false">
                     	<fieldset'>
 							<div>
-								<input type='email'  maxlength='50' size='30' name='login' class='headerSubscribeFrm' placeholder='Full Name' />
-							</div>
+								<input type='text'  maxlength='50' size='30' name='fullname' class='headerSubscribeFrm' placeholder='Full Name' />
+							</div>	
 
 							<div id='headerNewsletterEmail'>
-								<input type='text'  maxlength='50' size='30' name='fullname' class='headerSubscribeFrm' placeholder='E-mail Address' />
+                            	<input type='email'  maxlength='50' size='30' name='login' class='headerSubscribeFrm' placeholder='E-mail Address' />
 							</div>
 						</fieldset>
                         
