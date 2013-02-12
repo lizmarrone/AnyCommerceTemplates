@@ -147,7 +147,8 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 <div id='homepageTemplate' class='homeTemplate'>
 <div class="wrapper">
 <!-- Sidebar -->
-    <div class="floatLeft sidebar">    	
+	
+   	 <div class="floatLeft sidebar">    	
     	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
         <div class="search clearfix">
         	<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
@@ -199,6 +200,8 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 2012 All Rights Reserved<br />
 eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
     </div>
+
+    	
     <div class="floatRight homewidth">
         <div><a href="#"><img src="images/z-h-banner-700x300.jpg" width="700" height="300" alt="Banner"></a></div>
         <!--<h5 data-bind='var: nothing(); defaultValue: blue; elasticAttr: pid; format:searchLink; extension:myRIA;'></h5>
@@ -213,6 +216,7 @@ eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
     <!-- a sample of how to get a 'list' src onto the page. -->
         <ul data-bind="var: list($models.@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; withReviews:1; items_per_page: 25;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
 	</div>
+    	
 </div>
 
 </div>
@@ -231,7 +235,63 @@ each of the 'sections' are used to load another template. don't change the id.
 don't modify the 'data-templateid' unless you are changing template names and updating everywhere appropriate.
 -->
 <div id='categoryTemplate' class='loadingBG categoryTemplate'>
+<div class="wrapper">
+<!-- Sidebar -->
+	
+   	 <div class="floatLeft sidebar">    	
+    	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
+        <div class="search clearfix">
+        	<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
+            <div class="floatLeft searchbtn"><input name="" type="button" ></div>
+        </div>
+        <div class="sidebarbg">
+<!-- Category -->
+<div class="category">
+    <ul>
+        <li><a href="#">BROWSE ALL GAMES</a></li>
+        <li><a href="#">What's Hot</a></li>
+        <li><a href="#">NEW ARRIVALS</a></li>
+        <li><a href="#">ACTION ADVENTURE</a></li>
+    </ul>
+    <ul class="redbg">FPS</ul>
+    <ul>
+        <li><a href="#">MMO/RPGs</a></li>
+        <li><a href="#">BOARD GAMES</a></li>
+        <li><a href="#">CARD GAMES</a></li>
+    </ul>
+</div>
+<!-- Need Help -->
+<div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
+<div class="listitems">
+	<ul>
+    	<li>THE COMPANY NAME</li>
+        <ul>
+        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
+			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
+			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
+			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
+			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
+			<li><a href="#">Terms and Conditions</a></li>
+        </ul>
+	</ul>
+    <ul class="marginbtm">
+    	<li>Account Service</li>
+        <ul>
+        	<li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});">My account</a></li>
+			<li><a href='#customer?show=orders' id='navLink_orders'>Order Tracking</a></li>
+			<li><a href="#">Previously Viewed Items</a></li>
+			<li><a href="#">Wishlist Items</a></li>
+			<li><a href="#">Sign Out</a></li>
+        </ul>
+	</ul>
+</div>
+        </div>
+        <div class="copyright"><a href='#top' onClick="return showContent('homepage',{});">theCompanyName</a><br />
+2012 All Rights Reserved<br />
+eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
+    </div>
 
+<div class="floatRight homewidth">
 	<ul class='breadcrumb clearfix noPadOrMargin fluidList' data-bind='var: category(id); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
 
 	<img data-bind="var: category(%page.banner1); format: banner; editor: banner; height:250; width:750; extension: myRIA;" />
@@ -246,7 +306,7 @@ don't modify the 'data-templateid' unless you are changing template names and up
 
 	<p data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>
 
-
+</div></div>
 </div>
 
 
@@ -426,6 +486,63 @@ this will likely become more flexible in the future. ###
 
 
 <div id='productTemplate'>
+<div class="wrapper">
+<!-- Sidebar -->
+	
+   	 <div class="floatLeft sidebar">    	
+    	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
+        <div class="search clearfix">
+        	<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
+            <div class="floatLeft searchbtn"><input name="" type="button" ></div>
+        </div>
+        <div class="sidebarbg">
+<!-- Category -->
+<div class="category">
+    <ul>
+        <li><a href="#">BROWSE ALL GAMES</a></li>
+        <li><a href="#">What's Hot</a></li>
+        <li><a href="#">NEW ARRIVALS</a></li>
+        <li><a href="#">ACTION ADVENTURE</a></li>
+    </ul>
+    <ul class="redbg">FPS</ul>
+    <ul>
+        <li><a href="#">MMO/RPGs</a></li>
+        <li><a href="#">BOARD GAMES</a></li>
+        <li><a href="#">CARD GAMES</a></li>
+    </ul>
+</div>
+<!-- Need Help -->
+<div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
+<div class="listitems">
+	<ul>
+    	<li>THE COMPANY NAME</li>
+        <ul>
+        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
+			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
+			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
+			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
+			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
+			<li><a href="#">Terms and Conditions</a></li>
+        </ul>
+	</ul>
+    <ul class="marginbtm">
+    	<li>Account Service</li>
+        <ul>
+        	<li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});">My account</a></li>
+			<li><a href='#customer?show=orders' id='navLink_orders'>Order Tracking</a></li>
+			<li><a href="#">Previously Viewed Items</a></li>
+			<li><a href="#">Wishlist Items</a></li>
+			<li><a href="#">Sign Out</a></li>
+        </ul>
+	</ul>
+</div>
+        </div>
+        <div class="copyright"><a href='#top' onClick="return showContent('homepage',{});">theCompanyName</a><br />
+2012 All Rights Reserved<br />
+eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
+    </div>
+
+<div class="floatRight homewidth">
 
 <ul class='clearfix noPadOrMargin fluidList breadcrumb' data-bind='var: session(session.recentCategories.0); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
 
@@ -566,7 +683,8 @@ It's done this way because ID's hard coded into template are bad mojo (templates
 	<ul class='listStyleNone fluidList clearfix noPadOrMargin productList' data-bind="var: product(zoovy:related_products); format:productList; extension:store_prodlist;loadsTemplate:productListTemplate;hide_pagination:true;hide_summary:true; before:<h2>Similar Items</h2>; withReviews:1;"></ul>
 </div>
 
-
+</div>
+</div>
 </div><!-- productTemplate -->
 
 
