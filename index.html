@@ -48,7 +48,12 @@ css files should be included before any .js file to ensure they are downloaded i
 <script src="jquery.ui.widget.min.js"></script>
 <script src="customTabs.js"></script>
 <script type="text/javascript" src="loadscript.js"></script>
-
+<link href="css/style.css" rel="stylesheet" type="text/css"/>
+	<link href="gothammedium/stylesheet.css" rel="stylesheet" type="text/css"/>
+	<link href="gothamblack/stylesheet.css" rel="stylesheet" type="text/css"/>
+	<link href="gothambold/stylesheet.css" rel="stylesheet" type="text/css"/>
+	<link href="gothamlight/stylesheet.css" rel="stylesheet" type="text/css"/>
+	<link href="gothamxlight/stylesheet.css" rel="stylesheet" type="text/css"/>
 
 
 
@@ -61,9 +66,10 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 
 <body>
 <!-- DELETE THIS WHEN YOU GET STARTED -->
-<h1>WELCOME TO QUICKSTART</h1>
+<!-- <h1>WELCOME TO QUICKSTART</h1> -->
+<!-- 
 This file is intended to go along with the 10-step tutorial at:
-<a href="https://github.com/zoovy/AnyCommerce-Development/wiki/quickstart">https://github.com/zoovy/AnyCommerce-Development/wiki/quickstart</a>
+<a href="https://github.com/zoovy/AnyCommerce-Development/wiki/quickstart">https://github.com/zoovy/AnyCommerce-Development/wiki/quickstart</a> -->
 <!-- /DELETE THIS WHEN YOU GET STARTED -->
 
 
@@ -96,6 +102,54 @@ This file is intended to go along with the 10-step tutorial at:
 
 
 <div id='appView' class='displayNone'>
+<div class="main">
+		<div class="wrapper">
+		<!-- <ul id='tier1categories'></ul> -->
+			<div class="header_top">
+				<div class="welcome_signup">
+					<span><h5>WELCOME, GUEST!</h5><p>(Not you? <a href="#">LOGIN </a>or <a href="#">SIGN-UP</a>)</p></span>
+				</div>
+				<div class="shopping_cart">
+					<span><b>734 Items </b> <p>in your Cart   | </p><a href="#">VIEW SHOPPING CART</a></span>
+					<span class="help"><a href="#">HELP</a>
+				</div>
+			</div>
+			<div class="header">
+				<div class="header_main">
+					<div class="header_logo">
+						<a href="#"><img src="images/head_logo.png"/></a>
+					</div>
+					<div id="mastHeadSearchContainer" class="header_search">
+					<span>
+				<form id="headerSearchFrm" class="productSearchForm" method="get" action="#" name="headerSearchFrm">
+				<input class="productSearchKeyword handleDefault box"  type="search" value="Enter Search Term" name="KEYWORDS">
+<input id="headerSearchSubmit" class="search button" width="35" type="submit" height="36" value="SEARCH">
+
+
+</form>
+				
+								</span>	
+								</div>
+								
+					
+				</div>
+				<div class="nav_menu">
+				<!-- <ul id='tier1categories'></ul> -->
+					<ul>
+						<li><a class="active" href="#">BROWSE</a></li>
+						<li><a href="#">WHAT'S HOT</a></li>
+						<li><a href="#">NEW ARRIVALS</a></li>
+						<li><a href="#">SALE</a></li>
+						<li><a href="#">CLEARANCE</a></li>
+						<li><a href="#">MY ACCOUNT</a></li>
+					</ul> 
+				</div>
+			</div>
+			
+			
+
+
+
 
 <!-- VIEW CONTENT -->
 <!-- leave the appView div, put your your html here ...  -->
@@ -105,9 +159,75 @@ This file is intended to go along with the 10-step tutorial at:
 	**				  INSTEAD PUT THEM INTO <div id="homepageTemplate"></div>
 	-->
 <div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
-<div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
+<div id='mainContentArea'>
 
 
+</div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
+
+
+			<div class="footer">
+				<div class="footer_signup">
+					<span class="login_head">
+						<p>STAY UP-TO-DATE WITH US</p>
+					</span>
+					<span class="login_form">
+						<input class="form_name" type="text"/>
+						<input class="form_email" type="text"/>
+						<input class="form_submit" type="button" value="SIGN UP!"/>
+					</span>
+				</div>
+				<div class="footer_bottoms">
+					<div class="footer_cats">
+						<p>CATEGORIES</p>
+						<ul>
+							<li><a href="#">Browse All Categories</a></li>
+							<li><a href="#">What’s Hot</a></li>
+							<li><a href="#">New Arrivals</a></li>
+							<li><a href="#">Sale</a></li>
+							<li><a href="#">Clearance</a></li>
+						</ul>
+					</div>
+					<div class="footer_cats">
+						<p>HELP</p>
+						<ul>
+							<li><a href="#">About CompanyName</a></li>
+							<li><a href="#">Contact Us</a></li>
+							<li><a href="#">FAQs</a></li>
+							<li><a href="#">Shipping Policy</a></li>
+							<li><a href="#">Return Policy</a></li>
+							<li><a href="#">Payment Policy</a></li>
+							<li><a href="#">Privacy Policy</a></li>
+						</ul>
+					</div>
+					<div class="footer_cats">
+						<p>MY ACCOUNT</p>
+						<ul>
+							<li><a href="#">Create An Account</a></li>
+							<li><a href="#">Sign In</a></li>
+							<li><a href="#">Change Password</a></li>
+							<li><a href="#">Wishlist Items</a></li>
+							<li><a href="#">Previously Viewed Items</a></li>
+							<li><a href="#">Order Tracking</a></li>
+						</ul>
+					</div>
+					<div class="footer_cats">
+						<p>MORE FASHION</p>
+						<ul>
+							<li><a href="#">Blog</a></li>
+							<li><a href="#">Tutorials</a></li>
+							<li><a href="#">Tips and Tricks</a></li>
+							<li><a href="#">YouTube</a></li>
+							<li><a href="#">Facebook</a></li>
+							<li><a href="#">Twitter</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="footer_copyright">
+					<p><a href="">Company Name</a> 2012 All Rights Reserved. eCommerce by <a href="">Zoovy</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
 <!-- ... your html ends -->
 <!-- /VIEW CONTENT -->
 </div>
@@ -152,10 +272,43 @@ COMMONLY EDITED TEMPLATES
 the homepageTemplate template is loaded into mainContentArea by default when the application loads
 -->
 <div id='homepageTemplate' class='homeTemplate'>
-
+		<div class="slider_signup">
+				<div class="slider">
+					<a href="#"><img src="images/slider.png"/></a>
+				</div>
+	<div class="signup_form">
+					<div class="headings"><p class="light">GET THE SCOOP ON</p>
+						  <p class="bold">THE LATEST IN FASHION</p>
+					</div>
+					<div class="side_inputs">
+						<input class="fullname" type="text"/>
+						<input class="email" type="text"/>
+						<input class="signup" type="button" value="SIGN UP!"/>
+					</div>
+					<div class="follow_us">
+						<p>-------   FOLLOW US   -------</p>
+					</div>
+					<div class="social_icons">
+						<a href="#"><img src="images/fb.png"/></a>
+						<a href="#"><img src="images/twt.png"/></a>
+						<a href="#"><img src="images/youtb.png"/></a>
+						<a href="#"><img src="images/tmblr.png"/></a>
+					</div>
+				</div>
+			</div>
+			
+			<!-- <div class="content">
+				<div class="cat_names">
+					<span><p class="cat_name1">CATEGORY 1</p></span>
+					<span><img src="images/cat_lft_arrow.png"/><p class="cat_name2">CATEGORY 2</p></span>
+					<span><img src="images/cat_rght_arrow.png"/><p class="cat_name3">CATEGORY 3</p></span>
+				</div>
+				
+			</div> -->
+			
 	<!--<h5 data-bind='var: nothing(); defaultValue: blue; elasticAttr: pid; format:searchLink; extension:myRIA;'></h5>
 	-->
-	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>
+	<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList cat_names'></ul>
 
 	<ul data-bind="var: category(@products); format: productList; editor: finder; extension: store_prodlist; loadsTemplate: productListTemplate; hide_summary:1; before:<h2>Featured Items</h2>; withReviews:1;" class='listStyleNone fluidList clearfix noPadOrMargin productList'></ul>
 	<p data-bind="var: category(%page.description); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>
@@ -212,7 +365,7 @@ don't modify the 'data-templateid' unless you are changing template names and up
 <li id='categoryListTemplate'>
 	<div onClick="showContent('category',{'navcat':$(this).parent().attr('data-catsafeid')});" class='pointer'>
 		<div class='thumbContainer'><img src='blank.gif' class='catThumb' data-bind='var: category(%meta.CAT_THUMB); format:imageURL;' width='120' height='120' /></div>
-		<div class='catName white2LGray'><span data-bind='var: category(pretty); format:text;'></span></div>
+		<div class='catName white2LGray'><span class="cat_list" data-bind='var: category(pretty); format:text;'></span></div>
 	</div>
 </li>
 
@@ -220,7 +373,7 @@ don't modify the 'data-templateid' unless you are changing template names and up
 <li id='categoryListTemplateRootCats'>
 	<div onClick="showContent('category',{'navcat':$(this).parent().attr('data-catsafeid')});" class='pointer'>
 		<div class='thumbContainer'><img src='blank.gif' class='catThumb' data-bind='var: category(%meta.CAT_THUMB); format:imageURL;' width='35' height='35' /></div>
-		<div class='catName'><span data-bind='var: category(pretty); format:text;'></span></div>
+		<div class='catName'><span class="cat_list" data-bind='var: category(pretty); format:text;'></span></div>
 	</div>
 </li>
 
@@ -236,7 +389,26 @@ remember to NOT put the button inside the 'onclick' container or two events will
 -->
 <li id='productListTemplate' class='loadingBG  ' onMouseOver="$('.quickView',$(this)).show();" onMouseOut="$('.quickView').hide();" >
 
-	<button class='floatRight pointer quickView displayNone' onClick="quickView('product',{'templateID':'productTemplateQuickView','pid':$(this).closest('[data-pid]').attr('data-pid')});">Quickview</button>
+					<div class="cat_single_pdct">
+						<div class="prdct_head">
+							<a href="#" data-bind='var: product(zoovy:prod_name); format:text;'></a>
+							<p>by CompanyName</p>
+						</div>
+						<div class='prodThumbContainer prdct_thumb' data-bind='var:product(pid); format:addPicSlider; extension:myRIA;' style="margin-left: 42px;margin-top: 5px;margin-bottom: 5px;">
+							
+		<a href="#"><img src='blank.gif' class='prodThumb' data-bind='var: product(zoovy:prod_image1); format:imageURL;' width='120' height='120' /></a>
+		</div>
+					
+						<div class="prdct_dtls">
+						<!-- <h6 data-bind='var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; className:price; pretext: Our Price: ;'></h6> -->
+
+							<p class="price" data-bind='var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; className:price;' ></p>
+							<a class="details" href="javascript:void(0)" onClick="showContent('product',{'pid':$(this).attr('data-pid')})" data-bind='var:product(pid);format:assignAttribute; attribute:data-pid;' class='pointer'>DETAILS</a>
+						</div>
+					</div>
+		<button class='floatRight pointer quickView displayNone' onClick="quickView('product',{'templateID':'productTemplateQuickView','pid':$(this).closest('[data-pid]').attr('data-pid')});">Quickview</button>			
+					
+	<!--<button class='floatRight pointer quickView displayNone' onClick="quickView('product',{'templateID':'productTemplateQuickView','pid':$(this).closest('[data-pid]').attr('data-pid')});">Quickview</button>
 
 	<div onClick="showContent('product',{'pid':$(this).attr('data-pid')})" data-bind='var:product(pid);format:assignAttribute; attribute:data-pid;' class='pointer'>
 		<div class='prodThumbContainer' data-bind='var:product(pid); format:addPicSlider; extension:myRIA;'>
@@ -249,8 +421,8 @@ remember to NOT put the button inside the 'onclick' container or two events will
 
 
 		<span data-bind='var: reviews(reviews.average); format:addClass; className:review_;' class='reviewSprite'></span>
-<!-- 	<span data-bind='var: reviews(reviews.total); format:text; pretext: from ;posttext: reviews; className:numReviews;'></span> -->
-	</div>
+<!-- 	<span data-bind='var: reviews(reviews.total); format:text; pretext: from ;posttext: reviews; className:numReviews;'></span>
+	</div> -->
 </li>
 
 
@@ -336,7 +508,18 @@ the loadingBG class is removed (must be that classname) when the template is tra
 remember to NOT put the button inside the 'onclick' container or two events will occur onclick.
 -->
 <li id='productListTemplateResults' class='loadingBG  ' >
-	<div onClick="showContent('product',{'pid':$(this).attr('data-pid')})" data-bind='var:product(pid);format:assignAttribute; attribute:data-pid;' class='pointer'>
+ <div onClick="showContent('product',{'pid':$(this).attr('data-pid')})" data-bind='var:product(pid);format:assignAttribute; attribute:data-pid;' class='pointer'>
+		<div class='prodThumbContainer'>
+		<img src='blank.gif' class='prodThumb' data-bind='var: product(images); format:elasticImage1URL;bgcolor:ffffff;' width='120' height='120' />
+		</div>
+
+		<h5 data-bind='var: product(prod_name); format:text;'></h5>
+
+		<h6 data-bind='var: product(base_price); format:elasticMoney; currencySign: $;  hideZero:true; className:price; pretext: Our Price: ;'></h6>
+	</div>	
+					
+
+	<!-- <div onClick="showContent('product',{'pid':$(this).attr('data-pid')})" data-bind='var:product(pid);format:assignAttribute; attribute:data-pid;' class='pointer'>
 		<div class='prodThumbContainer'>
 		<img src='blank.gif' class='prodThumb' data-bind='var: product(images); format:elasticImage1URL;bgcolor:ffffff;' width='120' height='120' />
 		</div>
@@ -345,7 +528,8 @@ remember to NOT put the button inside the 'onclick' container or two events will
 
 		<h6 data-bind='var: product(base_price); format:elasticMoney; currencySign: $;  hideZero:true; className:price; pretext: Our Price: ;'></h6>
 	</div>
-</li>
+ -->
+ </li>
 </ul>
 
 
@@ -377,7 +561,9 @@ this will likely become more flexible in the future. ###
 -->
 
 
-<div id='productTemplate'>
+<div id='productTemplate' class="product_inner_bg">
+<ul class='breadcrumb clearfix noPadOrMargin fluidList' data-bind='var: category(id); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
+
 
 <ul class='clearfix noPadOrMargin fluidList breadcrumb' data-bind='var: session(session.recentCategories.0); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
 
@@ -406,15 +592,15 @@ this will likely become more flexible in the future. ###
 	</td>
 
 	<td class='prodSummaryContainer marginBottom no_underline'>
-	<h1 data-bind='var: product(zoovy:prod_name); format:text;'></h1>
+	<h1 data-bind='var: product(zoovy:prod_name); format:text;' class="product_name_text"></h1>
 
-	<h5 class='stid' data-bind='var: product(pid); format:text; pretext: Sku: ;'></h5>
-	<h5 data-bind='var: product(zoovy:prod_mfg); format:searchLink; extension:myRIA; pretext: Mfg: ;'></h5>
+	<h5 class='stid product_detail_text' class="product_detail_text" data-bind='var: product(pid); format:text; pretext: Sku: ;'></h5>
+	<h5 data-bind='var: product(zoovy:prod_mfg); format:searchLink; extension:myRIA; pretext: Mfg: ;'class="product_detail_text"></h5>
 	<h5 data-bind='var: product(zoovy:prod_mfgid); format:text; pretext: Mfg ID: ;'></h5>
 
 
 	<div class='priceContainer'>
-		<h4 class='basePrice' data-bind='var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; pretext: Our Price: ;'></h4>
+		<h4 class='basePrice product_detail_text' data-bind='var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; pretext: Our Price: ;' class="product_detail_text"></h4>
 		<h5 class='prodMSRP' data-bind='var: product(zoovy:prod_msrp); format:money; currencySign: $;  hideZero:true; pretext: MSRP: ;'></h5>
 		<span class='savings'>
 			<span class='savingsDifference' data-bind='var: product(pid); format:priceRetailSavingsDifference; extension:myRIA; pretext: You save: ;'></span>
@@ -527,7 +713,7 @@ It's done this way because ID's hard coded into template are bad mojo (templates
 <!-- a template used for a quickview link off of a category page -->
 <div id='productTemplateQuickView'>
 
-<table class='prodViewerContainer'>
+<table class='prodViewerContainer '>
 <tr>
 	<td class='imageContainer'>
 <div>
@@ -545,7 +731,7 @@ It's done this way because ID's hard coded into template are bad mojo (templates
 
 
 	<div class='priceContainer'>
-		<h4 class='basePrice' data-bind='var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; pretext: Our Price: ;'></h4>
+		<h4 class='basePrice product_detail_text' data-bind='var: product(zoovy:base_price); format:money; currencySign: $;  hideZero:true; pretext: Our Price: ;'></h4>
 		<h5 class='prodMSRP' data-bind='var: product(zoovy:prod_msrp); format:money; currencySign: $;  hideZero:true; pretext: MSRP: ;'></h5>
 		<span class='savings'>
 			<span class='savingsDifference' data-bind='var: product(pid); format:priceRetailSavingsDifference; extension:myRIA; pretext: You save: ;'></span>
