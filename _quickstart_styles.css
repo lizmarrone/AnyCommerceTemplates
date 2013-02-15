@@ -73,7 +73,10 @@ h1{font-weight:normal; font-family:"myriad Pro",arial,verdana;}
 #contactForm label{font-size:13px; color:#333333;}
 
 
-
+li#recentSearchesContainer h3{font-size:13px;}
+#privacyArticle h3{font-size:18px; font-weight:normal;}
+#privacyArticle h4{font-size:16px; font-weight:normal;}
+#privacyArticle h5{font-size:15px; font-weight:normal; color:#000000;}
 
 
 

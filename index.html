@@ -245,9 +245,14 @@ don't modify the 'data-templateid' unless you are changing template names and up
 	
    	 <div class="floatLeft sidebar">    	
     	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
-        <div class="search clearfix">
-        	<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
-            <div class="floatLeft searchbtn"><input name="" type="button" ></div>
+         <div class="search clearfix">
+        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
+<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
+<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
+		</form>
+       
+        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
+            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
         </div>
         <div class="sidebarbg">
 <!-- Category -->
@@ -500,9 +505,14 @@ this will likely become more flexible in the future. ###
 	
    	 <div class="floatLeft sidebar">    	
     	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
-        <div class="search clearfix">
-        	<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
-            <div class="floatLeft searchbtn"><input name="" type="button" ></div>
+         <div class="search clearfix">
+        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
+<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
+<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
+		</form>
+       
+        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
+            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
         </div>
         <div class="sidebarbg">
 <!-- Category -->
@@ -832,9 +842,14 @@ adding classes is not likely to have any bad effects.
 	
    	 <div class="floatLeft sidebar">    	
     	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
-        <div class="search clearfix">
-        	<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
-            <div class="floatLeft searchbtn"><input name="" type="button" ></div>
+         <div class="search clearfix">
+        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
+<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
+<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
+		</form>
+       
+        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
+            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
         </div>
         <div class="sidebarbg">
 <!-- Category -->
@@ -854,10 +869,7 @@ adding classes is not likely to have any bad effects.
 </div>
 <!-- Need Help -->
 <div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
-
 <div class="listitems">
-<div class=''>
-	<nav id='companyNav'>
 	<ul>
     	<li>THE COMPANY NAME</li>
         <ul>
@@ -869,8 +881,6 @@ adding classes is not likely to have any bad effects.
 			<li><a href="#">Terms and Conditions</a></li>
         </ul>
 	</ul>
-    </nav>
-    </div><br />
     <ul class="marginbtm">
     	<li>Account Service</li>
         <ul>
@@ -1106,8 +1116,72 @@ eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
 	</div>
 
 	<div class='mainColumn'>
+    <div class="wrapper">
+<!-- Sidebar -->
+	
+   	 <div class="floatLeft sidebar">    	
+    	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
+         <div class="search clearfix">
+        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
+<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
+<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
+		</form>
+       
+        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
+            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
+        </div>
+        <div class="sidebarbg">
+<!-- Category -->
+<div class="category">
+    <ul>
+        <li><a href="#">BROWSE ALL GAMES</a></li>
+        <li><a href="#">What's Hot</a></li>
+        <li><a href="#">NEW ARRIVALS</a></li>
+        <li><a href="#">ACTION ADVENTURE</a></li>
+    </ul>
+    <ul class="redbg">FPS</ul>
+    <ul>
+        <li><a href="#">MMO/RPGs</a></li>
+        <li><a href="#">BOARD GAMES</a></li>
+        <li><a href="#">CARD GAMES</a></li>
+    </ul>
+</div>
+<!-- Need Help -->
+<div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
+<div class="listitems">
+	<ul>
+    	<li>THE COMPANY NAME</li>
+        <ul>
+        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
+			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
+			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
+			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
+			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
+			<li><a href="#">Terms and Conditions</a></li>
+        </ul>
+	</ul>
+    <ul class="marginbtm">
+    	<li>Account Service</li>
+        <ul>
+        	<li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});">My account</a></li>
+			<li><a href='#customer?show=orders' id='navLink_orders'>Order Tracking</a></li>
+			<li><a href="#">Previously Viewed Items</a></li>
+			<li><a href="#">Wishlist Items</a></li>
+			<li><a href="#">Sign Out</a></li>
+        </ul>
+	</ul>
+</div>
+        </div>
+        <div class="copyright"><a href='#top' onClick="return showContent('homepage',{});">theCompanyName</a><br />
+2012 All Rights Reserved<br />
+eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
+    </div>
+
+    	
+    <div class="floatRight homewidth">
 		<ul id='resultsProductListContainer' class='listStyleNone fluidList noPadOrMargin productList'></ul><!-- productListTemplateResults gets loaded into here -->
 	</div>
+    </div></div>
 </div>
 
 
