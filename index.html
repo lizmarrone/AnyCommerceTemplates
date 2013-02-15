@@ -150,9 +150,14 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 	
    	 <div class="floatLeft sidebar">    	
     	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
-        <div class="search clearfix">
-        	<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
-            <div class="floatLeft searchbtn"><input name="" type="button" ></div>
+         <div class="search clearfix">
+        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
+<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
+<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
+		</form>
+       
+        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
+            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
         </div>
         <div class="sidebarbg">
 <!-- Category -->
