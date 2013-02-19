@@ -155,18 +155,43 @@ and override using classes or id's as needed.
 
 .listStyleNone, .listStyleNone li	{list-style:none;} /* apply to a ul or ol */
 .noPadOrMargin	{padding:0; margin:0;}
-.fluidList li	{float:left; margin:12px; padding:0; display:inline-block;}
+.noPadOrMargin li a{ color: rgb(163, 3, 61);
+    font-family: arial;
+    font-size: 12px;
+    text-decoration: none;}
+.fluidList li	{float:left; margin:8px; padding:0; display:inline-block;}
 
-.quickView	{position:absolute; top:5px; right:5px; z-index:1001;} /* jqui modal has zindex 1002 */
+.quickView	{
+	background: none repeat scroll 0 0 rgb(163, 3, 61);
+    border: 2px solid rgb(208, 208, 208);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    padding: 3px 5px;
+    position: absolute;
+    right: 60px;
+    top: 5px;
+    z-index: 1001;
+} /* jqui modal has zindex 1002 */
 
 /* over rides - height and width ensure each row is the same height. percentages could be used for width */
 .productList li	{
- width:205px;
-
- /*
- height:250px; */
-
- position:relative;}
+    padding: 5px;
+    position: relative;
+    width: 205px;
+	/* height:250px; */
+}
+#categoryTemplate_penguins ul li	{
+	border: 1px solid rgb(208, 208, 208);
+    padding: 5px;
+    position: relative;
+    width: 205px;
+	/* height:250px; */
+}
+#categoryTemplate_penguins ul.breadcrumb li	{
+	border: none;
+	width:auto;
+	/* height:250px; */
+}
 .lineItemProdlist li	{position:relative; display:block; padding:12px 0; width:100% !important; height:auto !important; border-bottom:1px dotted #efefef;} /* single column product list - used in cart, checkout, etc. productList class is also defined in these cases. */
 
 .lineItemProdlist .prodThumb	{margin-right:12px;}
@@ -196,7 +221,7 @@ and override using classes or id's as needed.
 
 .slideMe	{position:absolute; top:0px;}
 .slideMe, .slideMe li	{list-style:none; margin:0; padding:0;}
-.slideMe li	{float:left; margin-right:2px; border:0;}
+.slideMe li	{float:left; margin-right:2px; border:none !important;width:auto !important;}
 
 
 
@@ -234,6 +259,18 @@ so the displayNone class is used, then a .grpType_PARENT class is added if the i
 .prodViewerAddToCartForm label:after	{content:":"; padding-right:12px;}
 
 .CRMButtonMenu	{margin:0; padding:0; margin-bottom:12px;}
+.CRMButtonMenu	a{
+	background: none repeat scroll 0 0 rgb(163, 3, 61);
+    border-radius: 2px 2px 2px 2px;
+    -moz-border-radius: 2px 2px 2px 2px;
+    -webkit-border-radius: 2px 2px 2px 2px;
+    -khtml-border-radius: 2px 2px 2px 2px;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    padding: 3px 10px;
+    text-decoration: none;
+	margin-right: 5px;
+	}
 
 .pogType_attribs	{display:none;} /* don't show finder attributes */
 
@@ -287,7 +324,7 @@ BREADCRUMB
 .breadcrumb li:after	{content:" \00BB "; padding-left:10px; font-size:10px; font-weight:bold; color:#999999;}
 .breadcrumb li:last-child:after	{content:"";}
 
-.breadcrumb li:last-child a	{color:#666666; text-decoration:none; font-weight:bold; cursor:text;}
+.breadcrumb li:last-child a	{color:rgb(163, 3, 61); text-decoration:none; font-weight:bold; cursor:text;}
 
 
 
@@ -620,4 +657,71 @@ ul.zwarn li	{margin-left:15px;}
 	border: 0 none;
 	width: 160px;
 	}
+	
+	
+/* my css 18 feb 2013 */
 
+.categoryTemplate{
+	float: left;
+    margin: 10px 0 0;
+    width: 100%;
+	display:block;
+}
+.categoryTemplate ul li a{
+	color: rgb(163, 3, 61);
+    font-family: arial;
+    font-size: 12px;
+    text-decoration: none;
+	border-radius: 2px 2px 2px 2px;
+	-moz-radius: 2px 2px 2px 2px;
+	-webkit-radius: 2px 2px 2px 2px;
+	-khtml-radius: 2px 2px 2px 2px;
+}
+.prodThumbs{
+	border: 1px solid rgb(208, 208, 208);
+    float: left;
+    margin: 5px 0 0 3px;
+    padding: 5px;     
+}
+#productTemplateQuickView{
+	display: block;
+    height: 325px;
+    left: 420px;
+    outline: 0 none;
+    position: absolute;
+    top: 111.917px;
+    width: 42%;
+    z-index: 1002;
+}
+.ui-button-text{
+	background: none repeat scroll 0 0 rgb(163, 3, 61) !important;
+    border: medium none !important;
+    color: rgb(255, 255, 255) !important;
+    font-family: serif !important;
+}
+.ui-tabs .ui-tabs-nav li a{
+	background:#d0d0d0;
+	border-top:1px solid #d0d0d0;
+	border-right:1px solid #d0d0d0;
+	border-left:1px solid #d0d0d0;
+	color:#a3033d;
+}
+.ui-tabs .ui-tabs-nav li a:hover{
+	color:#fc0261;
+}
+.ui-tabs .ui-tabs-nav li:hover, .ui-tabs .ui-tabs-nav li:focus.ui-tabs .ui-tabs-nav li.ui-tabs-selected a{
+	background:#d0d0d0;
+	border-top:1px solid #d0d0d0 !important;
+	border-right:1px solid #d0d0d0 !important;
+	border-left:1px solid #d0d0d0 !important;
+	color:#a3033d;
+}
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{
+	border-top:1px solid #d0d0d0 !important;
+	border-right:1px solid #d0d0d0 !important;
+	border-left:1px solid #d0d0d0 !important;
+	color:#a3033d;
+}
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited{
+	color:#fc0261 !important;	
+}
