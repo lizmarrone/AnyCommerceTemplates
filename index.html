@@ -56,7 +56,6 @@ css files should be included before any .js file to ensure they are downloaded i
 app.u.loadScript(app.vars.baseURL+"init.js");
 </script>
 
-
 </head>
 
 <body>
@@ -91,23 +90,81 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 <div id='appView' class='displayNone'>
 	<div id="header">
     	<div class="wrapper clearfix">
-        	<div class="floatLeft welcome"><strong>Welcome, Guest!</strong> (Not you? <a href="#">Login</a> or <a href="#">Sign-up</a>)</div>
-            <div class="floatLeft wl-midlink"><a href="#">755 Items</a> <span>Stashed  |</span>    <a href="#">VIEW THE STASH</a></div>
+        	<div class="floatLeft welcome"><strong>Welcome, Guest!</strong> (Not you? <a href="#" onClick="return showContent('customer',{'show':'myaccount'});">Login</a> or <a href="#" onClick="return showContent('customer',{'show':'myaccount'});">Sign-up</a>)</div>
+            <div class="floatLeft wl-midlink"><a href="#">755 Items</a> <span>Stashed  |</span>    <a href="#" onclick="return showContent('cart',{});">VIEW THE STASH</a></div>
             <div class="floatLeft wl-lastlink"><a href="#">HELP</a></div>
             
 		</div>
     </div>
-	
+    <div class="wrapper">
+    <!-- Sidebar -->
+	<div class="floatLeft sidebar">    	
+    	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
+         <div class="search clearfix">
+        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
+<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
+<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
+		</form>
+       
+        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
+            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
+        </div>
+        <div class="sidebarbg">
+<!-- Category -->
+<div class="category">
+    <ul>
+        <li><a href="#">BROWSE ALL GAMES</a></li>
+        <li><a href="#">What's Hot</a></li>
+        <li><a href="#">NEW ARRIVALS</a></li>
+        <li><a href="#">ACTION ADVENTURE</a></li>
+    </ul>
+    <ul class="redbg">FPS</ul>
+    <ul>
+        <li><a href="#">MMO/RPGs</a></li>
+        <li><a href="#">BOARD GAMES</a></li>
+        <li><a href="#">CARD GAMES</a></li>
+    </ul>
+</div>
+<!-- Need Help -->
+<div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
+<div class="listitems">
+	<ul>
+    	<li>THE COMPANY NAME</li>
+        <ul>
+        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
+			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
+			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
+			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
+			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
+			<li><a href="#">Terms and Conditions</a></li>
+        </ul>
+	</ul>
+    <ul class="marginbtm">
+    	<li>Account Service</li>
+        <ul>
+        	<li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});">My account</a></li>
+			<li><a href='#customer?show=orders' id='navLink_orders'>Order Tracking</a></li>
+			<li><a href="#">Previously Viewed Items</a></li>
+			<li><a href="#">Wishlist Items</a></li>
+			<li><a href="#">Sign Out</a></li>
+        </ul>
+	</ul>
+</div>
+        </div>
+        <div class="copyright"><a href='#top' onClick="return showContent('homepage',{});">theCompanyName</a><br />
+2012 All Rights Reserved<br />
+eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
+    </div>
 
 <div id='globalMessaging' class='appMessaging'></div><!-- DO NOT REMOVE - used for some high level error handling (usually appears below breadcrumb nav or top bar) -->
-<div id='mainContentArea'></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
+<div id='mainContentArea' class="floatRight"></div><!-- DO NOT REMOVE - this is where the specific page (ex: homepage, product, category) content is going to go -->
 
 
 <!-- ... your html ends -->
 <!-- /VIEW CONTENT -->
+
+
 </div>
-
-
 
 
 
@@ -145,70 +202,10 @@ COMMONLY EDITED TEMPLATES
 the homepageTemplate template is loaded into mainContentArea by default when the application loads
 -->
 <div id='homepageTemplate' class='homeTemplate'>
-<div class="wrapper">
-<!-- Sidebar -->
-	
-   	 <div class="floatLeft sidebar">    	
-    	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
-         <div class="search clearfix">
-        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
-<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
-<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
-		</form>
-       
-        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
-            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
-        </div>
-        <div class="sidebarbg">
-<!-- Category -->
-<div class="category">
-    <ul>
-        <li><a href="#">BROWSE ALL GAMES</a></li>
-        <li><a href="#">What's Hot</a></li>
-        <li><a href="#">NEW ARRIVALS</a></li>
-        <li><a href="#">ACTION ADVENTURE</a></li>
-    </ul>
-    <ul class="redbg">FPS</ul>
-    <ul>
-        <li><a href="#">MMO/RPGs</a></li>
-        <li><a href="#">BOARD GAMES</a></li>
-        <li><a href="#">CARD GAMES</a></li>
-    </ul>
-</div>
-<!-- Need Help -->
-<div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
-<div class="listitems">
-	<ul>
-    	<li>THE COMPANY NAME</li>
-        <ul>
-        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
-			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
-			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
-			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
-			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
-			<li><a href="#">Terms and Conditions</a></li>
-        </ul>
-	</ul>
-    <ul class="marginbtm">
-    	<li>Account Service</li>
-        <ul>
-        	<li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});">My account</a></li>
-			<li><a href='#customer?show=orders' id='navLink_orders'>Order Tracking</a></li>
-			<li><a href="#">Previously Viewed Items</a></li>
-			<li><a href="#">Wishlist Items</a></li>
-			<li><a href="#">Sign Out</a></li>
-        </ul>
-	</ul>
-</div>
-        </div>
-        <div class="copyright"><a href='#top' onClick="return showContent('homepage',{});">theCompanyName</a><br />
-2012 All Rights Reserved<br />
-eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
-    </div>
 
+    <div class="homewidth">
     	
-    <div class="floatRight homewidth">
-        <div><a href="#"><img src="images/z-h-banner-700x300.jpg" width="700" height="300" alt="Banner"></a></div>
+		<div><a href="#"><img src="images/z-h-banner-700x300.jpg" width="700" height="300" alt="Banner"></a></div>
         <!--<h5 data-bind='var: nothing(); defaultValue: blue; elasticAttr: pid; format:searchLink; extension:myRIA;'></h5>
         -->
         <ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>
@@ -240,68 +237,9 @@ each of the 'sections' are used to load another template. don't change the id.
 don't modify the 'data-templateid' unless you are changing template names and updating everywhere appropriate.
 -->
 <div id='categoryTemplate' class='loadingBG categoryTemplate'>
-<div class="wrapper">
-<!-- Sidebar -->
-	
-   	 <div class="floatLeft sidebar">    	
-    	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
-         <div class="search clearfix">
-        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
-<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
-<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
-		</form>
-       
-        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
-            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
-        </div>
-        <div class="sidebarbg">
-<!-- Category -->
-<div class="category">
-    <ul>
-        <li><a href="#">BROWSE ALL GAMES</a></li>
-        <li><a href="#">What's Hot</a></li>
-        <li><a href="#">NEW ARRIVALS</a></li>
-        <li><a href="#">ACTION ADVENTURE</a></li>
-    </ul>
-    <ul class="redbg">FPS</ul>
-    <ul>
-        <li><a href="#">MMO/RPGs</a></li>
-        <li><a href="#">BOARD GAMES</a></li>
-        <li><a href="#">CARD GAMES</a></li>
-    </ul>
-</div>
-<!-- Need Help -->
-<div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
-<div class="listitems">
-	<ul>
-    	<li>THE COMPANY NAME</li>
-        <ul>
-        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
-			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
-			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
-			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
-			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
-			<li><a href="#">Terms and Conditions</a></li>
-        </ul>
-	</ul>
-    <ul class="marginbtm">
-    	<li>Account Service</li>
-        <ul>
-        	<li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});">My account</a></li>
-			<li><a href='#customer?show=orders' id='navLink_orders'>Order Tracking</a></li>
-			<li><a href="#">Previously Viewed Items</a></li>
-			<li><a href="#">Wishlist Items</a></li>
-			<li><a href="#">Sign Out</a></li>
-        </ul>
-	</ul>
-</div>
-        </div>
-        <div class="copyright"><a href='#top' onClick="return showContent('homepage',{});">theCompanyName</a><br />
-2012 All Rights Reserved<br />
-eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
-    </div>
 
-<div class="floatRight homewidth">
+
+<div class=" homewidth">
 	<ul class='breadcrumb clearfix noPadOrMargin fluidList' data-bind='var: category(id); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
 
 	<img data-bind="var: category(%page.banner1); format: banner; editor: banner; height:250; width:750; extension: myRIA;" />
@@ -316,7 +254,7 @@ eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
 
 	<p data-bind="var: category(%page.description2); format:wiki; wikiFormats:myRIA; editor: textarea;"></p>
 
-</div></div>
+</div>
 </div>
 
 
@@ -500,68 +438,8 @@ this will likely become more flexible in the future. ###
 
 
 <div id='productTemplate'>
-<div class="wrapper">
-<!-- Sidebar -->
-	
-   	 <div class="floatLeft sidebar">    	
-    	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
-         <div class="search clearfix">
-        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
-<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
-<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
-		</form>
-       
-        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
-            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
-        </div>
-        <div class="sidebarbg">
-<!-- Category -->
-<div class="category">
-    <ul>
-        <li><a href="#">BROWSE ALL GAMES</a></li>
-        <li><a href="#">What's Hot</a></li>
-        <li><a href="#">NEW ARRIVALS</a></li>
-        <li><a href="#">ACTION ADVENTURE</a></li>
-    </ul>
-    <ul class="redbg">FPS</ul>
-    <ul>
-        <li><a href="#">MMO/RPGs</a></li>
-        <li><a href="#">BOARD GAMES</a></li>
-        <li><a href="#">CARD GAMES</a></li>
-    </ul>
-</div>
-<!-- Need Help -->
-<div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
-<div class="listitems">
-	<ul>
-    	<li>THE COMPANY NAME</li>
-        <ul>
-        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
-			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
-			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
-			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
-			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
-			<li><a href="#">Terms and Conditions</a></li>
-        </ul>
-	</ul>
-    <ul class="marginbtm">
-    	<li>Account Service</li>
-        <ul>
-        	<li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});">My account</a></li>
-			<li><a href='#customer?show=orders' id='navLink_orders'>Order Tracking</a></li>
-			<li><a href="#">Previously Viewed Items</a></li>
-			<li><a href="#">Wishlist Items</a></li>
-			<li><a href="#">Sign Out</a></li>
-        </ul>
-	</ul>
-</div>
-        </div>
-        <div class="copyright"><a href='#top' onClick="return showContent('homepage',{});">theCompanyName</a><br />
-2012 All Rights Reserved<br />
-eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
-    </div>
 
-<div class="floatRight homewidth">
+<div class="homewidth">
 
 <ul class='clearfix noPadOrMargin fluidList breadcrumb' data-bind='var: session(session.recentCategories.0); format:breadcrumb; extension:store_navcats; loadsTemplate: breadcrumbTemplate;'></ul>
 
@@ -703,7 +581,7 @@ It's done this way because ID's hard coded into template are bad mojo (templates
 </div>
 
 </div>
-</div>
+
 </div><!-- productTemplate -->
 
 
@@ -837,68 +715,9 @@ adding classes is not likely to have any bad effects.
 </ul>
 </nav>
 	</div>
-<div class="wrapper">
-<!-- Sidebar -->
-	
-   	 <div class="floatLeft sidebar">    	
-    	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
-         <div class="search clearfix">
-        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
-<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
-<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
-		</form>
-       
-        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
-            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
-        </div>
-        <div class="sidebarbg">
-<!-- Category -->
-<div class="category">
-    <ul>
-        <li><a href="#">BROWSE ALL GAMES</a></li>
-        <li><a href="#">What's Hot</a></li>
-        <li><a href="#">NEW ARRIVALS</a></li>
-        <li><a href="#">ACTION ADVENTURE</a></li>
-    </ul>
-    <ul class="redbg">FPS</ul>
-    <ul>
-        <li><a href="#">MMO/RPGs</a></li>
-        <li><a href="#">BOARD GAMES</a></li>
-        <li><a href="#">CARD GAMES</a></li>
-    </ul>
-</div>
-<!-- Need Help -->
-<div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
-<div class="listitems">
-	<ul>
-    	<li>THE COMPANY NAME</li>
-        <ul>
-        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
-			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
-			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
-			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
-			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
-			<li><a href="#">Terms and Conditions</a></li>
-        </ul>
-	</ul>
-    <ul class="marginbtm">
-    	<li>Account Service</li>
-        <ul>
-        	<li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});">My account</a></li>
-			<li><a href='#customer?show=orders' id='navLink_orders'>Order Tracking</a></li>
-			<li><a href="#">Previously Viewed Items</a></li>
-			<li><a href="#">Wishlist Items</a></li>
-			<li><a href="#">Sign Out</a></li>
-        </ul>
-	</ul>
-</div>
-        </div>
-        <div class="copyright"><a href='#top' onClick="return showContent('homepage',{});">theCompanyName</a><br />
-2012 All Rights Reserved<br />
-eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
-    </div>
 
-<div class="floatRight homewidth">
+
+<div class="homewidth">
 	<div class='mainColumn'>
 <!-- .textContentArea is used as a selector in quickstart.js because article tag type isn't ie8 friendly -->
 		<div id='aboutArticle' class='textContentArea article'>
@@ -997,7 +816,7 @@ eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
 
 	</div>
 </div>
-</div>
+
 </div><!-- /companyTemplate -->
 
 
@@ -1116,72 +935,14 @@ eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
 	</div>
 
 	<div class='mainColumn'>
-    <div class="wrapper">
-<!-- Sidebar -->
-	
-   	 <div class="floatLeft sidebar">    	
-    	<div id="logo"><a href='#top' onClick="return showContent('homepage',{});"><img src="images/z-logo-220x21.png" width="220" height="21" alt="Company Logo"></a></div>
-         <div class="search clearfix">
-        <form name='headerSearchFrm' action='#' class='productSearchForm' method="get">
-<div class="floatLeft inputtxt"><input type='search' name='KEYWORDS' value='Find it here...' class="productSearchKeyword handleDefault" /></div>
-<div class="floatLeft searchbtn"><input class="search" type="submit" value="" /></div>
-		</form>
-       
-        	<!--<div class="floatLeft inputtxt"><input name="" type="text" value="Find it here..."></div>
-            <div class="floatLeft searchbtn"><input name="" type="button" ></div>-->
-        </div>
-        <div class="sidebarbg">
-<!-- Category -->
-<div class="category">
-    <ul>
-        <li><a href="#">BROWSE ALL GAMES</a></li>
-        <li><a href="#">What's Hot</a></li>
-        <li><a href="#">NEW ARRIVALS</a></li>
-        <li><a href="#">ACTION ADVENTURE</a></li>
-    </ul>
-    <ul class="redbg">FPS</ul>
-    <ul>
-        <li><a href="#">MMO/RPGs</a></li>
-        <li><a href="#">BOARD GAMES</a></li>
-        <li><a href="#">CARD GAMES</a></li>
-    </ul>
-</div>
-<!-- Need Help -->
-<div class="needhelp">Need Help ?<span class="arrowbg"></span></div>
-<div class="listitems">
-	<ul>
-    	<li>THE COMPANY NAME</li>
-        <ul>
-        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
-			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
-			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
-			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
-			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
-			<li><a href="#">Terms and Conditions</a></li>
-        </ul>
-	</ul>
-    <ul class="marginbtm">
-    	<li>Account Service</li>
-        <ul>
-        	<li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});">My account</a></li>
-			<li><a href='#customer?show=orders' id='navLink_orders'>Order Tracking</a></li>
-			<li><a href="#">Previously Viewed Items</a></li>
-			<li><a href="#">Wishlist Items</a></li>
-			<li><a href="#">Sign Out</a></li>
-        </ul>
-	</ul>
-</div>
-        </div>
-        <div class="copyright"><a href='#top' onClick="return showContent('homepage',{});">theCompanyName</a><br />
-2012 All Rights Reserved<br />
-eCommerce by <a href="http://www.zoovy.com" target="_blank">Zoovy</a></div>
-    </div>
+   
+
 
     	
-    <div class="floatRight homewidth">
+    <div class=" homewidth">
 		<ul id='resultsProductListContainer' class='listStyleNone fluidList noPadOrMargin productList'></ul><!-- productListTemplateResults gets loaded into here -->
 	</div>
-    </div></div>
+    </div>
 </div>
 
 

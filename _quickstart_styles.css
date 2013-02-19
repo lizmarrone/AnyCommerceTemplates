@@ -13,11 +13,14 @@ p {color:#333333 !important;}
 .border-gray{border:1px solid #3b3b3b; padding:15px;}
 .welcome{color:#FFFFFF; font-size:12px; line-height:30px;}
 .welcome a{color:#FFFFFF; font-weight:bold;}
+.welcome a:hover{text-decoration:underline; color:#FFFFFF !important;}
 
 .wl-midlink{margin-left:285px; color:#FFFFFF; font-weight:bold; font-size:12px; line-height:30px;}
 .wl-midlink a{color:#FFFFFF;}
+.wl-midlink a:hover{color:#FFFFFF !important; text-decoration:underline;}
 .wl-midlink span{font-weight:normal;}
 .wl-lastlink a{color:#FFFFFF; font-weight:bold; margin-left:125px; font-size:12px; line-height:30px;}
+.wl-lastlink a:hover{color:#FFFFFF !important; text-decoration:underline;}
 
 #homepageTemplate{width:700px; margin:0 40px 0 0;}
 .catName{font-size:13px; font-weight:bold; margin:5px 0;}
@@ -78,7 +81,7 @@ li#recentSearchesContainer h3{font-size:13px;}
 #privacyArticle h4{font-size:16px; font-weight:normal;}
 #privacyArticle h5{font-size:15px; font-weight:normal; color:#000000;}
 
-
+#mainContentArea{float:right;}
 
 
 
