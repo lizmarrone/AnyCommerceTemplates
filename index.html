@@ -54,13 +54,10 @@ css files should be included before any .js file to ensure they are downloaded i
 	<link href="gothambold/stylesheet.css" rel="stylesheet" type="text/css"/>
 	<link href="gothamlight/stylesheet.css" rel="stylesheet" type="text/css"/>
 	<link href="gothamxlight/stylesheet.css" rel="stylesheet" type="text/css"/>
-
-
-
+	
 <script type="text/javascript">
 app.u.loadScript(app.vars.baseURL+"init.js");
 </script>
-
 
 </head>
 
@@ -110,7 +107,7 @@ This file is intended to go along with the 10-step tutorial at:
 					<span><h5>WELCOME, GUEST!</h5><p>(Not you? <a href="#">LOGIN </a>or <a href="#">SIGN-UP</a>)</p></span>
 				</div>
 				<div class="shopping_cart">
-					<span><b>734 Items </b> <p>in your Cart   | </p><a href="#">VIEW SHOPPING CART</a></span>
+					<span><b><p class="cartItemCount" >734 </p>Item </b> <p>in your Cart   | </p><a onclick="showContent('cart',{}); return false" style="cursor:pointer">VIEW SHOPPING CART</a></span>
 					<span class="help"><a href="#">HELP</a>
 				</div>
 			</div>
@@ -170,6 +167,7 @@ This file is intended to go along with the 10-step tutorial at:
 					<span class="login_head">
 						<p>STAY UP-TO-DATE WITH US</p>
 					</span>
+					
 					<span class="login_form">
 						<input class="form_name" type="text"/>
 						<input class="form_email" type="text"/>
@@ -273,9 +271,9 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 -->
 <div id='homepageTemplate' class='homeTemplate'>
 		<div class="slider_signup">
-				<div class="slider">
-					<a href="#"><img src="images/slider.png"/></a>
-				</div>
+			  <div class="slider">
+					<a href="#"><img src="images/slider.png"/></a>			</div> 
+
 	<div class="signup_form">
 					<div class="headings"><p class="light">GET THE SCOOP ON</p>
 						  <p class="bold">THE LATEST IN FASHION</p>
@@ -714,7 +712,7 @@ It's done this way because ID's hard coded into template are bad mojo (templates
 	</td>
 
 	<td class='prodSummaryContainer marginBottom no_underline'>
-	<h1 data-bind='var: product(zoovy:prod_name); format:text;'></h1>
+	<h1 class="product_name_text" data-bind='var: product(zoovy:prod_name); format:text;'></h1>
 	<h6 class='ztable_row_small stid' data-bind='var: product(pid); format:text; className: stid; pretext: Sku#: ;'></h6>
 
 
