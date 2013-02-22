@@ -130,14 +130,17 @@ app.u.loadScript(app.vars.baseURL+"init.js");
 <div class="listitems">
 	<ul>
     	<li>THE COMPANY NAME</li>
-        <ul>
-        	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
-			<li><a href='#company?show=faq'  id='navLink_faq'>FAQs</a></li>
-			<li><a href='#top' onClick="return showContent('company',{'show':'contact'});">Contact Us</a></li>
-			<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Policy</a></li>
-			<li><a href='#company?show=return' id='navLink_return'>Exchange and Return Policy</a></li>
-			<li><a href="#">Terms and Conditions</a></li>
-        </ul>
+        <nav id='companyNav'>
+<ul class='listStyleNone noPadOrMargin'>
+	<li><a href='#company?show=about'  id='navLink_about'>About Us</a></li>
+	<li><a href='#company?show=contact'  id='navLink_contact'>Contact Information</a></li>
+	<li><a href='#company?show=faq'  id='navLink_faq'>FAQ</a></li>
+	<li><a href='#company?show=payment' id='navLink_payment'>Payment Policy</a></li>
+	<li><a href='#company?show=privacy' id='navLink_privacy'>Privacy Statement</a></li>
+	<li><a href='#company?show=return' id='navLink_return'>Return Policy</a></li>
+	<li><a href='#company?show=shipping' id='navLink_shipping'>Shipping Information</a></li>
+</ul>
+</nav>
 	</ul>
     <ul class="marginbtm">
     	<li>Account Service</li>
