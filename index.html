@@ -247,27 +247,26 @@ COMMONLY EDITED TEMPLATES
 the homepageTemplate template is loaded into mainContentArea by default when the application loads
 -->
 <div id='homepageTemplate' class='homeTemplate'>
-<!--blah-->
         <div class='mainNavContainer'>
         	<!-- place holder links, will need to replace safe.name later -->
-            <ul class='hidden'>
+            <ul id='mainNavDropDown'>
                 <li><a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>BROWSE</div></a></li>
-                	<ul class='hidden'>
-           <!-- hidden class is causing margin to throw alilgnment off, fix here -->
-                    	<li><a href='#' onClick="return showContent('company',{'show':'about'});" class='footerLinkStyle'>ABOUT</a></li>
-                        <li><a href='#' onClick="return showContent('company',{'show':'contact'});" class='footerLinkStyle'>CONTACT US</a></li>
-                        <li><a href='#' onClick="return showContent('company',{'show':'faq'});" class='footerLinkStyle'>FAQ</a></li>
-                        <li><a href='#' onClick="return showContent('company',{'show':'shipping'});" class='footerLinkStyle'>SHIPPING</a></li>
-                        <li><a href='#' onClick="return showContent('company',{'show':'return'});" class='footerLinkStyle'>RETURNS</a></li>
-                        <li><a href='#' onClick="return showContent('company',{'show':'payment'});" class='footerLinkStyle'>PAYMENT</a></li>
-                        <li><a href='#' onClick="return showContent('company',{'show':'privacy'});" class='footerLinkStyle'>PRIVACY</a></li>
+                	<ul>
+                    	<li><a href='#' onClick="return showContent('company',{'show':'about'});">ABOUT</a></li>
+                        <li><a href='#' onClick="return showContent('company',{'show':'contact'});">CONTACT US</a></li>
+                        <li><a href='#' onClick="return showContent('company',{'show':'faq'});">FAQ</a></li>
+                        <li><a href='#' onClick="return showContent('company',{'show':'shipping'});">SHIPPING</a></li>
+                        <li><a href='#' onClick="return showContent('company',{'show':'return'});">RETURNS</a></li>
+                        <li><a href='#' onClick="return showContent('company',{'show':'payment'});">PAYMENT</a></li>
+                        <li><a href='#' onClick="return showContent('company',{'show':'privacy'});">PRIVACY</a></li>
                 	</ul>
-                </ul>
-                <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>WHAT'S HOT</div></a>
-                <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>NEW ARRIVALS</div></a>
-                <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>SALE</div></a>
-                <a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>CLEARANCE</div></a>
-                <a href='#top' onClick="return showContent('customer',{'show':'myaccount'});"><div class='mainNavLink' id='browse'>MY ACCOUNT</div></a>	
+                </li>
+                <li><a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>WHAT'S HOT</div></a></li>
+                <li><a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>NEW ARRIVALS</div></a></li>
+                <li><a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>SALE</div></a></li>
+                <li><a href='#top' onClick="return showContent('category',{'navcat':'[.category.safe.name]'});"><div class='mainNavLink' id='browse'>CLEARANCE</div></a></li>
+                <li><a href='#top' onClick="return showContent('customer',{'show':'myaccount'});"><div class='mainNavLink' id='browse'>MY ACCOUNT</div></a></li>
+            </ul>
         </div>	
         
         <div class='mainBannerContainer'>
@@ -323,6 +322,10 @@ the homepageTemplate template is loaded into mainContentArea by default when the
 <ul id="wideSlideshow" class="pics slideshow">
 		<img src='images/blank.gif' width='712' height='400' data-bind="var: category(%page.banner_slideshow1); format: banner; extension:myRIA; editor:banner; wrap:<li>;" />
 	</ul>
+    
+<div class='miscInfoContainer'>
+	
+</div>
 	
 	<!--<ul data-bind="var: category(@subcategoryDetail); format: categoryList; extension: store_navcats; loadsTemplate: categoryListTemplate; detail:max;" class='listStyleNone fluidList clearfix noPadOrMargin categoryList'></ul>-->
 

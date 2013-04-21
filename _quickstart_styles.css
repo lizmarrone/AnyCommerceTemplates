@@ -107,8 +107,12 @@ HEADER
   	margin-right: auto;
 }
 
-.mainNavContainer ul ul {
-		display: none;	
+#mainNavDropDown ul ul{
+	display: none;
+}
+
+#mainNavDropDown ul li:hover > ul {
+	display: block;	
 }
 
 .hidden {
